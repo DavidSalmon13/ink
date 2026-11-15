@@ -34,7 +34,9 @@
 
 - **Local**: Postgres in Docker Compose, API via `./gradlew bootRun`, app via Expo Go /
   dev client.
-- **Production**: API container + Postgres on Railway, R2 bucket, app via TestFlight.
+- **Production**: API container + Postgres on Railway, R2 bucket.
+- **Preview (during the MVP)**: web build of the Expo app (static files on Railway) at a public URL Aya can open; Expo Go via EAS Update for the iPhone experience. The web build is a preview, not a supported platform: no device lock, and tokens are kept in memory.
+- **After MVP acceptance**: native app via TestFlight.
 - **Staging**: TBD.
 
 ## Gotchas
