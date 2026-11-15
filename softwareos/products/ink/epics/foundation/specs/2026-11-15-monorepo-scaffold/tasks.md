@@ -6,8 +6,8 @@
 
 ## Repo & local infra
 
-- [ ] T1 Root files: .gitignore (Gradle, Node, Expo, .env), .nvmrc (Node LTS), .env.example
-- [ ] T2 docker-compose.yml: Postgres 16, named volume, healthcheck, env from .env
+- [x] T1 Root files: .gitignore (Gradle, Node, Expo, .env), .nvmrc (Node LTS), .env.example
+- [x] T2 docker-compose.yml: Postgres 16, named volume, healthcheck, env from .env
 
 ## API (apps/api)
 

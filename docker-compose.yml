@@ -1,0 +1,25 @@
+# Local development database only.
+# Usage: cp .env.example .env  (set POSTGRES_PASSWORD)  &&  docker compose up -d
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ink-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ink}
+      POSTGRES_USER: ${POSTGRES_USER:-ink}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env (copy .env.example)}
+      TZ: UTC
+      PGTZ: UTC
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - ink-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  ink-pgdata:
