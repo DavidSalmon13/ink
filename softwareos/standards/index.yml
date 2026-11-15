@@ -1,10 +1,5 @@
 # SoftwareOS Standards Index
 
 global:
-  auth-security:
-    description: Nest AuthGuard on every mutating or private API endpoint, user ID only from the session, POST-only changes with an Origin check against the trusted forwarded host, API rejects calls without the web proxy secret, client IP only from the secret-verified header (null fails open), only apps/api/src/auth touches tokens/hashes, secrets only on the API project (incl. BLOB_READ_WRITE_TOKEN; browsers get short-lived Blob client tokens, no onUploadCompleted callback), none in logs or NEXT_PUBLIC_
   git-workflow:
-    description: Needs description - run /index-standards
-  tech-stack:
-    description: Next.js frontend (apps/web) + NestJS API (apps/api) monorepo with shared Zod; web never imports Prisma or secrets; Prisma 6 on Neon in the API; two Vercel projects; product images in Vercel Blob via direct browser uploads
-
+    description: Branch off main per spec (feat/<epic>/<spec>, hotfix/, chore/), never commit on main, conventional commits scoped to the epic, PRs via the pr skill

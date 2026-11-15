@@ -2,7 +2,7 @@
 
 ## Base branch
 
-Branch off `develop` and open every PR against `develop`. `main` is not a PR target.
+Branch off `main` and open every PR against `main`.
 
 ## Branch naming
 
@@ -17,7 +17,7 @@ chore/<slug>                          # everything else
 
 - The canonical branch is recorded in the spec's `tasks.md` `> Branch:` line. To map a branch to a spec: match that line first; fall back to suffix-matching `<spec-slug>` against `feat/*/`.
 - Slugs are load-bearing — never rename an epic or spec after branches exist.
-- Never commit on `develop` or `main`. Branch first.
+- Never commit on `main`. Branch first.
 
 ## Commits
 
