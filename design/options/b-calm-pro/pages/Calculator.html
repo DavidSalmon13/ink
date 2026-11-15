@@ -1,0 +1,178 @@
+<!doctype html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מחשבון — Ink · Calm pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F5F1;--surface:#FFFFFF;--surface-alt:#F1EDE2;--text:#1E1A18;--muted:#5F5550;--border:#E2DCD1;--border-strong:#B9AEA0;--primary:#76544B;--on-primary:#FFFFFF;--tint:#EFE6E1;--line:#76544B;--danger:#A9322A;--on-danger:#FFFFFF;--success:#2E7049;--av:#2E7D4C;--re:#C2690F;--do:#B3352B;--scrim:rgba(30,26,24,0.4);--focus:#76544B;--cm-bg:#F1EDE2;--cm-surface:#FFFFFF;--cm-text:#1E1A18;--cm-muted:#5F5550;--fh:'Heebo', sans-serif;--fb:'Heebo', sans-serif;--r-sm:6px;--r-md:8px;--r-lg:12px;--pad:16px;--row:52px;--btn-h:44px;--in-h:44px;--sh-card:0 1px 2px rgba(30,26,24,0.05);--sh-raised:0 4px 10px rgba(30,26,24,0.08);--sh-modal:0 16px 40px rgba(30,26,24,0.2);--gap:12px;--gap-s:4px;--gap-l:16px}
+body{margin:0;background:#D8D2C8;display:flex;justify-content:center;padding:24px 0}
+
+*{box-sizing:border-box}
+h1,h2,h3,h4,p{margin:0}
+button,input,select{font-family:inherit;color:inherit}
+.screen{width:393px;min-height:852px;background:var(--bg);color:var(--text);font-family:var(--fb);position:relative;overflow:hidden;padding-top:54px;padding-bottom:40px}
+.screen.has-tabbar{padding-bottom:110px}
+.screen.ipad{width:1180px;height:820px;min-height:0;padding:24px 0 0}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.ic{flex:none;display:block}
+.stack{display:flex;flex-direction:column}
+.hrow{display:flex;align-items:center}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.px{padding-inline:var(--pad)}
+.vis-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px var(--pad) 12px;min-height:56px}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;color:var(--text);border-radius:999px;padding:0;cursor:pointer}
+.btn{min-height:var(--btn-h);padding:0 20px;font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid transparent;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn-primary{background:var(--primary);color:var(--on-primary)}
+.btn-secondary{background:transparent;color:var(--primary);border-color:var(--primary)}
+.btn-ghost{background:transparent;color:var(--primary);padding:0 8px}
+.btn-destructive{background:var(--danger);color:var(--on-danger)}
+.btn:disabled,.btn[aria-disabled=true]{background:var(--surface-alt);color:var(--muted);border-color:transparent;cursor:not-allowed}
+.btn-block{width:100%}
+.btn-sm{min-height:44px;padding:0 14px;font-size:15px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.label{font-size:13px;font-weight:600;color:var(--muted)}
+.input{min-height:var(--in-h);width:100%;padding:0 14px;border:1px solid var(--border-strong);background:var(--surface);font-size:16px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.input.error{border-color:var(--danger);border-width:1.5px}
+.input .unit{color:var(--muted);font-size:14px}
+.helper{font-size:13px;color:var(--muted)}
+.helper.err{color:var(--danger);font-weight:600}
+.search{display:flex;align-items:center;gap:8px;min-height:var(--in-h);padding:0 12px;background:var(--surface);color:var(--muted)}
+.search input{border:0;background:transparent;font-size:16px;flex:1;min-width:0;outline:none;color:var(--text)}
+.search input::placeholder{color:var(--muted)}
+.seg{display:flex;padding:3px;gap:2px;background:var(--surface-alt)}
+.seg button{flex:1;min-height:38px;border:0;background:transparent;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.seg button small{font-size:11px;color:var(--muted);font-weight:400}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--primary);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{text-decoration:none;min-height:36px;padding:0 14px;border:1px solid var(--border-strong);background:transparent;font-size:14px;display:inline-flex;align-items:center;gap:6px;color:var(--text);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:var(--on-primary);font-weight:600}
+.dot{width:10px;height:10px;border-radius:999px;display:inline-block;flex:none}
+.dot.available{background:var(--av)}.dot.reserved{background:var(--re)}.dot.done{background:var(--do)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text)}
+.card{background:var(--surface)}
+.row{display:flex;align-items:center;gap:12px;min-height:var(--row);padding:10px var(--pad);color:var(--text);text-decoration:none}
+.rows>.row+.row{border-top:1px solid var(--border)}
+.section-h{display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);margin:28px 0 10px}
+.tabbar{position:absolute;inset-inline:0;bottom:0;display:flex;justify-content:space-around;padding:8px 8px 30px;background:var(--surface);border-top:1px solid var(--border);z-index:20}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--muted);text-decoration:none;min-width:60px;min-height:44px}
+.tabbar a[aria-current=page]{color:var(--primary);font-weight:700}
+.backdrop{position:absolute;inset:0;background:var(--scrim);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{width:100%;max-width:353px;background:var(--surface);box-shadow:var(--sh-modal);z-index:110;display:flex;flex-direction:column;max-height:760px;overflow:hidden}
+.modal-h{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 8px 20px;padding-inline-start:20px;padding-inline-end:8px}
+.modal-b{padding:4px 20px 16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.modal-f{display:flex;gap:10px;padding:14px 20px 20px;border-top:1px solid var(--border)}
+.modal-f .btn{flex:1}
+.prefill{font-size:13px;color:var(--primary);display:flex;align-items:center;gap:6px;font-weight:600}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--text);color:var(--bg);font-size:15px;font-weight:500;box-shadow:var(--sh-raised)}
+.toast.err{background:var(--danger);color:var(--on-danger)}
+.skel{background:var(--surface-alt);border-radius:4px}
+.thumb{background:var(--surface-alt);color:var(--line);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.thumb .art{width:78%;height:78%}
+.avatar{width:44px;height:44px;border-radius:999px;background:var(--tint);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:none}
+.timeline{position:relative}
+.hourline{display:flex;align-items:flex-start;gap:8px;border-top:1px solid var(--border);position:relative}
+.hourline .h{width:44px;font-size:12px;color:var(--muted);transform:translateY(-8px);background:var(--bg);text-align:end;padding-inline-end:6px}
+.appt{position:absolute;inset-inline-start:58px;inset-inline-end:var(--pad);padding:8px 12px;overflow:hidden;background:var(--tint);color:var(--text);border-inline-start:3px solid var(--primary);text-decoration:none;display:block}
+.appt .who{font-weight:700;font-size:14px}
+.appt .what{font-size:13px;color:var(--muted)}
+.appt.cancelled{background:transparent;border:1px dashed var(--border-strong);border-inline-start:3px solid var(--border-strong)}
+.appt.cancelled .who{text-decoration:line-through;color:var(--muted)}
+.nowline{position:absolute;inset-inline-start:52px;inset-inline-end:0;height:2px;background:var(--danger)}
+.nowline:before{content:"";position:absolute;inset-inline-start:-5px;top:-4px;width:10px;height:10px;border-radius:999px;background:var(--danger)}
+.lock-pill{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid currentColor;background:transparent;font-size:14px;font-weight:600;cursor:pointer;border-radius:999px}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:5px 0}
+.sum-row.total{font-size:18px;font-weight:700;border-top:1px solid var(--border);margin-top:6px;padding-top:12px}
+details>summary{list-style:none;cursor:pointer}
+details>summary::-webkit-details-marker{display:none}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 var(--pad)}
+.tabs a{min-height:44px;display:flex;align-items:center;padding:0 14px;font-size:15px;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a[aria-current=page]{color:var(--primary);border-bottom-color:var(--primary);font-weight:700}
+.badge{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--tint);color:var(--primary)}
+
+.t-display{font-family:var(--fh);font-size:28px;line-height:34px;font-weight:700}
+.t-title1{font-family:var(--fh);font-size:22px;line-height:28px;font-weight:700}
+.t-title2{font-family:var(--fh);font-size:17px;line-height:22px;font-weight:600}
+.t-headline{font-family:var(--fb);font-size:15px;line-height:20px;font-weight:600}
+.t-body{font-family:var(--fb);font-size:15px;line-height:22px;font-weight:400}
+.t-callout{font-family:var(--fb);font-size:14px;line-height:20px;font-weight:400}
+.t-caption{font-family:var(--fb);font-size:12px;line-height:16px;font-weight:500}
+.t-overline{font-family:var(--fb);font-size:11px;line-height:14px;font-weight:600;letter-spacing:0.6px}
+.t-price{font-family:var(--fh);font-size:26px;line-height:32px;font-weight:700}
+
+.btn{border-radius:var(--r-md)}
+.input,.search{border-radius:var(--r-md)}
+.input{border-color:var(--border-strong)}
+.search{background:var(--surface-alt)}
+.seg{border-radius:var(--r-md)}
+.seg button{border-radius:6px}
+.seg button[aria-pressed=true]{box-shadow:var(--sh-card)}
+.chip{border-radius:var(--r-sm);min-height:34px;font-size:13px;padding:0 10px}
+.card{border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-card)}
+.section-h{margin:20px 0 8px}
+.section-h h2{font-size:13px;font-weight:700;letter-spacing:.6px;color:var(--muted)}
+.modal{border-radius:14px}
+.toast{border-radius:var(--r-md)}
+.thumb{border-radius:6px}
+.appt{border-radius:6px;padding:5px 10px}
+.appt .who{font-size:13px}.appt .what{font-size:12px}
+.row{min-height:52px;padding:8px var(--pad)}
+.overline{font-size:11px;letter-spacing:.6px;font-weight:700;color:var(--muted)}
+
+.item{padding:14px;display:flex;flex-direction:column;gap:14px}.item .seg button{min-height:44px}.summary{padding:14px}.more{margin-top:18px}.more summary{min-height:52px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.stepper{border:1px solid var(--border-strong);border-radius:999px}.picked{padding:6px 6px 6px 10px;background:var(--tint);border-radius:999px;padding-inline-start:4px}.linked{padding:8px;background:var(--bg);border-radius:var(--r-sm)}.item{gap:12px}.field label{font-size:12px}
+</style>
+</head>
+<body>
+
+<main class="screen has-tabbar" dir="rtl">
+  <div class="top" style="min-height:52px"><div><p class="overline">הצעת מחיר לביקור</p><h1 class="t-title1">מחשבון</h1></div><div class="hrow" style="gap:4px"></div></div>
+  <section class="px" aria-labelledby="cl" style="margin-top:8px">
+    <div class="hrow between"><h2 id="cl" class="t-title2">לקוחות</h2><button class="btn btn-ghost btn-sm" type="button"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>לקוח חדש</button></div>
+    <label class="search" style="margin-top:8px"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><span class="vis-hidden">חיפוש לקוח</span><input placeholder="חיפוש לפי שם, טלפון או אינסטגרם"></label>
+    <div class="hrow picked" style="gap:10px;margin-top:10px"><span class="avatar" style="width:36px;height:36px;font-size:14px">מ</span><span class="grow" style="font-weight:600">מאיה לוי</span><button class="iconbtn" type="button" aria-label="הסרת לקוח"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <p class="helper" style="margin-top:6px">אפשר לחשב ולהעתיק הצעת מחיר גם בלי לבחור לקוח.</p>
+  </section>
+  <div class="px stack" style="gap:14px;margin-top:20px"><article class="card item collapsed" aria-label="קעקוע 1"><div class="hrow" style="gap:12px"><span class="thumb" style="width:52px;height:52px"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M50 30c-6 0-10 4-10 9s5 9 10 9 9-4 9-8-3-7-7-7-6 3-6 6 2 4 4 4"/><path d="M38 38c-6 4-6 14 2 18 6 3 15 2 20-3 4-5 3-12-1-16"/><path d="M43 33c2-5 9-7 14-3"/><path d="M50 57c0 10-2 20-1 32"/><path d="M49.5 72c-8-4-14-2-17 2 5 3 11 3 17-2z"/><path d="M50 80c6-5 12-5 16-2-4 4-10 5-16 2z"/></svg></span><div class="grow stack" style="gap:2px"><h3 class="t-headline"><span class="muted">קעקוע 1 · </span>ורד עם גבעול</h3><span class="muted" style="font-size:14px">M · פירוט פשוטה · הצללות עדינות · אמה</span><span style="font-size:14px;font-weight:600">סקיצה קיימת · <span class="num">75</span> דק׳</span></div><button class="btn btn-ghost btn-sm" type="button">עריכה</button></div></article>
+<article class="card item" aria-labelledby="it2">
+  <div class="hrow between"><h3 id="it2" class="t-headline"><span class="muted">קעקוע 2 · </span>דובדבנים</h3><button class="iconbtn" type="button" aria-label="פעולות לקעקוע"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button></div>
+  <div class="field"><label>גודל</label><div class="seg" role="group" aria-label="גודל"><button type="button" aria-pressed="false">XS<small>עד 3 ס״מ</small></button><button type="button" aria-pressed="true">S<small>3–7</small></button><button type="button" aria-pressed="false">M<small>7–12</small></button><button type="button" aria-pressed="false">L<small>12–20</small></button><button type="button" aria-pressed="false">XL<small>20+</small></button></div></div>
+  <div class="field"><label>רמת פירוט</label><div class="seg" role="group" aria-label="רמת פירוט"><button type="button" aria-pressed="false">פשוטה</button><button type="button" aria-pressed="true">בינונית</button><button type="button" aria-pressed="false">גבוהה</button></div></div>
+  <div class="field"><label>הצללות</label><div class="seg" role="group" aria-label="הצללות"><button type="button" aria-pressed="true">ללא</button><button type="button" aria-pressed="false">עדינות</button><button type="button" aria-pressed="false">מלאות</button></div></div>
+  <div class="field"><label>מיקום בגוף</label><div class="chips" role="group" aria-label="מיקום בגוף"><button class="chip" type="button" aria-pressed="false">אמה</button><button class="chip" type="button" aria-pressed="false">זרוע</button><button class="chip" type="button" aria-pressed="false">ירך</button><button class="chip" type="button" aria-pressed="false">שוק</button><button class="chip" type="button" aria-pressed="false">כתף</button><button class="chip" type="button" aria-pressed="false">גב</button><button class="chip" type="button" aria-pressed="false">חזה</button><button class="chip" type="button" aria-pressed="false">שורש כף היד</button><button class="chip" type="button" aria-pressed="true">קרסול</button></div></div>
+  <div class="field"><label>מקור הסקיצה</label><div class="seg" role="group" aria-label="מקור הסקיצה"><button type="button" aria-pressed="false">סקיצה קיימת</button><button type="button" aria-pressed="false">רפרנס לקוח</button><button type="button" aria-pressed="true">עיצוב מותאם חדש</button></div></div>
+  <div class="field"><label for="dh2">שעות עיצוב</label><div class="input"><input id="dh2" value="1" style="border:0;background:transparent;font-size:16px;width:60px;outline:none"><span class="unit">שעות × 200 ₪</span></div></div>
+  <div class="hrow est" style="gap:12px">
+    <div class="field" style="width:132px"><label for="m2">זמן משוער</label><div class="input"><input id="m2" value="45" class="num" style="border:0;background:transparent;font-size:16px;width:50px;outline:none"><span class="unit">דק׳</span></div></div>
+    <p class="helper" style="margin-top:22px">דומה: דובדבן ≈ 80 דק׳<br>אפשר לערוך ידנית</p>
+  </div>
+</article>
+    <button class="btn btn-secondary btn-block" type="button"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>קעקוע נוסף</button>
+  </div>
+  <details class="px more" open="">
+    <summary class="hrow between"><span class="t-headline">אפשרויות נוספות</span><span style="transform:rotate(180deg);display:inline-flex"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></span></summary>
+    <div class="stack" style="gap:14px;padding-top:12px">
+      <div class="hrow between"><div class="stack"><span style="font-weight:600">תוספת מחטים</span><span class="helper">50 ₪ למחט נוספת</span></div>
+        <div class="hrow stepper" role="group" aria-label="תוספת מחטים"><button class="iconbtn" type="button" aria-label="הפחתה"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12h12"/></svg></button><span class="num" style="width:28px;text-align:center;font-weight:700">1</span><button class="iconbtn" type="button" aria-label="הוספה"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+      <div class="field"><label>הנחה</label><div class="hrow" style="gap:10px"><div style="width:120px"><div class="seg" role="group" aria-label="סוג הנחה"><button type="button" aria-pressed="false">%</button><button type="button" aria-pressed="true">₪</button></div></div><div class="input grow"><input value="95" class="num" style="border:0;background:transparent;font-size:16px;width:80px;outline:none"><span class="unit">₪</span></div></div><p class="helper">ההנחה חלה על כל הביקור, כולל דמי העיצוב.</p></div>
+      <div class="field"><label for="ov">מחיר ידני</label><div class="input"><input id="ov" placeholder="ללא — לפי החישוב" style="border:0;background:transparent;font-size:16px;flex:1;outline:none"></div></div>
+    </div>
+  </details>
+  <section class="px" aria-labelledby="sm" style="margin-top:18px">
+    <div class="card summary">
+      <h2 id="sm" class="vis-hidden">סיכום</h2><div class="sum-row"><span class="muted">משך ביקור</span><span class="num">120 דק׳</span></div><div class="sum-row"><span class="muted">מחיר בסיס</span><span class="num">845 ₪</span></div><div class="sum-row"><span class="muted">דמי עיצוב</span><span class="num">200 ₪</span></div><div class="sum-row"><span class="muted">תוספת מחטים</span><span class="num">50 ₪</span></div><div class="sum-row"><span class="muted">הנחה</span><span class="num">−95 ₪</span></div>
+      <div class="sum-row total"><span>סה״כ</span><span class="t-price num">1,000 ₪</span></div>
+      <p class="helper" style="margin-top:6px">מינימום 350 ₪ כולל 30 דקות ראשונות, ואחר כך 5.5 ₪ לדקה. דמי פתיחת מחט פעם אחת לביקור.</p>
+    </div>
+    <div class="hrow" style="gap:10px;margin-top:14px"><button class="btn btn-secondary" type="button" style="flex:1"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/></svg>העתקת הצעה</button><button class="btn btn-primary" type="button" style="flex:1.3">שמירת הצעה</button></div>
+    <p class="helper" style="margin-top:8px;text-align:center">שמירת הצעה אינה יוצרת תור. אחרי השמירה: ״קביעת תור״.</p>
+  </section>
+  <nav class="tabbar" aria-label="ניווט ראשי"><a href="Home.html"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5L12 4l8 6.5V20H4z"/><path d="M10 20v-5h4v5"/></svg><span>בית</span></a><a href="Calculator.html" aria-current="page"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15v3M8 18h4"/></svg><span>מחשבון</span></a><a href="SketchLibrary.html"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H18v14H5.5C4.7 18 4 18.7 4 19.5z"/><path d="M4 19.5C4 20.3 4.7 21 5.5 21H20V6"/><path d="M8 13c1.5-3 3-4 4-4s1 1.5 0 2.5S9.5 14 11 14s2.5-2 3.5-3"/></svg><span>סקיצות</span></a><a href="ClientCard.html"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.9-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.8 14.2c2.2-.3 4.2 1.2 4.7 4"/></svg><span>לקוחות</span></a><a href="Calendar.html"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="M8 13.5h.01M12 13.5h.01M16 13.5h.01M8 17h.01M12 17h.01"/></svg><span>יומן</span></a></nav>
+</main>
+</body>
+</html>
