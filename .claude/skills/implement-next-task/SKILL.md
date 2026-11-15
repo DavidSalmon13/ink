@@ -62,7 +62,7 @@ Read, in this order, and keep notes short:
 1. `spec.md` — Acceptance Criteria (AC1…), Technical Approach, Out of Scope, `> Covers:`, latest Changelog rows.
 2. `tasks.md` — all tasks and their states (finished tasks tell you what already exists).
 3. `standards.md` and `references.md` in the spec folder, then only the `softwareos/standards/**` files they name.
-4. Only the design files the open tasks or ACs cite (e.g. `stride-design/pages/Login.dc.html`, `stride-design/design-system/...`). Don't read the whole design folder.
+4. Only the design files the open tasks or ACs cite (e.g. `design/pages/Login.dc.html`, `design/design-system/...`). Don't read the whole design folder.
 5. The existing code the next tasks touch (if any). For broad unfamiliar areas, dispatch `code-explorer` and keep only its summary.
 
 Context is the budget this skill spends — every file read stays in the conversation. Read what the batch needs, not everything that might be relevant.
@@ -126,7 +126,7 @@ Announce the batch in one or two lines (`This run: T1–T4. Stopping before T5 (
 2. **Tests first (tdd only).** Invoke the `testing` skill with explicit args: `Generate failing tests for <T-id> covering <AC list> — mode 1 (Generate), then run them to confirm they fail`. It may still ask to confirm the file plan; answer from the spec where you can, otherwise relay to the user.
 3. **Implement.** The smallest change that completes this task's text and its ACs — no work belonging to later tasks, nothing listed under Out of Scope. Follow the loaded standards and the repo's existing patterns.
    - **Stay inside `> Covers:`.** If the task genuinely needs a file outside the spec's covers (e.g. another spec's module), note it in the report rather than quietly spreading the change — ownership drift is how two specs end up claiming the same route.
-   - Design work: match the cited `stride-design/` file's tokens, spacing and states; use existing tokens, not hard-coded values.
+   - Design work: match the cited `design/` file's tokens, spacing and states; use existing tokens, not hard-coded values.
    - New dependencies: pin exact versions where the spec says so; don't add libraries the spec/tech-stack doesn't call for without asking.
    - Scaffolding generators (`create-next-app` and the like) refuse to run in a non-empty repo root, and this repo already has `softwareos/`, `.claude/`, `CLAUDE.md` and so on. Generate into a temp directory with the spec's flags, then copy the generated files in. Never overwrite existing project files: merge `.gitignore` instead of replacing it, and skip a generated README if one exists. Then delete the temp directory.
    - Secrets: placeholders only (`YOUR_SECRET_HERE` style) in `.env.example`; never write real credentials.
