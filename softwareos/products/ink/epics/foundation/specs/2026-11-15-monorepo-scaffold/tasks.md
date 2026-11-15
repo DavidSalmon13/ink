@@ -11,11 +11,11 @@
 
 ## API (apps/api)
 
-- [ ] T3 Gradle Kotlin DSL project + wrapper, Java 21 toolchain, deps (web, jpa, validation, actuator, flyway, postgres, testcontainers); package app.ink.api, InkApiApplication
-- [ ] T4 application.yml: env-driven datasource, ddl-auto=validate, open-in-view=false, UTC JDBC time zone
-- [ ] T5 Flyway V1__baseline.sql
-- [ ] T6 Actuator health exposed at GET /health (only endpoint exposed)
-- [ ] T7 Dev CORS config (app.cors.allowed-origins, default http://localhost:8081)
+- [x] T3 Gradle Kotlin DSL project + wrapper, Java 21 toolchain, deps (web, jpa, validation, actuator, flyway, postgres, testcontainers); package app.ink.api, InkApiApplication
+- [x] T4 application.yml: env-driven datasource, ddl-auto=validate, open-in-view=false, UTC JDBC time zone
+- [x] T5 Flyway V1__baseline.sql
+- [x] T6 Actuator health exposed at GET /health (only endpoint exposed)
+- [x] T7 Dev CORS config (app.cors.allowed-origins, default http://localhost:8081)
 
 ## Mobile (apps/mobile)
 
