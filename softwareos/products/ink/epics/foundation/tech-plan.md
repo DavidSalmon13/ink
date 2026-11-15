@@ -29,10 +29,11 @@ a local Face ID/passcode lock on top.
 
 ## Candidate Specs
 
-Build order: scaffold → deploy (a live URL from day one, updated on every merge) → shell → auth → conventions.
+Build order: everything runs locally first (Mac, Simulator, browser, Expo Go on the same Wi-Fi);
+the first deploy is the last spec of the epic, after David has reviewed it all locally.
 
 - `monorepo-scaffold` — `apps/api` (Spring Boot, health endpoint, Flyway, Docker Compose Postgres) + `apps/mobile` (Expo Router, TypeScript); CI builds and tests both
-- `deploy-pipeline` — Railway: API + Postgres, plus the **web preview** (`expo export --platform web`, static hosting, CORS on the API) as the URL Aya opens; environment variables; redeploy on merge to `main`; EAS Update channel for Expo Go
 - `app-shell` — theme from tokens.json, forced RTL, core components (buttons, inputs, rows, centered modal, toast, empty/loading/error states), the 5-tab bar, home screen per `design/pages/Home.html`; web fallbacks so the preview never crashes
 - `owner-auth-lock` — owner login, JWT refresh, secure storage, Face ID/passcode lock on open and on return from background, re-authentication before My Data; on web: no device lock, tokens kept in memory only (preview, not a supported platform)
 - `api-conventions` — shared entity rules (UUID, soft delete, version), safe-to-retry writes, error format, Settings endpoint, attachments with R2 presigned URLs
+- `deploy-pipeline` — **first deploy.** Railway: API + Postgres, plus the **web preview** (`expo export --platform web`, static hosting, CORS on the API) as the URL Aya opens; environment variables; redeploy on merge to `main`; EAS Update channel for Expo Go
