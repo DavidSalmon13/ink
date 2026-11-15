@@ -42,7 +42,8 @@ erDiagram
 ### Settings (single row)
 `minimumPriceAgorot` (35000), `minimumMinutes` (30), `hourlyRateAgorot` (33000 → 5.5 ₪/min),
 `designHourlyRateAgorot` (20000, suggested value), `needleOpeningCostAgorot` (7000, internal business figure only),
-`extraNeedleCostAgorot` (5000, tentative), `calibrationPoints` (JSON: arm 180, back 180,
+`extraNeedleCostAgorot` (5000, tentative), `estimateTables` (JSON — the size base minutes and
+the detail/shading/placement multipliers below, all editable), `calibrationPoints` (JSON: arm 180, back 180,
 cherry 80, figure with book 120, rose 60, deer 120 minutes), `autoLockSeconds`, `timezone`
 (`Asia/Jerusalem`), `testEmail` (phase 2).
 
@@ -61,7 +62,8 @@ The audit trail for marketing consent; `Client.marketingConsent` mirrors the lat
 `id, clientId (required to save; a quote that is only copied isn't saved), title, notes?,
 discountType (none|percent|amount), discountValue, extraNeedles (count),
 priceOverrideAgorot?, computedPriceAgorot, finalPriceAgorot, estimatedMinutesTotal`.
-Saving a quote never creates an appointment.
+Saving a quote never creates an appointment. Quotes **don't expire**. A quote can be
+booked as **several appointments** (sessions of a large piece).
 
 ### QuoteItem — one tattoo within the visit
 `id, quoteId, position, description, size, detailLevel, shading, bodyPlacement,
@@ -75,9 +77,30 @@ base         = 350 ₪ + max(0, visitMinutes − 30) × 5.5 ₪     ← minimum/
 design       = Σ custom_design items: designHours × designHourlyRate
 extras       = extraNeedles × extraNeedleCost                   ← only if added under "more options"
 subtotal     = base + design + extras
-final        = priceOverride ?? applyDiscount(subtotal)
+final        = priceOverride ?? applyDiscount(subtotal)   ← discount applies to the whole subtotal, design fee included
 ```
 Placement affects time only, never price directly. Artist sketch or client reference = no design fee.
+
+**Time estimate (per item):**
+```
+estimatedMinutes = roundUpTo5( max(15, sizeBase × detail × shading × placement) )
+```
+
+| Size | Base min | | Detail | × | | Shading | × | | Placement | × |
+|---|---|---|---|---|---|---|---|---|---|---|
+| XS (≤ 3 cm) | 20 | | simple | 0.8 | | none (line only) | 1.0 | | easy: forearm, outer arm, thigh, calf | 1.0 |
+| S (3–7 cm) | 40 | | medium | 1.0 | | light | 1.2 | | medium: back, shoulder, chest, wrist, ankle | 1.1 |
+| M (7–12 cm) | 75 | | high | 1.35 | | full | 1.45 | | hard: ribs, neck, hands, feet, spine, sternum | 1.25 |
+| L (12–20 cm) | 120 | | | | | | | | | |
+| XL (20 cm+ / half sleeve, back piece) | 180 | | | | | | | | | |
+
+- Design source doesn't change tattoo time; custom design time is the separate `designHours`.
+- All numbers live in `Settings.estimateTables` and can be edited. The estimate is a starting point and
+  Aya can always override it (`estimatedMinutesOverride`).
+- Checked against the calibration points: rose M × simple = 60 ✓, deer/figure with book L = 120 ✓,
+  arm XL = 180 ✓, cherry M ≈ 75 (calibration 80) ✓, back XL × 1.1 ≈ 200 (calibration 180, close).
+  The calculator shows the nearest calibration point as a hint ("similar: rose ≈ 60 min").
+- Phase 2 can retune the tables from recorded `actualMinutes`.
 
 ### Appointment
 `id, clientId, quoteId?, startAt, durationMinutes, agreedPriceAgorot, description,
@@ -97,7 +120,8 @@ actualMinutes?, photoAttachmentId?, completedAt? (only for tattoos with no appoi
 ### Sketch
 `id, title, imageAttachmentId, status (available|reserved|done), reservedForClientId?,
 tags?, notes?`. No price field. One-time exclusive use by default. Becomes `done`
-when a completed Tattoo references it.
+when a completed Tattoo references it. **`reservedForClientId` is required when
+`status = reserved`** (enforced by a DB check constraint). Requests for variations are not recorded.
 
 ### Expense
 `id, date (defaults to today), title, amountAgorot, categoryId, notes?`.
@@ -141,11 +165,13 @@ deliveryStatus (queued|sent|failed|skipped_no_consent), providerMessageId?, erro
 | 10 | `actualMinutes` on Tattoo | Confirmed: record actual duration for later calibration |
 | 11 | `CampaignRecipient` unique `(campaignId, clientId)` + delivery status | Doc requires preventing duplicates and tracking failures (§9) |
 
-## Open questions (for Aya)
+## Decisions (answered 2026-11-15)
 
-1. Can one quote be booked as **several appointments** (a large piece over multiple sessions)? The model allows it for now.
-2. Discount order: is the discount applied to the design fee too, or only to tattoo time?
-3. The **time-estimate formula** from size × detail × shading × placement × design source still needs defining (doc §14).
-4. Does a quote **expire**?
-5. When a client in client mode asks for a **variation** of a sketch, should that request be recorded?
-6. When a sketch is **reserved**, must it be linked to a client?
+| # | Question | Decision |
+|---|---|---|
+| 1 | Can one quote be booked as several appointments? | **Yes**: `Quote 1 → many Appointment` |
+| 2 | Does the discount also apply to the design fee? | **Yes**: discount applies to the whole subtotal |
+| 3 | Time-estimate formula | **Tech lead's call**: size base × detail × shading × placement, editable tables (see Quote section) |
+| 4 | Do quotes expire? | **No** |
+| 5 | Record client requests for sketch variations? | **No** |
+| 6 | Must a reserved sketch be linked to a client? | **Yes**: required when `status = reserved` |
