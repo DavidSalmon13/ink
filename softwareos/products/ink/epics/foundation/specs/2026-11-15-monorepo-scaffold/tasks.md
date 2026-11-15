@@ -19,7 +19,7 @@
 
 ## Mobile (apps/mobile)
 
-- [ ] T8 create-expo-app (TS + Expo Router) on the SDK the current Expo Go supports; strip template to app/_layout.tsx + app/index.tsx
+- [x] T8 create-expo-app (TS + Expo Router) on the SDK the current Expo Go supports; strip template to app/_layout.tsx + app/index.tsx
 - [ ] T9 src/config/api.ts base-URL resolution (EXPO_PUBLIC_API_URL → hostUri → localhost) + src/api/health.ts fetch with timeout
 - [ ] T10 Placeholder screen: "Ink" + API status (connected/unreachable), logical styles only
 - [ ] T11 Tooling scripts: typecheck (tsc --noEmit), lint (eslint-config-expo), test (jest-expo + RNTL)
