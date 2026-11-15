@@ -1,0 +1,9 @@
+{
+  "skill_name": "implement-next-task",
+  "evals": [
+    {"id": 1, "prompt": "implement the next task", "branch": "feat/accounts-auth/app-foundation", "expected_output": "Picks T1, infers test mode 'after', plans a bounded batch (around T1-T4/T5), stops before human-only T6, marks [~]/[x], flips spec+epic status to in-progress, commits per task with feat/chore(accounts-auth) and T-ids in body, no push.", "files": []},
+    {"id": 2, "prompt": "do T6 please", "branch": "feat/accounts-auth/app-foundation", "expected_output": "Notes T1-T5 still open (out of order), recognizes T6 as human-only (Vercel/Neon linking), gives step-by-step instructions and what to report back, leaves T6 [ ], does not fake it.", "files": []},
+    {"id": 3, "prompt": "ok let's start implementing accounts-auth", "branch": "develop", "expected_output": "Refuses to commit on develop, offers to create feat/accounts-auth/app-foundation (first spec in epic order) off develop, then proceeds with T1.", "files": []},
+    {"id": 4, "prompt": "continue the spec", "branch": "feat/accounts-auth/signup-login", "expected_output": "T1 done; next is T2 which says bcrypt/no pepper while AC3 requires Argon2id with pepper. Halts with path:line quotes on both sides and recommends /spec-changes; does not pick an interpretation. Recognizes TDD mode.", "files": ["tasks.md T2 modified to contradict AC3"]}
+  ]
+}
