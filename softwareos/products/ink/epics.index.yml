@@ -2,4 +2,4 @@
 generated: 2026-11-15
 product: ink
 epics:
-  - { slug: foundation, title: Foundation, status: planning, spec_count: 0 }
+  - { slug: foundation, title: Foundation, status: planning, spec_count: 1 }

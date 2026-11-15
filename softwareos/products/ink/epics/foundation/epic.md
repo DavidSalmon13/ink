@@ -19,3 +19,4 @@ Postgres. Every later epic just adds features on top of it.
 
 | Spec | Status | Branch |
 |---|---|---|
+| [2026-11-15-monorepo-scaffold](specs/2026-11-15-monorepo-scaffold/spec.md) | shaped | feat/foundation/monorepo-scaffold |
