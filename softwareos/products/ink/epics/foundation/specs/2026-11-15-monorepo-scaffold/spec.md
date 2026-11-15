@@ -1,7 +1,7 @@
 # Monorepo Scaffold
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/foundation/monorepo-scaffold
 > Covers: apps/api/** (build, bootstrap, /health), apps/mobile/** (Expo Router scaffold, app entry), docker-compose.yml, .github/workflows/**, README.md, .gitignore, .nvmrc
 

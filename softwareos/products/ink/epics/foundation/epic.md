@@ -1,7 +1,7 @@
 # Foundation
 
 > Product: ../../mission.md
-> Status: planning
+> Status: in-progress
 > Created: 2026-11-15 · Roles planned: PM, Tech
 
 ## Summary
@@ -19,4 +19,4 @@ Postgres. Every later epic just adds features on top of it.
 
 | Spec | Status | Branch |
 |---|---|---|
-| [2026-11-15-monorepo-scaffold](specs/2026-11-15-monorepo-scaffold/spec.md) | shaped | feat/foundation/monorepo-scaffold |
+| [2026-11-15-monorepo-scaffold](specs/2026-11-15-monorepo-scaffold/spec.md) | in-progress | feat/foundation/monorepo-scaffold |

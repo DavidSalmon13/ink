@@ -1,0 +1,40 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Environment (copy .env.example → .env)
+.env
+.env.*
+!.env.example
+
+# API (Gradle / Java)
+apps/api/.gradle/
+apps/api/build/
+apps/api/bin/
+apps/api/out/
+
+# Mobile (Node / Expo)
+node_modules/
+apps/mobile/.expo/
+apps/mobile/dist/
+apps/mobile/web-build/
+apps/mobile/expo-env.d.ts
+apps/mobile/ios/
+apps/mobile/android/
+apps/mobile/coverage/
+*.tsbuildinfo
+npm-debug.log*
+.metro-health-check*
+
+# Signing keys and certificates (never commit)
+*.jks
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+
+# Claude Code local settings
+.claude/settings.local.json
