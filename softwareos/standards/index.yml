@@ -3,3 +3,6 @@
 global:
   git-workflow:
     description: Branch off main per spec (feat/<epic>/<spec>, hotfix/, chore/), never commit on main, conventional commits scoped to the epic, PRs via the pr skill
+frontend:
+  design-fidelity:
+    description: UI copies design/ exactly; specs cite design/pages/*.html in references.md, styles only from design/design-system/tokens.json, start/end not left/right, done means matching the mockup on iPhone and iPad
