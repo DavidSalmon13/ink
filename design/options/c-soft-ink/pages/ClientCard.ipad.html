@@ -1,0 +1,173 @@
+<!doctype html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>כרטיס לקוח · iPad — Ink · Soft ink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F1EDE2;--surface:#FBF8F3;--surface-alt:#E8DFD0;--text:#36291F;--muted:#6B5A50;--border:#E0D5C3;--border-strong:#B9A792;--primary:#76544B;--on-primary:#FBF8F3;--tint:#E9DCD3;--line:#76544B;--danger:#A2392E;--on-danger:#FBF8F3;--success:#3D7148;--av:#3F8050;--re:#C46C1C;--do:#B23A2E;--scrim:rgba(54,41,31,0.4);--focus:#76544B;--cm-bg:#76544B;--cm-surface:#FBF8F3;--cm-text:#FBF8F3;--cm-muted:#EADFD8;--fh:'Rubik', sans-serif;--accent:#76544B;--on-accent:#FBF8F3;--accent-tint:#E9DCD3;--fb:'Rubik', sans-serif;--r-sm:12px;--r-md:18px;--r-lg:26px;--pad:20px;--row:60px;--btn-h:52px;--in-h:52px;--sh-card:0 4px 14px rgba(54,41,31,0.07);--sh-raised:0 8px 22px rgba(54,41,31,0.1);--sh-modal:0 20px 44px rgba(54,41,31,0.22);--gap:16px;--gap-s:8px;--gap-l:20px}
+body{margin:0;background:#D8D2C8;display:flex;justify-content:center;padding:24px 0}
+
+*{box-sizing:border-box}
+h1,h2,h3,h4,p{margin:0}
+button,input,select{font-family:inherit;color:inherit}
+.screen{width:393px;min-height:852px;background:var(--bg);color:var(--text);font-family:var(--fb);position:relative;overflow:hidden;padding-top:54px;padding-bottom:40px}
+.screen.has-tabbar{padding-bottom:110px}
+.screen.ipad{width:1180px;height:820px;min-height:0;padding:24px 0 0}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.ic{flex:none;display:block}
+.stack{display:flex;flex-direction:column}
+.hrow{display:flex;align-items:center}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.px{padding-inline:var(--pad)}
+.vis-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px var(--pad) 12px;min-height:56px}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;color:var(--text);border-radius:999px;padding:0;cursor:pointer}
+.btn{min-height:var(--btn-h);padding:0 20px;font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid transparent;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn-primary{background:var(--primary);color:var(--on-primary)}
+.btn-secondary{background:transparent;color:var(--primary);border-color:var(--primary)}
+.btn-ghost{background:transparent;color:var(--primary);padding:0 8px}
+.btn-destructive{background:var(--danger);color:var(--on-danger)}
+.btn:disabled,.btn[aria-disabled=true]{background:var(--surface-alt);color:var(--muted);border-color:transparent;cursor:not-allowed}
+.btn-block{width:100%}
+.btn-sm{min-height:44px;padding:0 14px;font-size:15px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.label{font-size:13px;font-weight:600;color:var(--muted)}
+.input{min-height:var(--in-h);width:100%;padding:0 14px;border:1px solid var(--border-strong);background:var(--surface);font-size:16px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.input.error{border-color:var(--danger);border-width:1.5px}
+.input .unit{color:var(--muted);font-size:14px}
+.helper{font-size:13px;color:var(--muted)}
+.helper.err{color:var(--danger);font-weight:600}
+.search{display:flex;align-items:center;gap:8px;min-height:var(--in-h);padding:0 12px;background:var(--surface);color:var(--muted)}
+.search input{border:0;background:transparent;font-size:16px;flex:1;min-width:0;outline:none;color:var(--text)}
+.search input::placeholder{color:var(--muted)}
+.seg{display:flex;padding:3px;gap:2px;background:var(--surface-alt)}
+.seg button{flex:1;min-height:38px;border:0;background:transparent;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.seg button small{font-size:11px;color:var(--muted);font-weight:400}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--primary);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{text-decoration:none;min-height:36px;padding:0 14px;border:1px solid var(--border-strong);background:transparent;font-size:14px;display:inline-flex;align-items:center;gap:6px;color:var(--text);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:var(--on-primary);font-weight:600}
+.dot{width:10px;height:10px;border-radius:999px;display:inline-block;flex:none}
+.dot.available{background:var(--av)}.dot.reserved{background:var(--re)}.dot.done{background:var(--do)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text)}
+.card{background:var(--surface)}
+.row{display:flex;align-items:center;gap:12px;min-height:var(--row);padding:10px var(--pad);color:var(--text);text-decoration:none}
+.rows>.row+.row{border-top:1px solid var(--border)}
+.section-h{display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);margin:28px 0 10px}
+.tabbar{position:absolute;inset-inline:0;bottom:0;display:flex;justify-content:space-around;padding:8px 8px 30px;background:var(--surface);border-top:1px solid var(--border);z-index:20}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--muted);text-decoration:none;min-width:60px;min-height:44px}
+.tabbar a[aria-current=page]{color:var(--primary);font-weight:700}
+.backdrop{position:absolute;inset:0;background:var(--scrim);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{width:100%;max-width:353px;background:var(--surface);box-shadow:var(--sh-modal);z-index:110;display:flex;flex-direction:column;max-height:760px;overflow:hidden}
+.modal-h{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 8px 20px;padding-inline-start:20px;padding-inline-end:8px}
+.modal-b{padding:4px 20px 16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.modal-f{display:flex;gap:10px;padding:14px 20px 20px;border-top:1px solid var(--border)}
+.modal-f .btn{flex:1}
+.prefill{font-size:13px;color:var(--primary);display:flex;align-items:center;gap:6px;font-weight:600}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--text);color:var(--bg);font-size:15px;font-weight:500;box-shadow:var(--sh-raised)}
+.toast.err{background:var(--danger);color:var(--on-danger)}
+.skel{background:var(--surface-alt);border-radius:4px}
+.thumb{background:var(--surface-alt);color:var(--line);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.thumb .art{width:78%;height:78%}
+.avatar{width:44px;height:44px;border-radius:999px;background:var(--tint);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:none}
+.timeline{position:relative}
+.hourline{display:flex;align-items:flex-start;gap:8px;border-top:1px solid var(--border);position:relative}
+.hourline .h{width:44px;font-size:12px;color:var(--muted);transform:translateY(-8px);background:var(--bg);text-align:end;padding-inline-end:6px}
+.appt{position:absolute;inset-inline-start:58px;inset-inline-end:var(--pad);padding:8px 12px;overflow:hidden;background:var(--tint);color:var(--text);border-inline-start:3px solid var(--primary);text-decoration:none;display:block}
+.appt .who{font-weight:700;font-size:14px}
+.appt .what{font-size:13px;color:var(--muted)}
+.appt.cancelled{background:transparent;border:1px dashed var(--border-strong);border-inline-start:3px solid var(--border-strong)}
+.appt.cancelled .who{text-decoration:line-through;color:var(--muted)}
+.nowline{position:absolute;inset-inline-start:52px;inset-inline-end:0;height:2px;background:var(--danger)}
+.nowline:before{content:"";position:absolute;inset-inline-start:-5px;top:-4px;width:10px;height:10px;border-radius:999px;background:var(--danger)}
+.lock-pill{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid currentColor;background:transparent;font-size:14px;font-weight:600;cursor:pointer;border-radius:999px}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:5px 0}
+.sum-row.total{font-size:18px;font-weight:700;border-top:1px solid var(--border);margin-top:6px;padding-top:12px}
+details>summary{list-style:none;cursor:pointer}
+details>summary::-webkit-details-marker{display:none}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 var(--pad)}
+.tabs a{min-height:44px;display:flex;align-items:center;padding:0 14px;font-size:15px;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a[aria-current=page]{color:var(--primary);border-bottom-color:var(--primary);font-weight:700}
+.badge{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--tint);color:var(--primary)}
+
+.t-display{font-family:var(--fh);font-size:32px;line-height:38px;font-weight:600}
+.t-title1{font-family:var(--fh);font-size:24px;line-height:30px;font-weight:600}
+.t-title2{font-family:var(--fh);font-size:19px;line-height:24px;font-weight:500}
+.t-headline{font-family:var(--fb);font-size:16px;line-height:22px;font-weight:500}
+.t-body{font-family:var(--fb);font-size:16px;line-height:24px;font-weight:400}
+.t-callout{font-family:var(--fb);font-size:14px;line-height:20px;font-weight:400}
+.t-caption{font-family:var(--fb);font-size:13px;line-height:18px;font-weight:400}
+.t-overline{font-family:var(--fb);font-size:12px;line-height:16px;font-weight:500;letter-spacing:0.4px}
+.t-price{font-family:var(--fh);font-size:30px;line-height:36px;font-weight:600}
+
+.btn{border-radius:999px}
+.input{border-radius:var(--r-sm);border:0;background:var(--surface);box-shadow:inset 0 0 0 1px var(--border-strong)}
+.search{border-radius:999px;background:var(--surface);box-shadow:var(--sh-card)}
+.seg{border-radius:999px;padding:4px}
+.seg button{border-radius:999px}
+.seg button[aria-pressed=true]{box-shadow:var(--sh-card)}
+.btn-secondary{background:var(--tint);border-color:transparent}
+.chip{border-radius:999px;border:0;background:var(--surface);box-shadow:inset 0 0 0 1px var(--border-strong)}
+.chip[aria-pressed=true]{box-shadow:none}
+.card{border-radius:var(--r-md);box-shadow:var(--sh-card)}
+.section-h h2{font-size:19px;font-weight:500}
+.modal{border-radius:var(--r-lg)}
+.toast{border-radius:999px;padding:12px 20px}
+.thumb{border-radius:14px}
+.appt{border-radius:14px;border-inline-start:0;background:var(--surface);box-shadow:var(--sh-card)}
+.appt:before{content:"";position:absolute;inset-inline-start:10px;top:12px;width:8px;height:8px;border-radius:999px;background:var(--primary)}
+.appt .who,.appt .what{padding-inline-start:14px}
+.appt.cancelled{box-shadow:none}
+.appt.cancelled:before{background:var(--border-strong)}
+.rows>.row+.row{border-top:0}
+.tabbar{inset-inline:16px;bottom:22px;border-radius:999px;border:0;padding:8px 6px;box-shadow:var(--sh-raised)}
+.tabbar a{min-width:56px;border-radius:999px;padding:4px 0}
+.tabbar a[aria-current=page]{background:var(--tint)}
+.overline{font-size:13px;font-weight:500;color:var(--muted)}
+.tabs{border-bottom:0;gap:6px;padding:4px var(--pad)}
+.tabs a{border:0;border-radius:999px;min-height:40px;margin:0;background:var(--surface-alt)}
+.tabs a[aria-current=page]{background:var(--primary);color:var(--on-primary)}
+
+
+.stat{padding:12px 14px;display:flex;flex-direction:column;gap:4px}.tat{display:flex;gap:14px;padding:12px;align-items:flex-start}.thumb.photo{width:76px;height:76px}.thumb.photo.empty{background:transparent;border:1.5px dashed var(--border-strong);color:var(--muted)}.consent{padding-top:10px;border-top:1px solid var(--border)}.side{width:340px;flex:none;border-inline-end:1px solid var(--border);background:var(--surface-alt);display:flex;flex-direction:column;overflow:hidden}.list .row{padding:8px 20px;min-height:60px}.list .row[aria-current=page]{background:var(--tint)}.detail{flex:1;padding:8px 32px;overflow:hidden}.tgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}.tgrid .tat{flex-direction:column}.tgrid .thumb.photo{width:100%;height:150px}.list .row[aria-current=page]{background:var(--surface);border-radius:18px;margin:0 10px;padding:8px 10px;box-shadow:var(--sh-card)}
+</style>
+</head>
+<body>
+
+<main class="screen ipad" dir="rtl" style="display:flex">
+  <aside class="side" aria-label="לקוחות">
+    <div class="hrow between" style="padding:8px 20px 12px"><h1 class="t-title1">לקוחות</h1><button class="btn btn-primary btn-sm" type="button"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>לקוח חדש</button></div>
+    <label class="search" style="margin:0 20px 10px"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><span class="vis-hidden">חיפוש לקוח</span><input placeholder="חיפוש לפי שם, טלפון או אינסטגרם"></label>
+    <nav class="rows list"><a class="row" href="#" aria-current="page"><span class="avatar" style="width:40px;height:40px;font-size:15px">מ</span><span class="grow stack"><span style="font-weight:600">מאיה לוי</span><span class="muted" style="font-size:13px">3 קעקועים</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">נ</span><span class="grow stack"><span style="font-weight:600">נועה ברק</span><span class="muted" style="font-size:13px">2 קעקועים</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">ת</span><span class="grow stack"><span style="font-weight:600">תמר אדלר</span><span class="muted" style="font-size:13px">1 קעקוע</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">ש</span><span class="grow stack"><span style="font-weight:600">שירה כהן</span><span class="muted" style="font-size:13px">אין עדיין קעקועים</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">ד</span><span class="grow stack"><span style="font-weight:600">דנה פרידמן</span><span class="muted" style="font-size:13px">4 קעקועים</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">י</span><span class="grow stack"><span style="font-weight:600">יעל שגיא</span><span class="muted" style="font-size:13px">1 קעקוע</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">ר</span><span class="grow stack"><span style="font-weight:600">רוני אבן</span><span class="muted" style="font-size:13px">2 קעקועים</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">ל</span><span class="grow stack"><span style="font-weight:600">ליה מור</span><span class="muted" style="font-size:13px">1 קעקוע</span></span></a><a class="row" href="#"><span class="avatar" style="width:40px;height:40px;font-size:15px">ע</span><span class="grow stack"><span style="font-weight:600">עדי נחום</span><span class="muted" style="font-size:13px">אין עדיין קעקועים</span></span></a></nav>
+  </aside>
+  <section class="detail" aria-label="כרטיס לקוח">
+    <div class="hrow between" style="margin-bottom:6px"><span></span><div class="hrow" style="gap:8px"><button class="btn btn-secondary btn-sm" type="button">הצעת מחיר</button><a class="btn btn-primary btn-sm" href="CalendarNewAppointment.ipad.html">קביעת תור</a><button class="iconbtn" type="button" aria-label="עוד פעולות"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="12" r="1"/></svg></button></div></div>
+    
+  <div class=" hrow" style="gap:14px">
+    <span class="avatar" style="width:64px;height:64px;font-size:24px">מ</span>
+    <div class="grow"><h1 class="t-title1">מאיה לוי</h1><p class="muted" style="font-size:14px">לקוחה מאז מרץ 2026</p></div>
+  </div>
+  <div class=" hrow contact" style="gap:8px;margin-top:14px">
+    <a class="chip" href="#"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 4h3l1.5 4-2 1.3a10 10 0 0 0 5.7 5.7L16 13l4 1.5v3A2 2 0 0 1 18 19.5 15 15 0 0 1 4.5 6 2 2 0 0 1 6.5 4z"/></svg><span class="num">054-381-2290</span></a>
+    <a class="chip" href="#"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.8 7.2h.01"/></svg><span class="num">@maya.lines</span></a>
+  </div>
+  <div class=" stats" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px">
+    <div class="card stat"><span class="label">קעקועים שבוצעו</span><span class="t-title1 num">3</span></div>
+    <div class="card stat"><span class="label">הכנסות לפי תורים שהסתיימו</span><span class="t-title1 num">1,690 ₪</span></div>
+    <div class="card stat"><span class="label">תור קרוב</span><span class="t-headline">יום רביעי 18.11 · 16:00</span></div>
+  </div>
+  
+  <div class=" hrow between consent" style="margin-top:12px"><span style="font-size:14px">הסכמה לדיוור: <strong>ניתנה · 02.10.2026</strong></span><button class="btn btn-ghost btn-sm" type="button">ביטול הסכמה</button></div>
+    <nav class="tabs" aria-label="לשוניות כרטיס לקוח" style="margin-top:18px;padding:0"><a href="#" aria-current="page">קעקועים · 3</a><a href="#">הצעות מחיר · 1</a><a href="#">הערות</a></nav>
+    <div class="tgrid"><article class="card tat"><span class="thumb photo"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M28 86c22 0 32-10 22-20S20 56 30 41s30-10 25-25c-2-5-8-6-12-3"/><path d="M43 13c-3 2-4 6-2 8l4-1"/><path d="M40 21l-4 3M40 21l-2 4"/></svg></span><div class="grow stack" style="gap:3px"><h3 class="t-headline">נחש בקו דק</h3><span class="muted" style="font-size:14px">אמה חיצונית · <span class="num">12.03.2026</span> · 75 דק׳</span><span class="status"><span class="dot available" aria-hidden="true" style="background:var(--success)"></span>בוצע · מופיע בגלריה</span></div></article><article class="card tat"><span class="thumb photo"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M16 50c10-14 22-20 34-20s24 6 34 20c-10 14-22 20-34 20S26 64 16 50z"/><circle cx="50" cy="50" r="9"/><circle cx="50" cy="50" r="3"/><path d="M30 37l-4-6M40 32l-2-7M50 30v-7M60 32l2-7M70 37l4-6"/></svg></span><div class="grow stack" style="gap:3px"><h3 class="t-headline">עין עם ריסים</h3><span class="muted" style="font-size:14px">עורף · <span class="num">28.06.2026</span> · 60 דק׳</span><span class="status"><span class="dot available" aria-hidden="true" style="background:var(--success)"></span>בוצע · מופיע בגלריה</span></div></article><article class="card tat"><span class="thumb photo empty"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.5" r="3.3"/></svg></span><div class="grow stack" style="gap:3px"><h3 class="t-headline">פרפר</h3><span class="muted" style="font-size:14px">קרסול · <span class="num">09.10.2026</span> · 45 דק׳</span><button class="btn btn-secondary btn-sm" type="button" style="align-self:flex-start"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M5 19h14"/></svg>העלאת תמונה</button></div></article></div>
+    <p class="helper" style="margin-top:10px">תמונה אחת לכל קעקוע. היא מופיעה אוטומטית בגלריית העבודות.</p>
+  </section>
+</main>
+</body>
+</html>

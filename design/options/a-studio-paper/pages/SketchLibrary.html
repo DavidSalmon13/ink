@@ -1,0 +1,146 @@
+<!doctype html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ספריית סקיצות — Ink · Studio paper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Assistant:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F1EDE2;--surface:#F8F5EE;--surface-alt:#E7E0D0;--text:#2B211E;--muted:#6A574F;--border:#CDBFAA;--border-strong:#76544B;--primary:#76544B;--on-primary:#F8F5EE;--tint:#E6DBD2;--line:#9C7B6E;--danger:#9B3328;--on-danger:#F8F5EE;--success:#3F6E45;--av:#3F7A47;--re:#B9671F;--do:#A3352B;--scrim:rgba(43,33,30,0.45);--focus:#76544B;--cm-bg:#2B211E;--cm-surface:#3A2E2A;--cm-text:#F1EDE2;--cm-muted:#CDBFB0;--fh:'Frank Ruhl Libre', serif;--accent:#76544B;--on-accent:#F8F5EE;--accent-tint:#E6DBD2;--fb:'Assistant', sans-serif;--r-sm:2px;--r-md:4px;--r-lg:8px;--pad:24px;--row:64px;--btn-h:50px;--in-h:50px;--sh-card:none;--sh-raised:0 2px 6px rgba(43,33,30,0.08);--sh-modal:0 12px 32px rgba(43,33,30,0.18);--gap:16px;--gap-s:8px;--gap-l:24px}
+body{margin:0;background:#D8D2C8;display:flex;justify-content:center;padding:24px 0}
+
+*{box-sizing:border-box}
+h1,h2,h3,h4,p{margin:0}
+button,input,select{font-family:inherit;color:inherit}
+.screen{width:393px;min-height:852px;background:var(--bg);color:var(--text);font-family:var(--fb);position:relative;overflow:hidden;padding-top:54px;padding-bottom:40px}
+.screen.has-tabbar{padding-bottom:110px}
+.screen.ipad{width:1180px;height:820px;min-height:0;padding:24px 0 0}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.ic{flex:none;display:block}
+.stack{display:flex;flex-direction:column}
+.hrow{display:flex;align-items:center}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.px{padding-inline:var(--pad)}
+.vis-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px var(--pad) 12px;min-height:56px}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;color:var(--text);border-radius:999px;padding:0;cursor:pointer}
+.btn{min-height:var(--btn-h);padding:0 20px;font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid transparent;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn-primary{background:var(--primary);color:var(--on-primary)}
+.btn-secondary{background:transparent;color:var(--primary);border-color:var(--primary)}
+.btn-ghost{background:transparent;color:var(--primary);padding:0 8px}
+.btn-destructive{background:var(--danger);color:var(--on-danger)}
+.btn:disabled,.btn[aria-disabled=true]{background:var(--surface-alt);color:var(--muted);border-color:transparent;cursor:not-allowed}
+.btn-block{width:100%}
+.btn-sm{min-height:44px;padding:0 14px;font-size:15px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.label{font-size:13px;font-weight:600;color:var(--muted)}
+.input{min-height:var(--in-h);width:100%;padding:0 14px;border:1px solid var(--border-strong);background:var(--surface);font-size:16px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.input.error{border-color:var(--danger);border-width:1.5px}
+.input .unit{color:var(--muted);font-size:14px}
+.helper{font-size:13px;color:var(--muted)}
+.helper.err{color:var(--danger);font-weight:600}
+.search{display:flex;align-items:center;gap:8px;min-height:var(--in-h);padding:0 12px;background:var(--surface);color:var(--muted)}
+.search input{border:0;background:transparent;font-size:16px;flex:1;min-width:0;outline:none;color:var(--text)}
+.search input::placeholder{color:var(--muted)}
+.seg{display:flex;padding:3px;gap:2px;background:var(--surface-alt)}
+.seg button{flex:1;min-height:38px;border:0;background:transparent;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.seg button small{font-size:11px;color:var(--muted);font-weight:400}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--primary);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{text-decoration:none;min-height:36px;padding:0 14px;border:1px solid var(--border-strong);background:transparent;font-size:14px;display:inline-flex;align-items:center;gap:6px;color:var(--text);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:var(--on-primary);font-weight:600}
+.dot{width:10px;height:10px;border-radius:999px;display:inline-block;flex:none}
+.dot.available{background:var(--av)}.dot.reserved{background:var(--re)}.dot.done{background:var(--do)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text)}
+.card{background:var(--surface)}
+.row{display:flex;align-items:center;gap:12px;min-height:var(--row);padding:10px var(--pad);color:var(--text);text-decoration:none}
+.rows>.row+.row{border-top:1px solid var(--border)}
+.section-h{display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);margin:28px 0 10px}
+.tabbar{position:absolute;inset-inline:0;bottom:0;display:flex;justify-content:space-around;padding:8px 8px 30px;background:var(--surface);border-top:1px solid var(--border);z-index:20}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--muted);text-decoration:none;min-width:60px;min-height:44px}
+.tabbar a[aria-current=page]{color:var(--primary);font-weight:700}
+.backdrop{position:absolute;inset:0;background:var(--scrim);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{width:100%;max-width:353px;background:var(--surface);box-shadow:var(--sh-modal);z-index:110;display:flex;flex-direction:column;max-height:760px;overflow:hidden}
+.modal-h{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 8px 20px;padding-inline-start:20px;padding-inline-end:8px}
+.modal-b{padding:4px 20px 16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.modal-f{display:flex;gap:10px;padding:14px 20px 20px;border-top:1px solid var(--border)}
+.modal-f .btn{flex:1}
+.prefill{font-size:13px;color:var(--primary);display:flex;align-items:center;gap:6px;font-weight:600}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--text);color:var(--bg);font-size:15px;font-weight:500;box-shadow:var(--sh-raised)}
+.toast.err{background:var(--danger);color:var(--on-danger)}
+.skel{background:var(--surface-alt);border-radius:4px}
+.thumb{background:var(--surface-alt);color:var(--line);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.thumb .art{width:78%;height:78%}
+.avatar{width:44px;height:44px;border-radius:999px;background:var(--tint);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:none}
+.timeline{position:relative}
+.hourline{display:flex;align-items:flex-start;gap:8px;border-top:1px solid var(--border);position:relative}
+.hourline .h{width:44px;font-size:12px;color:var(--muted);transform:translateY(-8px);background:var(--bg);text-align:end;padding-inline-end:6px}
+.appt{position:absolute;inset-inline-start:58px;inset-inline-end:var(--pad);padding:8px 12px;overflow:hidden;background:var(--tint);color:var(--text);border-inline-start:3px solid var(--primary);text-decoration:none;display:block}
+.appt .who{font-weight:700;font-size:14px}
+.appt .what{font-size:13px;color:var(--muted)}
+.appt.cancelled{background:transparent;border:1px dashed var(--border-strong);border-inline-start:3px solid var(--border-strong)}
+.appt.cancelled .who{text-decoration:line-through;color:var(--muted)}
+.nowline{position:absolute;inset-inline-start:52px;inset-inline-end:0;height:2px;background:var(--danger)}
+.nowline:before{content:"";position:absolute;inset-inline-start:-5px;top:-4px;width:10px;height:10px;border-radius:999px;background:var(--danger)}
+.lock-pill{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid currentColor;background:transparent;font-size:14px;font-weight:600;cursor:pointer;border-radius:999px}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:5px 0}
+.sum-row.total{font-size:18px;font-weight:700;border-top:1px solid var(--border);margin-top:6px;padding-top:12px}
+details>summary{list-style:none;cursor:pointer}
+details>summary::-webkit-details-marker{display:none}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 var(--pad)}
+.tabs a{min-height:44px;display:flex;align-items:center;padding:0 14px;font-size:15px;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a[aria-current=page]{color:var(--primary);border-bottom-color:var(--primary);font-weight:700}
+.badge{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--tint);color:var(--primary)}
+
+.t-display{font-family:var(--fh);font-size:36px;line-height:42px;font-weight:500}
+.t-title1{font-family:var(--fh);font-size:28px;line-height:34px;font-weight:500}
+.t-title2{font-family:var(--fh);font-size:21px;line-height:28px;font-weight:500}
+.t-headline{font-family:var(--fb);font-size:17px;line-height:24px;font-weight:600}
+.t-body{font-family:var(--fb);font-size:17px;line-height:26px;font-weight:400}
+.t-callout{font-family:var(--fb);font-size:15px;line-height:22px;font-weight:400}
+.t-caption{font-family:var(--fb);font-size:13px;line-height:18px;font-weight:500}
+.t-overline{font-family:var(--fb);font-size:12px;line-height:16px;font-weight:600;letter-spacing:1.2px}
+.t-price{font-family:var(--fh);font-size:30px;line-height:36px;font-weight:500}
+
+.btn{border-radius:var(--r-md);letter-spacing:.2px}
+.input,.search{border-radius:var(--r-md)}
+.search{border:1px solid var(--border-strong)}
+.seg{border-radius:var(--r-md);background:transparent;border:1px solid var(--border-strong);padding:0}
+.seg button{border-radius:0}
+.seg button+button{border-inline-start:1px solid var(--border)}
+.seg button[aria-pressed=true]{background:var(--primary);color:var(--on-primary)}
+.seg button[aria-pressed=true] small{color:var(--on-primary)}
+.chip{border-radius:999px}
+.card{border:1px solid var(--border);border-radius:var(--r-md)}
+.section-h h2{font-family:var(--fh);font-weight:500;font-size:21px}
+.rule{display:flex;align-items:center;gap:10px;color:var(--line)}
+.rule:before,.rule:after{content:"";flex:1;height:1px;background:var(--border)}
+.modal{border-radius:var(--r-lg);border:1px solid var(--border)}
+.toast{border-radius:var(--r-md)}
+.thumb{border-radius:var(--r-sm)}
+.appt{border-radius:var(--r-sm)}
+.tabbar{display:none}
+.overline{font-size:12px;letter-spacing:1.2px;font-weight:600;color:var(--muted)}
+
+
+.sq{aspect-ratio:1/1;width:100%}.sk-t{font-size:15px;font-weight:600}.cm-entry{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;color:var(--text);text-decoration:none;background:var(--tint);border-radius:var(--r-md)}.cm-entry .ic{color:var(--primary)}.sk .thumb{background:var(--surface);border:1px solid var(--border)}.sk-t{font-family:var(--fh);font-weight:500;font-size:17px}
+</style>
+</head>
+<body>
+
+<main class="screen" dir="rtl">
+  <div class="top"><button class="iconbtn" type="button" aria-label="חזרה"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></button><div class="hrow" style="gap:4px"><button class="btn btn-primary btn-sm" type="button"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M5 19h14"/></svg>העלאה</button></div></div><div class="px" style="margin-bottom:8px"><h1 class="t-title1" style="margin-top:2px">ספריית סקיצות</h1></div>
+  <div class="px stack" style="gap:10px">
+    <label class="search"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><span class="vis-hidden">חיפוש סקיצה</span><input placeholder="חיפוש סקיצה"></label>
+    <div class="seg" role="group" aria-label="סינון לפי סטטוס"><button type="button" aria-pressed="true">הכול<small>9</small></button><button type="button" aria-pressed="false">פנויה<small>4</small></button><button type="button" aria-pressed="false">שמורה<small>3</small></button><button type="button" aria-pressed="false">בוצעה<small>2</small></button></div>
+    <a class="cm-entry" href="ClientMode.html"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="grow stack"><span style="font-weight:700">מצב לקוח</span><span class="muted" style="font-size:13px">סקיצות בלבד · יציאה עם Face ID או קוד</span></span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg></a>
+  </div>
+  <div class="px grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px"><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M50 30c-6 0-10 4-10 9s5 9 10 9 9-4 9-8-3-7-7-7-6 3-6 6 2 4 4 4"/><path d="M38 38c-6 4-6 14 2 18 6 3 15 2 20-3 4-5 3-12-1-16"/><path d="M43 33c2-5 9-7 14-3"/><path d="M50 57c0 10-2 20-1 32"/><path d="M49.5 72c-8-4-14-2-17 2 5 3 11 3 17-2z"/><path d="M50 80c6-5 12-5 16-2-4 4-10 5-16 2z"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">ורד עם גבעול</h3><span class="status"><span class="dot available" aria-hidden="true"></span>פנויה</span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M58 20a31 31 0 1 0 0 60 25 25 0 1 1 0-60z"/><path d="M72 30l1.8 5h5.2l-4.2 3 1.6 5-4.4-3-4.4 3 1.6-5-4.2-3h5.2z"/><circle cx="66" cy="58" r="1"/><circle cx="76" cy="50" r=".8"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">ירח וכוכב</h3><span class="status"><span class="dot reserved" aria-hidden="true"></span>שמורה<span class="muted">· דנה פ.</span></span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M18 44c12-2 22 2 30 10 6-10 16-16 30-16-8 4-12 8-14 14 6 0 10 2 14 6-10 0-18 2-24 8l-6 18-4-16c-8-2-16-8-20-16 6 2 10 2 14 0-8-2-14-4-20-8z"/><circle cx="62" cy="47" r=".9"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">סנונית</h3><span class="status"><span class="dot done" aria-hidden="true"></span>בוצעה</span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M48 90C46 62 50 36 62 12"/><path d="M49 78c-8-2-14-8-16-14M49 66c-7-2-12-8-14-13M50 54c-6-2-10-7-12-12M52 43c-5-2-8-6-9-10M55 32c-4-2-6-5-7-8M49 72c7-3 12-9 13-15M50 60c6-3 10-8 11-13M52 48c5-3 8-7 9-11M55 37c4-2 6-6 7-9"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">שרך</h3><span class="status"><span class="dot available" aria-hidden="true"></span>פנויה</span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M28 86c22 0 32-10 22-20S20 56 30 41s30-10 25-25c-2-5-8-6-12-3"/><path d="M43 13c-3 2-4 6-2 8l4-1"/><path d="M40 21l-4 3M40 21l-2 4"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">נחש בקו דק</h3><span class="status"><span class="dot done" aria-hidden="true"></span>בוצעה</span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M16 50c10-14 22-20 34-20s24 6 34 20c-10 14-22 20-34 20S26 64 16 50z"/><circle cx="50" cy="50" r="9"/><circle cx="50" cy="50" r="3"/><path d="M30 37l-4-6M40 32l-2-7M50 30v-7M60 32l2-7M70 37l4-6"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">עין עם ריסים</h3><span class="status"><span class="dot reserved" aria-hidden="true"></span>שמורה<span class="muted">· ליה מ.</span></span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><circle cx="36" cy="70" r="11"/><circle cx="62" cy="74" r="10"/><path d="M38 59c4-14 10-26 22-36M60 64c0-14-1-28 0-41"/><path d="M60 23c8-6 18-6 24 0-8 6-18 6-24 0z"/><path d="M32 66c1-2 3-3 5-3"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">דובדבנים</h3><span class="status"><span class="dot available" aria-hidden="true"></span>פנויה</span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><path d="M50 34v38"/><path d="M50 40c-6-12-22-18-28-12s2 20 18 18c-12 4-14 16-8 20s14-4 18-14"/><path d="M50 40c6-12 22-18 28-12s-2 20-18 18c12 4 14 16 8 20s-14-4-18-14"/><path d="M48 33c-2-5-5-8-8-9M52 33c2-5 5-8 8-9"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">פרפר</h3><span class="status"><span class="dot available" aria-hidden="true"></span>פנויה</span></div></article><article class="sk"><div class="thumb sq"><svg class="art" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="סקיצה"><circle cx="50" cy="50" r="14"/><path d="M50 22v-9M50 87v-9M22 50h-9M87 50h-9M30 30l-6-6M76 76l-6-6M70 30l6-6M24 76l6-6"/><path d="M45 48c1-1 2-1 3 0M52 48c1-1 2-1 3 0M45 55c3 2 7 2 10 0"/></svg></div><div class="stack" style="gap:2px;padding:8px 2px 0"><h3 class="sk-t">שמש קטנה</h3><span class="status"><span class="dot reserved" aria-hidden="true"></span>שמורה<span class="muted">· נועה ב.</span></span></div></article></div>
+  
+</main>
+</body>
+</html>
