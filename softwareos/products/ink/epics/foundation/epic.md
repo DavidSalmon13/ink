@@ -6,7 +6,7 @@
 
 ## Summary
 
-An installable iPhone/iPad app (TestFlight) with the Ink design system, Hebrew
+A working iPhone/iPad app (demoed through Expo Go; TestFlight comes after the MVP) with the Ink design system, Hebrew
 right-to-left, a Face ID lock and owner login, connected to a deployed Spring Boot API +
 Postgres. Every later epic just adds features on top of it.
 

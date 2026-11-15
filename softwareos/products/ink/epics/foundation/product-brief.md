@@ -4,7 +4,7 @@
 
 ## Goals
 
-Aya can install the app, unlock it with Face ID, and move around the five tabs
+Aya can try the app on her own iPhone/iPad (through Expo Go), unlock it, and move around the five tabs
 (בית, מחשבון, סקיצות, לקוחות, יומן) in the final look. Her data is private and synced
 across her iPhone and iPad.
 
@@ -19,7 +19,8 @@ across her iPhone and iPad.
 
 ## Success Criteria
 
-- A TestFlight build runs on Aya's iPhone and iPad.
+- Aya can open the app on her iPhone and iPad through Expo Go, connected to the deployed API.
+- Face ID is verified on an iOS Simulator dev build (Expo Go falls back to the passcode).
 - The home screen matches `design/pages/Home.html` (and the design system) in light and dark mode.
 - The app is always locked when reopened or brought back from the background.
 - Hebrew right-to-left layout is correct on every screen in the shell, including numbers and ₪.
@@ -29,3 +30,4 @@ across her iPhone and iPad.
 - All feature screens: tabs other than home show placeholder screens.
 - Offline writes (reading from cache only, per architecture).
 - Email/marketing (phase 2).
+- Apple Developer account, TestFlight and the App Store: deferred until the MVP is accepted (see roadmap → Release).

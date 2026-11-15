@@ -8,7 +8,8 @@
 - Server state: TanStack Query with a persisted on-device cache (read offline)
 - `expo-print` + `expo-sharing` for the monthly PDF report (HTML → PDF, RTL-safe)
 - `expo-image-picker` for tattoo photos and sketches
-- EAS Build → TestFlight
+- During the MVP: Expo Go + EAS Update for demos (Expo Go–compatible libraries only)
+- After MVP acceptance: EAS Build → TestFlight (needs a paid Apple Developer account)
 
 ## Backend
 

@@ -27,6 +27,12 @@ Build order (each is a candidate epic):
 7. **My Data**: "income from completed appointments", manual expenses with categories,
    computed balance, monthly chart, monthly PDF report to share with the accountant.
 
+### Release (after Aya accepts the MVP)
+
+- Apple Developer account, bundle ID, Face ID entitlement and usage text
+- EAS Build → TestFlight on Aya's devices, then a private App Store or TestFlight distribution
+- Until then, demos run through **Expo Go** + EAS Update; no paid Apple account is needed
+
 ## Phase 2: Post-Launch
 
 - **Email marketing**: consent-based mailing list, upload a finished newsletter
