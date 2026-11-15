@@ -1,0 +1,151 @@
+<!doctype html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>יומן · iPad — Ink · Calm pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F5F1;--surface:#FFFFFF;--surface-alt:#F1EDE2;--text:#1E1A18;--muted:#5F5550;--border:#E2DCD1;--border-strong:#B9AEA0;--primary:#76544B;--on-primary:#FFFFFF;--tint:#EFE6E1;--line:#76544B;--danger:#A9322A;--on-danger:#FFFFFF;--success:#2E7049;--av:#2E7D4C;--re:#C2690F;--do:#B3352B;--scrim:rgba(30,26,24,0.4);--focus:#76544B;--cm-bg:#F1EDE2;--cm-surface:#FFFFFF;--cm-text:#1E1A18;--cm-muted:#5F5550;--fh:'Heebo', sans-serif;--accent:#76544B;--on-accent:#FFFFFF;--accent-tint:#EFE6E1;--fb:'Heebo', sans-serif;--r-sm:6px;--r-md:8px;--r-lg:12px;--pad:16px;--row:52px;--btn-h:44px;--in-h:44px;--sh-card:0 1px 2px rgba(30,26,24,0.05);--sh-raised:0 4px 10px rgba(30,26,24,0.08);--sh-modal:0 16px 40px rgba(30,26,24,0.2);--gap:12px;--gap-s:4px;--gap-l:16px}
+body{margin:0;background:#D8D2C8;display:flex;justify-content:center;padding:24px 0}
+
+*{box-sizing:border-box}
+h1,h2,h3,h4,p{margin:0}
+button,input,select{font-family:inherit;color:inherit}
+.screen{width:393px;min-height:852px;background:var(--bg);color:var(--text);font-family:var(--fb);position:relative;overflow:hidden;padding-top:54px;padding-bottom:40px}
+.screen.has-tabbar{padding-bottom:110px}
+.screen.ipad{width:1180px;height:820px;min-height:0;padding:24px 0 0}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.ic{flex:none;display:block}
+.stack{display:flex;flex-direction:column}
+.hrow{display:flex;align-items:center}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.px{padding-inline:var(--pad)}
+.vis-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px var(--pad) 12px;min-height:56px}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;color:var(--text);border-radius:999px;padding:0;cursor:pointer}
+.btn{min-height:var(--btn-h);padding:0 20px;font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid transparent;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn-primary{background:var(--primary);color:var(--on-primary)}
+.btn-secondary{background:transparent;color:var(--primary);border-color:var(--primary)}
+.btn-ghost{background:transparent;color:var(--primary);padding:0 8px}
+.btn-destructive{background:var(--danger);color:var(--on-danger)}
+.btn:disabled,.btn[aria-disabled=true]{background:var(--surface-alt);color:var(--muted);border-color:transparent;cursor:not-allowed}
+.btn-block{width:100%}
+.btn-sm{min-height:44px;padding:0 14px;font-size:15px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.label{font-size:13px;font-weight:600;color:var(--muted)}
+.input{min-height:var(--in-h);width:100%;padding:0 14px;border:1px solid var(--border-strong);background:var(--surface);font-size:16px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.input.error{border-color:var(--danger);border-width:1.5px}
+.input .unit{color:var(--muted);font-size:14px}
+.helper{font-size:13px;color:var(--muted)}
+.helper.err{color:var(--danger);font-weight:600}
+.search{display:flex;align-items:center;gap:8px;min-height:var(--in-h);padding:0 12px;background:var(--surface);color:var(--muted)}
+.search input{border:0;background:transparent;font-size:16px;flex:1;min-width:0;outline:none;color:var(--text)}
+.search input::placeholder{color:var(--muted)}
+.seg{display:flex;padding:3px;gap:2px;background:var(--surface-alt)}
+.seg button{flex:1;min-height:38px;border:0;background:transparent;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.seg button small{font-size:11px;color:var(--muted);font-weight:400}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--primary);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{text-decoration:none;min-height:36px;padding:0 14px;border:1px solid var(--border-strong);background:transparent;font-size:14px;display:inline-flex;align-items:center;gap:6px;color:var(--text);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:var(--on-primary);font-weight:600}
+.dot{width:10px;height:10px;border-radius:999px;display:inline-block;flex:none}
+.dot.available{background:var(--av)}.dot.reserved{background:var(--re)}.dot.done{background:var(--do)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text)}
+.card{background:var(--surface)}
+.row{display:flex;align-items:center;gap:12px;min-height:var(--row);padding:10px var(--pad);color:var(--text);text-decoration:none}
+.rows>.row+.row{border-top:1px solid var(--border)}
+.section-h{display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);margin:28px 0 10px}
+.tabbar{position:absolute;inset-inline:0;bottom:0;display:flex;justify-content:space-around;padding:8px 8px 30px;background:var(--surface);border-top:1px solid var(--border);z-index:20}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--muted);text-decoration:none;min-width:60px;min-height:44px}
+.tabbar a[aria-current=page]{color:var(--primary);font-weight:700}
+.backdrop{position:absolute;inset:0;background:var(--scrim);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{width:100%;max-width:353px;background:var(--surface);box-shadow:var(--sh-modal);z-index:110;display:flex;flex-direction:column;max-height:760px;overflow:hidden}
+.modal-h{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 8px 20px;padding-inline-start:20px;padding-inline-end:8px}
+.modal-b{padding:4px 20px 16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.modal-f{display:flex;gap:10px;padding:14px 20px 20px;border-top:1px solid var(--border)}
+.modal-f .btn{flex:1}
+.prefill{font-size:13px;color:var(--primary);display:flex;align-items:center;gap:6px;font-weight:600}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--text);color:var(--bg);font-size:15px;font-weight:500;box-shadow:var(--sh-raised)}
+.toast.err{background:var(--danger);color:var(--on-danger)}
+.skel{background:var(--surface-alt);border-radius:4px}
+.thumb{background:var(--surface-alt);color:var(--line);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.thumb .art{width:78%;height:78%}
+.avatar{width:44px;height:44px;border-radius:999px;background:var(--tint);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:none}
+.timeline{position:relative}
+.hourline{display:flex;align-items:flex-start;gap:8px;border-top:1px solid var(--border);position:relative}
+.hourline .h{width:44px;font-size:12px;color:var(--muted);transform:translateY(-8px);background:var(--bg);text-align:end;padding-inline-end:6px}
+.appt{position:absolute;inset-inline-start:58px;inset-inline-end:var(--pad);padding:8px 12px;overflow:hidden;background:var(--tint);color:var(--text);border-inline-start:3px solid var(--primary);text-decoration:none;display:block}
+.appt .who{font-weight:700;font-size:14px}
+.appt .what{font-size:13px;color:var(--muted)}
+.appt.cancelled{background:transparent;border:1px dashed var(--border-strong);border-inline-start:3px solid var(--border-strong)}
+.appt.cancelled .who{text-decoration:line-through;color:var(--muted)}
+.nowline{position:absolute;inset-inline-start:52px;inset-inline-end:0;height:2px;background:var(--danger)}
+.nowline:before{content:"";position:absolute;inset-inline-start:-5px;top:-4px;width:10px;height:10px;border-radius:999px;background:var(--danger)}
+.lock-pill{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid currentColor;background:transparent;font-size:14px;font-weight:600;cursor:pointer;border-radius:999px}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:5px 0}
+.sum-row.total{font-size:18px;font-weight:700;border-top:1px solid var(--border);margin-top:6px;padding-top:12px}
+details>summary{list-style:none;cursor:pointer}
+details>summary::-webkit-details-marker{display:none}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 var(--pad)}
+.tabs a{min-height:44px;display:flex;align-items:center;padding:0 14px;font-size:15px;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a[aria-current=page]{color:var(--primary);border-bottom-color:var(--primary);font-weight:700}
+.badge{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--tint);color:var(--primary)}
+
+.t-display{font-family:var(--fh);font-size:28px;line-height:34px;font-weight:700}
+.t-title1{font-family:var(--fh);font-size:22px;line-height:28px;font-weight:700}
+.t-title2{font-family:var(--fh);font-size:17px;line-height:22px;font-weight:600}
+.t-headline{font-family:var(--fb);font-size:15px;line-height:20px;font-weight:600}
+.t-body{font-family:var(--fb);font-size:15px;line-height:22px;font-weight:400}
+.t-callout{font-family:var(--fb);font-size:14px;line-height:20px;font-weight:400}
+.t-caption{font-family:var(--fb);font-size:12px;line-height:16px;font-weight:500}
+.t-overline{font-family:var(--fb);font-size:11px;line-height:14px;font-weight:600;letter-spacing:0.6px}
+.t-price{font-family:var(--fh);font-size:26px;line-height:32px;font-weight:700}
+
+.btn{border-radius:var(--r-md)}
+.input,.search{border-radius:var(--r-md)}
+.input{border-color:var(--border-strong)}
+.search{background:var(--surface-alt)}
+.seg{border-radius:var(--r-md)}
+.seg button{border-radius:6px}
+.seg button[aria-pressed=true]{box-shadow:var(--sh-card)}
+.chip{border-radius:var(--r-sm);min-height:34px;font-size:13px;padding:0 10px}
+.card{border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-card)}
+.section-h{margin:20px 0 8px}
+.section-h h2{font-size:13px;font-weight:700;letter-spacing:.6px;color:var(--muted)}
+.modal{border-radius:14px}
+.toast{border-radius:var(--r-md)}
+.thumb{border-radius:6px}
+.appt{border-radius:6px;padding:5px 10px}
+.appt .who{font-size:13px}.appt .what{font-size:12px}
+.row{min-height:52px;padding:8px var(--pad)}
+.overline{font-size:11px;letter-spacing:.6px;font-weight:700;color:var(--muted)}
+
+
+.side{width:300px;flex:none;padding:8px 22px;border-inline-end:1px solid var(--border);background:var(--surface)}.main{flex:1;padding:8px 24px;min-width:0;position:relative}.wk{display:grid;grid-template-columns:56px repeat(7,minmax(0,1fr));position:relative}.ch{text-align:center;padding:8px 0;font-weight:600;border-bottom:1px solid var(--border)}.ch.today{color:var(--primary)}.ch.today .num{background:var(--primary);color:var(--on-primary);border-radius:999px;padding:2px 8px}.col{position:relative;border-inline-start:1px solid var(--border);background-image:repeating-linear-gradient(to bottom,var(--border) 0,var(--border) 1px,transparent 1px,transparent 56px)}.col.today{background-color:var(--tint)}.hh{font-size:12px;color:var(--muted);text-align:end;padding-inline-end:8px;transform:translateY(-7px)}.wk .appt{padding:4px 8px}.wk .appt .who{font-size:13px}.wk .appt .what{font-size:12px}.minimonth{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;text-align:center;margin-top:8px;font-size:13px}.mm-h{color:var(--muted);font-size:12px;padding:4px 0}.mm{padding:6px 0;border-radius:999px}.mm.wk{background:var(--tint)}.mm.sel{background:var(--primary);color:var(--on-primary);font-weight:700}
+</style>
+</head>
+<body>
+
+<main class="screen ipad" dir="rtl" style="display:flex">
+  <aside class="side" aria-label="ניווט יומן">
+    <h1 class="t-title1">יומן</h1>
+    <a class="btn btn-primary btn-block" href="CalendarNewAppointment.ipad.html" style="margin-top:14px"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>תור חדש</a>
+    <div class="hrow between" style="margin-top:22px"><span class="t-headline">נובמבר 2026</span><div class="hrow"><button class="iconbtn" type="button" aria-label="חודש קודם"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></button><button class="iconbtn" type="button" aria-label="חודש הבא"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg></button></div></div>
+    <div class="minimonth" aria-label="נובמבר 2026"><span class="mm-h">א׳</span><span class="mm-h">ב׳</span><span class="mm-h">ג׳</span><span class="mm-h">ד׳</span><span class="mm-h">ה׳</span><span class="mm-h">ו׳</span><span class="mm-h">ש׳</span><span class="mm num">1</span><span class="mm num">2</span><span class="mm num">3</span><span class="mm num">4</span><span class="mm num">5</span><span class="mm num">6</span><span class="mm num">7</span><span class="mm num">8</span><span class="mm num">9</span><span class="mm num">10</span><span class="mm num">11</span><span class="mm num">12</span><span class="mm num">13</span><span class="mm num">14</span><span class="mm sel num">15</span><span class="mm wk num">16</span><span class="mm wk num">17</span><span class="mm wk num">18</span><span class="mm wk num">19</span><span class="mm wk num">20</span><span class="mm wk num">21</span><span class="mm num">22</span><span class="mm num">23</span><span class="mm num">24</span><span class="mm num">25</span><span class="mm num">26</span><span class="mm num">27</span><span class="mm num">28</span><span class="mm num">29</span><span class="mm num">30</span></div>
+    <h2 class="t-headline" style="margin-top:20px">היום</h2>
+    <div class="rows"><div class="row" style="padding:8px 0"><span class="num" style="width:52px;font-weight:700">11:00</span><span class="grow stack"><span style="font-weight:600">נועה ברק</span><span class="muted" style="font-size:13px">ורד עדין, אמה פנימית</span></span></div><div class="row" style="padding:8px 0"><span class="num" style="width:52px;font-weight:700">14:30</span><span class="grow stack"><span style="font-weight:600">תמר אדלר</span><span class="muted" style="font-size:13px">דובדבנים קטנים, קרסול</span></span></div><div class="row" style="padding:8px 0"><span class="num" style="width:52px;font-weight:700">17:00</span><span class="grow stack"><span style="font-weight:600">שירה כהן</span><span class="muted" style="font-size:13px">אייל, גב עליון — מפגש ראשון</span></span></div></div>
+  </aside>
+  <section class="main" aria-label="שבוע">
+    <div class="hrow between" style="margin-bottom:12px"><h2 class="t-title2">15–21 בנובמבר 2026</h2><div style="width:220px"><div class="seg" role="group" aria-label="תצוגת יומן"><button type="button" aria-pressed="false">יום</button><button type="button" aria-pressed="true">שבוע</button><button type="button" aria-pressed="false">חודש</button></div></div></div>
+    <div class="wk"><div></div><div class="ch today"><span class="muted">א׳</span> <span class="num">15</span></div><div class="ch"><span class="muted">ב׳</span> <span class="num">16</span></div><div class="ch"><span class="muted">ג׳</span> <span class="num">17</span></div><div class="ch"><span class="muted">ד׳</span> <span class="num">18</span></div><div class="ch"><span class="muted">ה׳</span> <span class="num">19</span></div><div class="ch"><span class="muted">ו׳</span> <span class="num">20</span></div><div class="ch"><span class="muted">ש׳</span> <span class="num">21</span></div></div>
+    <div class="wk body"><div><div class="hh num" style="height:56px">09:00</div><div class="hh num" style="height:56px">10:00</div><div class="hh num" style="height:56px">11:00</div><div class="hh num" style="height:56px">12:00</div><div class="hh num" style="height:56px">13:00</div><div class="hh num" style="height:56px">14:00</div><div class="hh num" style="height:56px">15:00</div><div class="hh num" style="height:56px">16:00</div><div class="hh num" style="height:56px">17:00</div><div class="hh num" style="height:56px">18:00</div><div class="hh num" style="height:56px">19:00</div></div><div class="col today"><a class="appt" href="#" style="top:113px;height:53px;inset-inline:4px"><span class="who">נועה ברק</span><br><span class="what">ורד עדין, אמה פנימית</span></a><a class="appt cancelled" href="#" style="top:225px;height:39px;inset-inline:4px"><span class="who">דנה פרידמן</span><br><span class="what">בוטל</span></a><a class="appt" href="#" style="top:309px;height:39px;inset-inline:4px"><span class="who">תמר אדלר</span><br><span class="what">דובדבנים קטנים, קרסול</span></a><a class="appt" href="#" style="top:449px;height:81px;inset-inline:4px"><span class="who">שירה כהן</span><br><span class="what">אייל, גב עליון</span></a></div><div class="col"><a class="appt" href="#" style="top:57px;height:81px;inset-inline:4px"><span class="who">יעל שגיא</span><br><span class="what">שרך, צלעות</span></a></div><div class="col"><a class="appt" href="#" style="top:169px;height:53px;inset-inline:4px"><span class="who">רוני אבן</span><br><span class="what">סנונית, כתף</span></a><a class="appt" href="#" style="top:365px;height:25px;inset-inline:4px"><span class="who">ליה מור</span><br><span class="what">נקודות, אצבע</span></a></div><div class="col"><a class="appt" href="#" style="top:393px;height:109px;inset-inline:4px"><span class="who">מאיה לוי</span><br><span class="what">ורד עם גבעול + דובדבנים</span></a></div><div class="col"><a class="appt" href="#" style="top:113px;height:39px;inset-inline:4px"><span class="who">ליה מור</span><br><span class="what">עין, עורף</span></a><a class="appt" href="#" style="top:281px;height:53px;inset-inline:4px"><span class="who">עדי נחום</span><br><span class="what">פרפר, קרסול</span></a></div><div class="col"><a class="appt" href="#" style="top:57px;height:25px;inset-inline:4px"><span class="who">נועה ברק</span><br><span class="what">שמש קטנה, אצבע</span></a></div><div class="col"></div><div class="nowline" style="top:37px;inset-inline-start:56px"></div></div>
+  </section>
+  
+</main>
+</body>
+</html>
