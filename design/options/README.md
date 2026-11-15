@@ -1,6 +1,6 @@
 # Ink — three design directions
 
-Design files only (no app code). Each option has `tokens.json`, `design-system.html`, `pages/` (iPhone 393×852 + iPad 1180×820) and its own `README.md` with pattern credits. All screens use the same fictional sample data and Hebrew wording from `AYA_INK_new.docx`, so the differences you see are design choices, not content.
+Design files only (no app code). **Option D (`d-soft-ink-warm/`) was added after the first review**: C's structure with serif titles, a mauve accent for now/new, larger art and drawn moments. See its README for the reasoning, including how top CRMs use color. Each option has `tokens.json`, `design-system.html`, `pages/` (iPhone 393×852 + iPad 1180×820) and its own `README.md` with pattern credits. All screens use the same fictional sample data and Hebrew wording from `AYA_INK_new.docx`, so the differences you see are design choices, not content.
 
 | | **A · Studio paper** `a-studio-paper/` | **B · Calm pro** `b-calm-pro/` | **C · Soft ink** `c-soft-ink/` |
 |---|---|---|---|
@@ -19,7 +19,7 @@ Design files only (no app code). Each option has `tokens.json`, `design-system.h
 
 Shared across all three (from the spec): four main actions + next 3 appointments on home with no money; the centered "תור חדש" modal with a dimmed backdrop on iPhone and iPad; the "לקוחות" search + "לקוח חדש" at the top of the calculator, with "אפשרויות נוספות" for needles and discounts and copying allowed without a client; status dots green/orange/red with text labels and no prices on sketches; client mode with exit via Face ID or passcode; "הכנסות לפי תורים שהסתיימו" wording; WCAG AA contrast in light and dark (ratios printed in each `design-system.html`).
 
-## Recommendation: **C · Soft ink**
+## Recommendation: **C · Soft ink** (or D, its warmer version)
 
 For one artist who uses the app between sessions, on an iPhone and sometimes an iPad held in one hand, C is the best balance:
 
