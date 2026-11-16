@@ -1,3 +1,6 @@
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
+
 import type { LocalAuthResult } from '@/auth/localAuth';
 
 export interface AppLockOptions {
@@ -17,12 +20,93 @@ export interface AppLock {
   unlock(): Promise<void>;
 }
 
+/** Whether the app lock is up, for screens that must not prompt underneath it (My Data). */
+export const AppLockContext = createContext(false);
+
+export function useIsAppLocked(): boolean {
+  return useContext(AppLockContext);
+}
+
 /**
  * Prompts on cold start and when the app returns from `background`. It does NOT prompt on
  * inactive -> active (the Face ID sheet itself, Control Center, the app switcher): after a cancel
  * that would loop. A locked user retries with unlock().
+ *
+ * Mounted enabled = cold start with a stored session, so it starts locked. Becoming enabled later
+ * (a fresh password sign-in) does not lock: she has just authenticated.
  */
-export function useAppLock(options: AppLockOptions): AppLock {
-  void options;
-  throw new Error('Not implemented (T14)');
+export function useAppLock({ enabled, authenticate }: AppLockOptions): AppLock {
+  const [locked, setLocked] = useState(enabled);
+  const [covered, setCovered] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
+
+  // Signing out clears the lock, so the next sign-in starts unlocked.
+  const [wasEnabled, setWasEnabled] = useState(enabled);
+  if (wasEnabled !== enabled) {
+    setWasEnabled(enabled);
+    if (!enabled) {
+      setLocked(false);
+      setCovered(false);
+      setUnavailable(false);
+    }
+  }
+
+  const inFlight = useRef(false);
+  const wentToBackground = useRef(false);
+  /** Bumped on every trip to the background: a prompt that started before it is stale. */
+  const backgroundCount = useRef(0);
+
+  const prompt = useCallback(async () => {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    const startedAt = backgroundCount.current;
+    try {
+      // A native error (e.g. the auth service failing) counts as a failed attempt: stay locked.
+      const result = await authenticate().catch((): LocalAuthResult => 'failed');
+      // The app went to the background while the prompt was up: it needs a fresh check.
+      if (backgroundCount.current !== startedAt) return;
+      if (result === 'success') {
+        setLocked(false);
+        setUnavailable(false);
+      } else if (result === 'unavailable') {
+        setUnavailable(true);
+      }
+    } finally {
+      inFlight.current = false;
+    }
+  }, [authenticate]);
+
+  // Cold start: prompt right away. Runs once, with the value enabled had at mount.
+  const enabledAtMount = useRef(enabled);
+  useEffect(() => {
+    if (enabledAtMount.current) void prompt();
+  }, [prompt]);
+
+  useEffect(() => {
+    if (!enabled) return;
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'background') {
+        wentToBackground.current = true;
+        backgroundCount.current += 1;
+        setLocked(true);
+      } else if (state === 'inactive') {
+        setCovered(true);
+      } else if (state === 'active') {
+        setCovered(false);
+        // Only consume the trip to the background when a prompt can actually start.
+        if (wentToBackground.current && !inFlight.current) {
+          wentToBackground.current = false;
+          void prompt();
+        }
+      }
+    });
+    return () => subscription.remove();
+  }, [enabled, prompt]);
+
+  return {
+    locked: enabled && locked,
+    covered: enabled && covered,
+    unavailable: enabled && unavailable,
+    unlock: prompt,
+  };
 }

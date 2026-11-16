@@ -6,7 +6,13 @@ const mockLocalAuth = {
   authenticateAsync: jest.fn<(options: object) => Promise<{ success: boolean; error?: string }>>(),
   SecurityLevel: { NONE: 0, SECRET: 1, BIOMETRIC_WEAK: 2, BIOMETRIC_STRONG: 3 },
 };
-jest.mock('expo-local-authentication', () => mockLocalAuth, { virtual: true });
+// The factory runs when localAuth.ts is imported (hoisted above this file's consts),
+// so it forwards each call to mockLocalAuth at call time instead of capturing it.
+jest.mock('expo-local-authentication', () => ({
+  getEnrolledLevelAsync: () => mockLocalAuth.getEnrolledLevelAsync(),
+  authenticateAsync: (options: object) => mockLocalAuth.authenticateAsync(options),
+  SecurityLevel: { NONE: 0, SECRET: 1, BIOMETRIC_WEAK: 2, BIOMETRIC_STRONG: 3 },
+}));
 
 import { authenticateLocally } from '@/auth/localAuth';
 
