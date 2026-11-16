@@ -7,7 +7,7 @@ export async function requireReauth(
   authenticate: () => Promise<LocalAuthResult>,
   platform: string = Platform.OS,
 ): Promise<boolean> {
-  void authenticate;
-  void platform;
-  throw new Error('Not implemented (T15)');
+  if (platform === 'web') return true;
+  // No remembered approval: every call prompts.
+  return (await authenticate()) === 'success';
 }
