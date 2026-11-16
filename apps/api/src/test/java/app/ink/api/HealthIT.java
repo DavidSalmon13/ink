@@ -49,8 +49,11 @@ class HealthIT {
 
     @Test
     void healthIsNotServedUnderActuatorPrefix() {
-        assertThat(rest.getForEntity("/actuator/health", String.class).getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND);
+        // Since owner-auth-lock, unknown routes are refused before routing (401 without a token,
+        // AC6 there), so this checks that nothing health-like is served, not the exact status.
+        ResponseEntity<String> response = rest.getForEntity("/actuator/health", String.class);
+        assertThat(response.getStatusCode()).isNotEqualTo(HttpStatus.OK);
+        assertThat(String.valueOf(response.getBody())).doesNotContain("\"status\":\"UP\"");
     }
 
     @Test

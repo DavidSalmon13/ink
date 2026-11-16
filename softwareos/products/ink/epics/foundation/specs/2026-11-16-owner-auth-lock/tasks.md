@@ -3,18 +3,19 @@
 > Epic: foundation
 > Spec: 2026-11-16-owner-auth-lock
 > Branch: feat/foundation/owner-auth-lock
+> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2)
 
 ## Tests first (TDD)
 
-- [ ] T1 Write failing API tests: AuthIT (Testcontainers) for login ok/401/429, Bearer required on a protected probe endpoint, /health stays public, logout, list/revoke, expired + revoked tokens, seeder upsert + revoke-on-hash-change; SessionTokenServiceTest (hashing, sliding expiry, touch throttle) (testing skill)
+- [x] T1 Write failing API tests: AuthIT (Testcontainers) for login ok/401/429, Bearer required on a protected probe endpoint, /health stays public, logout, list/revoke, expired + revoked tokens, seeder upsert + revoke-on-hash-change; SessionTokenServiceTest (hashing, sliding expiry, touch throttle) (testing skill)
 - [ ] T2 Write failing mobile tests: tokenStore (native vs web), apiFetch (Bearer header, 401 → onUnauthorized), AuthProvider transitions, useAppLock (background locks, inactive only covers, active prompts), my-data reauth guard, Login screen states (testing skill)
 
 ## API (apps/api)
 
-- [ ] T3 Add spring-boot-starter-security; V2__owner_and_session.sql (owner, owner_session, indexes on token_hash and owner_id)
-- [ ] T4 Owner + OwnerSession entities and repositories
-- [ ] T5 SessionTokenService (issue, SHA-256 hash, active lookup with 90d sliding window, hourly touch, revoke) + app.auth.* config
-- [ ] T6 BearerTokenFilter + SecurityFilterChain (stateless, no CSRF, CORS, permitAll /health, /auth/login, OPTIONS) + JSON 401 entry point
+- [x] T3 Add spring-boot-starter-security; V2__owner_and_session.sql (owner, owner_session, indexes on token_hash and owner_id)
+- [x] T4 Owner + OwnerSession entities and repositories
+- [x] T5 SessionTokenService (issue, SHA-256 hash, active lookup with 90d sliding window, hourly touch, revoke) + app.auth.* config
+- [x] T6 BearerTokenFilter + SecurityFilterChain (stateless, no CSRF, CORS, permitAll /health, /auth/login, OPTIONS) + JSON 401 entry point
 - [ ] T7 AuthController: POST /auth/login, POST /auth/logout, GET /auth/sessions, DELETE /auth/sessions/{id}
 - [ ] T8 LoginRateLimiter (5 failures / 15 min per email and per IP → 429)
 - [ ] T9 OwnerSeeder (env upsert, revoke all sessions on hash change, warn when unset) + hashPassword Gradle task (HashPasswordCli, stdin)
