@@ -43,7 +43,7 @@ Lock have no page mockups, so they are built only from design-system components 
 7. AC7: A session expires 90 days after `last_used_at`. Using the token extends it. `last_used_at` is written at most once per hour per session.
 8. AC8: `POST /auth/logout` revokes the calling session, and the token returns 401 immediately afterwards.
 9. AC9: `GET /auth/sessions` lists active sessions (id, deviceName, platform, createdAt, lastUsedAt, current flag). `DELETE /auth/sessions/{id}` revokes that session. Its token returns 401 on the next request.
-10. AC10: The app with no stored token opens on the Login screen (Hebrew, RTL, design-system inputs and primary button, plus loading, error and disabled states). On success it stores the token and goes to the home placeholder. A wrong password shows "אימייל או סיסמה שגויים". Rate limiting shows a "try again later" message.
+10. AC10: The app with no stored token opens on the Login screen (Hebrew, laid out with logical start/end properties so it renders right-to-left once app-shell forces RTL; design-system inputs and primary button, plus loading, error and disabled states). On success it stores the token and goes to the home placeholder. A wrong password shows "אימייל או סיסמה שגויים". Rate limiting shows a "try again later" message.
 11. AC11: On iOS the token is kept in `expo-secure-store` and survives an app restart. On web it is kept in memory only, and a reload returns to Login.
 12. AC12: On iOS, the app shows the Lock screen on cold start and every time it returns from `background`, and unlocks only after `expo-local-authentication` succeeds (Face ID, then the passcode). On `inactive` (app switcher), a privacy cover hides the content. In Expo Go the passcode fallback works. Face ID is verified on a Simulator dev build.
 13. AC13: If the device has no biometrics and no passcode, the Lock screen offers signing in again with the password instead of unlocking.
@@ -74,7 +74,7 @@ Lock have no page mockups, so they are built only from design-system components 
 - `src/auth/useAppLock.ts`: listens to `AppState`. `background` → locked. `inactive` → privacy cover only, because the Face ID prompt itself triggers `inactive` and locking there would loop. `active` while locked → prompt. Web is a no-op.
 - `src/auth/requireReauth.ts`: a one-off `authenticateAsync` used by the `my-data` route guard.
 - `app/_layout.tsx`: wrap in `AuthProvider`. When signed out, redirect to `/login`. When signed in and locked, render `LockScreen` as a full-screen overlay above the Stack, so the navigation state is kept.
-- Screens: `app/login.tsx`, `src/auth/LockScreen.tsx` and `app/my-data.tsx` (placeholder). Styles come only from tokens, using logical properties. If app-shell's theme has landed, use it. Otherwise read the few needed tokens from a small `src/auth/tokens.ts`, marked for app-shell to replace.
+- Screens: `app/login.tsx`, `src/auth/LockScreen.tsx` and `app/my-data.tsx` (placeholder). Styles come only from tokens, using logical properties. If app-shell's theme has landed, use it. Otherwise read the few needed tokens from a small `src/auth/tokens.ts`, marked for app-shell to replace. Forced RTL also comes from app-shell; until it lands, these screens render left-to-right.
 
 **Docs:** add `Owner` and `OwnerSession` to `data-model.md` (they're internal, not synced entities). Add `OWNER_EMAIL` and `OWNER_PASSWORD_HASH` to `.env.example` and the README.
 
@@ -89,6 +89,7 @@ Lock have no page mockups, so they are built only from design-system components 
 - Distributed or persistent rate limiting. In-memory is enough for one instance.
 - Real My Data content (the My Data epic), and the Home.html tile linking to it (app-shell).
 - The final shared error format and the entity conventions (api-conventions).
+- Forcing the app into right-to-left layout (`I18nManager.forceRTL`). app-shell owns it (foundation tech-plan). This spec's screens use logical start/end only, and their RTL rendering is verified in app-shell's QA.
 
 ## Standards Applied
 
@@ -100,3 +101,4 @@ Lock have no page mockups, so they are built only from design-system components 
 | Date | Author | Type | Change | Ref |
 |---|---|---|---|---|
 | 2026-11-16 | david-schwartzman | created | Initial shaping | — |
+| 2026-11-16 | david-schwartzman | change | AC10: RTL layout depends on app-shell's forced RTL; added to Out of Scope — forced RTL is app-shell's per the tech plan, found in the code review of #21–#23 | PR #21–#23 review |
