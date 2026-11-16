@@ -42,3 +42,13 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+// Prints the bcrypt hash for OWNER_PASSWORD_HASH. Reads the password from stdin, never from args,
+// so it stays out of shell history: ./gradlew -q hashPassword
+tasks.register<JavaExec>("hashPassword") {
+	group = "application"
+	description = "Reads a password from stdin and prints its bcrypt hash (for OWNER_PASSWORD_HASH)."
+	classpath = sourceSets["main"].runtimeClasspath
+	mainClass = "app.ink.api.auth.HashPasswordCli"
+	standardInput = System.`in`
+}
