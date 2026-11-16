@@ -7,7 +7,15 @@ const mockSecureStore = {
   deleteItemAsync: jest.fn<(key: string) => Promise<void>>(),
   WHEN_UNLOCKED_THIS_DEVICE_ONLY: 'WHEN_UNLOCKED_THIS_DEVICE_ONLY',
 };
-jest.mock('expo-secure-store', () => mockSecureStore, { virtual: true });
+// The factory runs when tokenStore.ts is imported (hoisted above this file's consts),
+// so it forwards each call to mockSecureStore at call time instead of capturing it.
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: (key: string) => mockSecureStore.getItemAsync(key),
+  setItemAsync: (key: string, value: string, options?: object) =>
+    mockSecureStore.setItemAsync(key, value, options),
+  deleteItemAsync: (key: string) => mockSecureStore.deleteItemAsync(key),
+  WHEN_UNLOCKED_THIS_DEVICE_ONLY: 'WHEN_UNLOCKED_THIS_DEVICE_ONLY',
+}));
 
 import { createTokenStore, TOKEN_KEY } from '@/auth/tokenStore';
 

@@ -23,7 +23,7 @@
 ## Mobile (apps/mobile)
 
 - [x] T10 Add expo-secure-store, expo-local-authentication, expo-device (Expo Go–compatible versions via `npx expo install`)
-- [ ] T11 src/auth/tokenStore.ts + src/api/client.ts (apiFetch with Bearer + 401 handler)
+- [x] T11 src/auth/tokenStore.ts + src/api/client.ts (apiFetch with Bearer + 401 handler)
 - [ ] T12 src/auth/AuthProvider.tsx + auth guard in app/_layout.tsx (redirect to /login when signed out)
 - [ ] T13 app/login.tsx: Hebrew Login screen from design-system components/tokens (no mockup), loading/error/disabled states, iPhone + iPad
 - [ ] T14 src/auth/useAppLock.ts + LockScreen overlay + privacy cover on inactive; no-biometrics fallback to password sign-in; web no-op
