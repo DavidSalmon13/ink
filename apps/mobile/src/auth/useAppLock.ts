@@ -1,0 +1,28 @@
+import type { LocalAuthResult } from '@/auth/localAuth';
+
+export interface AppLockOptions {
+  /** false on web and when signed out: never locks. */
+  enabled: boolean;
+  authenticate: () => Promise<LocalAuthResult>;
+}
+
+export interface AppLock {
+  /** Content is hidden until local authentication succeeds. */
+  locked: boolean;
+  /** App switcher / inactive: content hidden by a privacy cover, but not locked. */
+  covered: boolean;
+  /** The device has no biometrics and no passcode: offer password sign-in instead. */
+  unavailable: boolean;
+  /** Prompt again (e.g. the user tapped the unlock button). */
+  unlock(): Promise<void>;
+}
+
+/**
+ * Prompts on cold start and when the app returns from `background`. It does NOT prompt on
+ * inactive -> active (the Face ID sheet itself, Control Center, the app switcher): after a cancel
+ * that would loop. A locked user retries with unlock().
+ */
+export function useAppLock(options: AppLockOptions): AppLock {
+  void options;
+  throw new Error('Not implemented (T14)');
+}

@@ -8,7 +8,7 @@
 ## Tests first (TDD)
 
 - [x] T1 Write failing API tests: AuthIT (Testcontainers) for login ok/401/429, Bearer required on a protected probe endpoint, /health stays public, logout, list/revoke, expired + revoked tokens, seeder upsert + revoke-on-hash-change; SessionTokenServiceTest (hashing, sliding expiry, touch throttle) (testing skill)
-- [ ] T2 Write failing mobile tests: tokenStore (native vs web), apiFetch (Bearer header, 401 → onUnauthorized), AuthProvider transitions, useAppLock (background locks, inactive only covers, active prompts), my-data reauth guard, Login screen states (testing skill)
+- [x] T2 Write failing mobile tests: tokenStore (native vs web), apiFetch (Bearer header, 401 → onUnauthorized), AuthProvider transitions, useAppLock (background locks, inactive only covers, active prompts), my-data reauth guard, Login screen states (testing skill)
 
 ## API (apps/api)
 
