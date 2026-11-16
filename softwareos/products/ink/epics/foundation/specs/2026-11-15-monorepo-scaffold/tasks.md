@@ -3,6 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-15-monorepo-scaffold
 > Branch: feat/foundation/monorepo-scaffold
+> PR: https://github.com/DavidSalmon13/ink/pull/12
 
 ## Repo & local infra
 
