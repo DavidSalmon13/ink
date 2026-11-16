@@ -3,6 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-16-owner-auth-lock
 > Branch: feat/foundation/owner-auth-lock
+> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2)
 
 ## Tests first (TDD)
 
