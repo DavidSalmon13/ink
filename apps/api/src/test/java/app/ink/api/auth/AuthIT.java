@@ -188,6 +188,16 @@ class AuthIT {
         assertThat(wrongPassword.getBody()).containsKey("error");
     }
 
+    @Test
+    void passwordLongerThanBcryptReadsIsRejectedLikeAWrongPassword() {
+        // bcrypt only reads 72 bytes: PASSWORD + padding must not log in even though its prefix is right.
+        String tooLong = PASSWORD + "x".repeat(80);
+        ResponseEntity<Map<String, Object>> res = login(EMAIL, tooLong, "iPhone");
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(res.getBody()).isEqualTo(login(EMAIL, "nope-nope-nope", "iPhone").getBody());
+    }
+
     // ---- AC6: every other endpoint needs a valid Bearer token -----------------------------------
 
     @Test
