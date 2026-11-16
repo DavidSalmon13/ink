@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: ink-api
+  datasource:
+    # Credentials come from the environment; local defaults match docker-compose.yml.
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ink}
+    username: ${DB_USER:ink}
+    password: ${DB_PASSWORD:ink}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      # Serve the health endpoint at GET /health (not /actuator/health).
+      base-path: "/"
+      exposure:
+        include: health
+      cors:
+        # Let the Expo web preview call /health cross-origin in dev. deploy-pipeline sets prod.
+        allowed-origins: ${app.cors.allowed-origins}
+        allowed-methods: GET,OPTIONS
+  endpoint:
+    health:
+      # Show each component's status (incl. db) without leaking connection details; no auth required.
+      show-components: always
+      show-details: never
+
+# Dev CORS origins for the API's own MVC endpoints (see CorsConfig) and the actuator CORS above.
+app:
+  cors:
+    allowed-origins: http://localhost:8081
