@@ -42,6 +42,11 @@ public class Owner {
 		this.updatedAt = now;
 	}
 
+	public void changeEmail(String email, Instant now) {
+		this.email = email;
+		this.updatedAt = now;
+	}
+
 	public void changePasswordHash(String passwordHash, Instant now) {
 		this.passwordHash = passwordHash;
 		this.updatedAt = now;

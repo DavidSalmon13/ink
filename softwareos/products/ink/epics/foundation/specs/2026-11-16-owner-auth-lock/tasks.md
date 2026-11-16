@@ -3,7 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-16-owner-auth-lock
 > Branch: feat/foundation/owner-auth-lock
-> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2)
+> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2) · https://github.com/DavidSalmon13/ink/pull/17 (API, T7+T8) · https://github.com/DavidSalmon13/ink/pull/18 (API, T9) · https://github.com/DavidSalmon13/ink/pull/19 (tests, review fixes)
 
 ## Tests first (TDD)
 
@@ -18,7 +18,7 @@
 - [x] T6 BearerTokenFilter + SecurityFilterChain (stateless, no CSRF, CORS, permitAll /health, /auth/login, OPTIONS) + JSON 401 entry point
 - [x] T7 AuthController: POST /auth/login, POST /auth/logout, GET /auth/sessions, DELETE /auth/sessions/{id}
 - [x] T8 LoginRateLimiter (5 failures / 15 min per email and per IP → 429)
-- [~] T9 OwnerSeeder (env upsert, revoke all sessions on hash change, warn when unset) + hashPassword Gradle task (HashPasswordCli, stdin)
+- [x] T9 OwnerSeeder (env upsert, revoke all sessions on hash change, warn when unset) + hashPassword Gradle task (HashPasswordCli, stdin)
 
 ## Mobile (apps/mobile)
 
