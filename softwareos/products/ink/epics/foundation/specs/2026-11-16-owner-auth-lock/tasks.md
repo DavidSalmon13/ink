@@ -22,7 +22,7 @@
 
 ## Mobile (apps/mobile)
 
-- [ ] T10 Add expo-secure-store, expo-local-authentication, expo-device (Expo Go–compatible versions via `npx expo install`)
+- [x] T10 Add expo-secure-store, expo-local-authentication, expo-device (Expo Go–compatible versions via `npx expo install`)
 - [ ] T11 src/auth/tokenStore.ts + src/api/client.ts (apiFetch with Bearer + 401 handler)
 - [ ] T12 src/auth/AuthProvider.tsx + auth guard in app/_layout.tsx (redirect to /login when signed out)
 - [ ] T13 app/login.tsx: Hebrew Login screen from design-system components/tokens (no mockup), loading/error/disabled states, iPhone + iPad
