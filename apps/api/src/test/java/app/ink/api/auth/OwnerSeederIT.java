@@ -153,4 +153,19 @@ class OwnerSeederIT {
             assertThat(client(ctx).get().uri("/health").exchange((req, res) -> res.getStatusCode()).value()).isEqualTo(200);
         }
     }
+
+    @Test
+    void changedEmailRenamesTheSingleOwnerAndRevokesSessions() {
+        String token;
+        try (ConfigurableApplicationContext ctx = start(AuthIT.EMAIL, AuthIT.PASSWORD_HASH)) {
+            token = loginToken(ctx, AuthIT.EMAIL, AuthIT.PASSWORD);
+        }
+        try (ConfigurableApplicationContext ctx = start("aya.studio@example.com", AuthIT.PASSWORD_HASH)) {
+            JdbcTemplate jdbc = ctx.getBean(JdbcTemplate.class);
+            assertThat(jdbc.queryForObject("select count(*) from owner where deleted_at is null", Integer.class)).isEqualTo(1);
+            assertThat(sessionsStatus(ctx, token).value()).isEqualTo(401);
+            assertThat(loginStatus(ctx, AuthIT.EMAIL, AuthIT.PASSWORD).value()).isEqualTo(401);
+            assertThat(loginStatus(ctx, "aya.studio@example.com", AuthIT.PASSWORD).value()).isEqualTo(200);
+        }
+    }
 }
