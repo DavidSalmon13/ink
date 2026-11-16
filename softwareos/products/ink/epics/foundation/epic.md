@@ -20,4 +20,4 @@ Postgres. Every later epic just adds features on top of it.
 | Spec | Status | Branch |
 |---|---|---|
 | [2026-11-15-monorepo-scaffold](specs/2026-11-15-monorepo-scaffold/spec.md) | in-progress | feat/foundation/monorepo-scaffold · [#12](https://github.com/DavidSalmon13/ink/pull/12) |
-| [2026-11-16-owner-auth-lock](specs/2026-11-16-owner-auth-lock/spec.md) | in-progress | feat/foundation/owner-auth-lock · [#15](https://github.com/DavidSalmon13/ink/pull/15) · [#16](https://github.com/DavidSalmon13/ink/pull/16) · [#17](https://github.com/DavidSalmon13/ink/pull/17) · [#18](https://github.com/DavidSalmon13/ink/pull/18) · [#19](https://github.com/DavidSalmon13/ink/pull/19) |
+| [2026-11-16-owner-auth-lock](specs/2026-11-16-owner-auth-lock/spec.md) | in-progress | feat/foundation/owner-auth-lock · [#15](https://github.com/DavidSalmon13/ink/pull/15) · [#16](https://github.com/DavidSalmon13/ink/pull/16) · [#17](https://github.com/DavidSalmon13/ink/pull/17) · [#18](https://github.com/DavidSalmon13/ink/pull/18) · [#19](https://github.com/DavidSalmon13/ink/pull/19) · [#20](https://github.com/DavidSalmon13/ink/pull/20) |
