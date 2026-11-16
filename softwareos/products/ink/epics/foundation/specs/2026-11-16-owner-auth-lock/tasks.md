@@ -12,7 +12,7 @@
 ## API (apps/api)
 
 - [x] T3 Add spring-boot-starter-security; V2__owner_and_session.sql (owner, owner_session, indexes on token_hash and owner_id)
-- [~] T4 Owner + OwnerSession entities and repositories
+- [x] T4 Owner + OwnerSession entities and repositories
 - [ ] T5 SessionTokenService (issue, SHA-256 hash, active lookup with 90d sliding window, hourly touch, revoke) + app.auth.* config
 - [ ] T6 BearerTokenFilter + SecurityFilterChain (stateless, no CSRF, CORS, permitAll /health, /auth/login, OPTIONS) + JSON 401 entry point
 - [ ] T7 AuthController: POST /auth/login, POST /auth/logout, GET /auth/sessions, DELETE /auth/sessions/{id}
