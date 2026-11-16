@@ -17,7 +17,7 @@
 - [x] T5 SessionTokenService (issue, SHA-256 hash, active lookup with 90d sliding window, hourly touch, revoke) + app.auth.* config
 - [x] T6 BearerTokenFilter + SecurityFilterChain (stateless, no CSRF, CORS, permitAll /health, /auth/login, OPTIONS) + JSON 401 entry point
 - [x] T7 AuthController: POST /auth/login, POST /auth/logout, GET /auth/sessions, DELETE /auth/sessions/{id}
-- [~] T8 LoginRateLimiter (5 failures / 15 min per email and per IP → 429)
+- [x] T8 LoginRateLimiter (5 failures / 15 min per email and per IP → 429)
 - [~] T9 OwnerSeeder (env upsert, revoke all sessions on hash change, warn when unset) + hashPassword Gradle task (HashPasswordCli, stdin)
 
 ## Mobile (apps/mobile)

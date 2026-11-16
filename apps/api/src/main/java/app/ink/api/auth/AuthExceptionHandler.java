@@ -23,6 +23,11 @@ class AuthExceptionHandler {
 		return error(HttpStatus.UNAUTHORIZED, "invalid_credentials", "Invalid email or password");
 	}
 
+	@ExceptionHandler(LoginService.TooManyAttemptsException.class)
+	ResponseEntity<Map<String, Object>> tooManyAttempts() {
+		return error(HttpStatus.TOO_MANY_REQUESTS, "too_many_attempts", "Too many failed attempts, try again later");
+	}
+
 	@ExceptionHandler({ MethodArgumentNotValidException.class, HttpMessageNotReadableException.class,
 			MethodArgumentTypeMismatchException.class })
 	ResponseEntity<Map<String, Object>> badRequest() {
