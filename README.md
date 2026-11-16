@@ -38,6 +38,36 @@ curl localhost:8080/health          # {"status":"UP",...}
 Tests (`./gradlew test`, or `./gradlew build` for compile + tests) start their own Postgres with Testcontainers,
 so Docker must be running.
 
+#### Owner login
+
+The app has one user, the owner, created from two env vars when the API starts:
+
+| Variable | Value |
+|---|---|
+| `OWNER_EMAIL` | The login email (case-insensitive) |
+| `OWNER_PASSWORD_HASH` | A bcrypt hash of the password, never the password itself |
+
+Make the hash with the `hashPassword` task. It reads the password from stdin, so it stays out of shell history.
+Gradle doesn't give it a real terminal, so typing straight into it would show the password on screen. Read it
+silently first and pipe it in:
+
+```sh
+cd apps/api
+read -rs P && printf '%s\n' "$P" | ./gradlew -q hashPassword; unset P   # type the password (hidden), Enter; prints $2a$12$...
+```
+
+Put both in `.env`, with the hash in **single quotes** (it contains `$`):
+
+```sh
+OWNER_EMAIL=aya@example.com
+OWNER_PASSWORD_HASH='$2a$12$...'
+```
+
+On Railway, paste the hash as is (no quotes) into the service's variables.
+
+- **Changing the password:** set a new hash and restart the API. Every signed-in device is logged out.
+- **Not set:** the API still starts, logs a warning, and every login fails.
+
 ### 3. App
 
 ```sh
