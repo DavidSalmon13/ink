@@ -63,6 +63,7 @@ describe('Login screen', () => {
     ['invalid_credentials', 'אימייל או סיסמה שגויים'],
     ['rate_limited', 'יותר מדי ניסיונות. אפשר לנסות שוב מאוחר יותר'],
     ['network', 'אין חיבור לשרת. אפשר לנסות שוב'],
+    ['unknown', 'משהו השתבש. אפשר לנסות שוב'],
   ] as const)('shows the %s error message', async (code, message) => {
     mockSignIn.mockRejectedValue(new AuthError(code));
     await render(<Login />);

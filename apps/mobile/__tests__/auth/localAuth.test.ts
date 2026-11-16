@@ -37,6 +37,15 @@ describe('authenticateLocally', () => {
     await expect(authenticateLocally('x')).resolves.toBe('failed');
   });
 
+  it.each(['passcode_not_set', 'not_enrolled', 'not_available'])(
+    'returns unavailable when iOS reports %s at prompt time',
+    async (error) => {
+      mockLocalAuth.getEnrolledLevelAsync.mockResolvedValue(1);
+      mockLocalAuth.authenticateAsync.mockResolvedValue({ success: false, error });
+      await expect(authenticateLocally('x')).resolves.toBe('unavailable');
+    },
+  );
+
   it('returns unavailable without prompting when there is no biometrics and no passcode', async () => {
     mockLocalAuth.getEnrolledLevelAsync.mockResolvedValue(0);
     await expect(authenticateLocally('x')).resolves.toBe('unavailable');

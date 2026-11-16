@@ -29,11 +29,15 @@ async function emit(state: AppStateStatus) {
 }
 
 describe('useAppLock', () => {
-  it('starts locked on cold start and prompts right away; success unlocks', async () => {
-    authenticate.mockResolvedValue('success');
+  it('starts locked on cold start (content hidden before Face ID) and prompts right away; success unlocks', async () => {
+    let resolve: (r: LocalAuthResult) => void = () => {};
+    authenticate.mockImplementation(() => new Promise((r) => (resolve = r)));
     const { result } = await renderHook(() => useAppLock({ enabled: true, authenticate }));
-    await waitFor(() => expect(result.current.locked).toBe(false));
-    expect(authenticate).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(authenticate).toHaveBeenCalledTimes(1));
+    expect(result.current.locked).toBe(true);
+
+    await act(async () => resolve('success'));
+    expect(result.current.locked).toBe(false);
   });
 
   it('stays locked when authentication fails, and unlock() prompts again', async () => {
@@ -88,6 +92,30 @@ describe('useAppLock', () => {
 
     await act(async () => resolve('success'));
     expect(result.current.locked).toBe(false);
+  });
+
+  it('does not re-prompt in a loop when Face ID is cancelled (the sheet closing fires inactive -> active)', async () => {
+    authenticate.mockResolvedValue('failed');
+    const { result } = await renderHook(() => useAppLock({ enabled: true, authenticate }));
+    await waitFor(() => expect(authenticate).toHaveBeenCalledTimes(1));
+
+    await emit('inactive');
+    await emit('active');
+
+    expect(authenticate).toHaveBeenCalledTimes(1);
+    expect(result.current.locked).toBe(true);
+  });
+
+  it('prompts again after a real trip to the background, even if the last prompt was cancelled', async () => {
+    authenticate.mockResolvedValueOnce('failed').mockResolvedValueOnce('success');
+    const { result } = await renderHook(() => useAppLock({ enabled: true, authenticate }));
+    await waitFor(() => expect(authenticate).toHaveBeenCalledTimes(1));
+
+    await emit('background');
+    await emit('active');
+
+    await waitFor(() => expect(result.current.locked).toBe(false));
+    expect(authenticate).toHaveBeenCalledTimes(2);
   });
 
   it('reports unavailable (no biometrics, no passcode) and stays locked', async () => {

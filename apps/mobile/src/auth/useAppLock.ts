@@ -17,6 +17,11 @@ export interface AppLock {
   unlock(): Promise<void>;
 }
 
+/**
+ * Prompts on cold start and when the app returns from `background`. It does NOT prompt on
+ * inactive -> active (the Face ID sheet itself, Control Center, the app switcher): after a cancel
+ * that would loop. A locked user retries with unlock().
+ */
 export function useAppLock(options: AppLockOptions): AppLock {
   void options;
   throw new Error('Not implemented (T14)');

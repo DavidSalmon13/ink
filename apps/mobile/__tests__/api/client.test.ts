@@ -1,5 +1,5 @@
 // covers AC15, T2, T11 — apiFetch adds the Bearer token and ends the session on a 401.
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { ApiError, createApiClient, NetworkError } from '@/api/client';
 
@@ -15,17 +15,19 @@ beforeEach(() => {
   globalThis.fetch = mockFetch as unknown as typeof fetch;
 });
 
+afterEach(() => {
+  jest.useRealTimers();
+});
+
 function client(timeoutMs?: number) {
   return createApiClient({ baseUrl: BASE, timeoutMs, getToken: async () => token, onUnauthorized });
 }
 
 function response(status: number, body?: unknown) {
-  return {
-    ok: status >= 200 && status < 300,
+  return new Response(body === undefined ? null : JSON.stringify(body), {
     status,
-    json: async () => body,
-    text: async () => (body === undefined ? '' : JSON.stringify(body)),
-  } as Response;
+    headers: body === undefined ? {} : { 'content-type': 'application/json' },
+  });
 }
 
 function sentHeaders(): Record<string, string> {
@@ -106,6 +108,5 @@ describe('apiFetch', () => {
     const settled = result.catch((e: unknown) => e);
     await jest.advanceTimersByTimeAsync(100);
     expect(await settled).toBeInstanceOf(NetworkError);
-    jest.useRealTimers();
   });
 });
