@@ -3,7 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-16-owner-auth-lock
 > Branch: feat/foundation/owner-auth-lock
-> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2) · https://github.com/DavidSalmon13/ink/pull/17 (API, T7+T8) · https://github.com/DavidSalmon13/ink/pull/18 (API, T9) · https://github.com/DavidSalmon13/ink/pull/19 (tests, review fixes) · https://github.com/DavidSalmon13/ink/pull/20 (T9 + review-fix tests → main)
+> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2) · https://github.com/DavidSalmon13/ink/pull/17 (API, T7+T8) · https://github.com/DavidSalmon13/ink/pull/18 (API, T9) · https://github.com/DavidSalmon13/ink/pull/19 (tests, review fixes) · https://github.com/DavidSalmon13/ink/pull/20 (T9 + review-fix tests → main) · https://github.com/DavidSalmon13/ink/pull/21 (mobile, T10–T12) · https://github.com/DavidSalmon13/ink/pull/22 (mobile, T13–T14) · https://github.com/DavidSalmon13/ink/pull/23 (mobile + docs, T15–T18)
 
 ## Tests first (TDD)
 
@@ -27,15 +27,15 @@
 - [x] T12 src/auth/AuthProvider.tsx + auth guard in app/_layout.tsx (redirect to /login when signed out)
 - [x] T13 app/login.tsx: Hebrew Login screen from design-system components/tokens (no mockup), loading/error/disabled states, iPhone + iPad
 - [x] T14 src/auth/useAppLock.ts + LockScreen overlay + privacy cover on inactive; no-biometrics fallback to password sign-in; web no-op
-- [ ] T15 src/auth/requireReauth.ts + app/my-data.tsx placeholder guarded by fresh authentication
-- [ ] T16 Temporary logout button on the home placeholder (calls /auth/logout, clears token)
+- [x] T15 src/auth/requireReauth.ts + app/my-data.tsx placeholder guarded by fresh authentication
+- [x] T16 Temporary logout button on the home placeholder (calls /auth/logout, clears token)
 
 ## Docs
 
-- [ ] T17 data-model.md: add Owner + OwnerSession; .env.example + README: OWNER_EMAIL, OWNER_PASSWORD_HASH, hashPassword usage
+- [x] T17 data-model.md: add Owner + OwnerSession; .env.example + README: OWNER_EMAIL, OWNER_PASSWORD_HASH, hashPassword usage
 
 ## Verification
 
-- [ ] T18 Make all T1/T2 tests pass; ./gradlew build, npm run typecheck/lint/test green (testing skill)
+- [x] T18 Make all T1/T2 tests pass; ./gradlew build, npm run typecheck/lint/test green (testing skill)
 - [ ] T19 Manual device check: Face ID on a Simulator dev build, passcode fallback in Expo Go, background re-lock, app-switcher cover, web preview login/reload; screenshots compared against design-system.html
 - [ ] T20 Run QA against acceptance criteria (qa skill)

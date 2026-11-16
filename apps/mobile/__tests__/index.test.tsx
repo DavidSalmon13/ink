@@ -1,6 +1,13 @@
-// covers AC5, AC8, T10, T15 — placeholder screen shows "Ink" and the API status.
+// covers AC5, AC8, AC15, T10, T15, T16 — placeholder screen shows "Ink", the API status and a temporary logout.
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
+
+import type { AuthState } from '@/auth/AuthProvider';
+
+const mockSignOut = jest.fn<AuthState['signOut']>();
+jest.mock('@/auth/AuthProvider', () => ({
+  useAuth: () => ({ status: 'signedIn', signIn: jest.fn(), signOut: mockSignOut, sessionExpired: jest.fn() }),
+}));
 
 import Index from '../app/index';
 
@@ -8,6 +15,7 @@ const mockFetch = jest.fn<(input: string, init?: RequestInit) => Promise<Respons
 
 beforeEach(() => {
   mockFetch.mockReset();
+  mockSignOut.mockReset();
   globalThis.fetch = mockFetch as unknown as typeof fetch;
 });
 
@@ -58,5 +66,17 @@ describe('placeholder screen', () => {
     await fireEvent.press(screen.getByText('API: unreachable'));
     expect(await screen.findByText('API: connected')).toBeOnTheScreen();
     expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it('logs out from the temporary button (until Settings exists)', async () => {
+    mockFetch.mockResolvedValue(healthResponse({ status: 'UP' }));
+    mockSignOut.mockResolvedValue(undefined);
+    await render(<Index />);
+    await screen.findByText('API: connected');
+
+    await fireEvent.press(screen.getByRole('button', { name: 'התנתקות' }));
+
+    expect(mockSignOut).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('button', { name: 'התנתקות' })).toBeDisabled();
   });
 });
