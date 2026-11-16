@@ -139,6 +139,23 @@ width?, height?`.
 - Income for a month = Σ `agreedPrice` of completed appointments whose `startAt` falls in that month (Israel time).
 - Balance = income − Σ expenses for the month. Labelled as a computed balance, **not** accounting profit.
 
+## Entities — internal (API only, not synced)
+
+Auth records that live only on the server (owner-auth-lock spec, Flyway `V2__owner_and_session.sql`).
+They are never sent to devices or synced, so they have no device-generated id and no `version`.
+Soft delete still applies.
+
+### Owner
+`id, email (unique, case-insensitive), passwordHash (bcrypt, strength 12), createdAt, updatedAt, deletedAt`.
+Exactly one row: Aya. It is seeded from `OWNER_EMAIL` / `OWNER_PASSWORD_HASH` on API start. A changed hash
+revokes every session. There is no sign-up and no in-app password change.
+
+### OwnerSession
+`id, ownerId, tokenHash (SHA-256 of the opaque token, unique), deviceName, platform, createdAt,
+lastUsedAt, deletedAt (= revoked)`.
+One per signed-in device. The raw token exists only on the device (secure-store). A session expires
+90 days after `lastUsedAt`, which is refreshed at most once an hour.
+
 ## Entities — Phase 2 (email marketing)
 
 ### Campaign

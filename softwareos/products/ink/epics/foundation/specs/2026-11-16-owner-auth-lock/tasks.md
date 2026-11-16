@@ -32,7 +32,7 @@
 
 ## Docs
 
-- [ ] T17 data-model.md: add Owner + OwnerSession; .env.example + README: OWNER_EMAIL, OWNER_PASSWORD_HASH, hashPassword usage
+- [x] T17 data-model.md: add Owner + OwnerSession; .env.example + README: OWNER_EMAIL, OWNER_PASSWORD_HASH, hashPassword usage
 
 ## Verification
 
