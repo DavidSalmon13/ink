@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { checkApiHealth, type ApiHealth } from '@/api/health';
+import { useAuth } from '@/auth/AuthProvider';
+import { useAuthColors } from '@/auth/tokens';
 import { API_BASE_URL } from '@/config/api';
 
 type Status = ApiHealth | 'checking';
@@ -15,6 +17,15 @@ const LABELS: Record<Status, string> = {
 /** Developer placeholder until app-shell replaces it with the designed Home screen. */
 export default function Index() {
   const [status, setStatus] = useState<Status>('checking');
+  const { signOut } = useAuth();
+  const colors = useAuthColors();
+  const [signingOut, setSigningOut] = useState(false);
+
+  // TEMPORARY (owner-auth-lock T16): logout lives here until the Settings screen exists.
+  const logout = useCallback(() => {
+    setSigningOut(true);
+    void signOut();
+  }, [signOut]);
 
   // Initial check on mount; status starts as 'checking'.
   useEffect(() => {
@@ -47,6 +58,15 @@ export default function Index() {
         </Text>
       </Pressable>
       <Text style={styles.url}>{API_BASE_URL}</Text>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityState={{ disabled: signingOut, busy: signingOut }}
+        disabled={signingOut}
+        onPress={logout}
+        style={[styles.logout, { borderColor: colors.primary }]}
+      >
+        <Text style={[styles.logoutText, { color: colors.primary }]}>התנתקות</Text>
+      </Pressable>
     </View>
   );
 }
@@ -63,4 +83,15 @@ const styles = StyleSheet.create({
   title: { fontSize: 32, fontWeight: '600' },
   status: { fontSize: 16 },
   url: { fontSize: 12, opacity: 0.6 },
+  // design-system.html .btn-secondary
+  logout: {
+    marginTop: 24,
+    minHeight: 44,
+    paddingHorizontal: 20,
+    borderWidth: 1.5,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoutText: { fontSize: 16, fontWeight: '600' },
 });

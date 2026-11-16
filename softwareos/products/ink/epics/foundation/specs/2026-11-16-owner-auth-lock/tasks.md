@@ -28,7 +28,7 @@
 - [x] T13 app/login.tsx: Hebrew Login screen from design-system components/tokens (no mockup), loading/error/disabled states, iPhone + iPad
 - [x] T14 src/auth/useAppLock.ts + LockScreen overlay + privacy cover on inactive; no-biometrics fallback to password sign-in; web no-op
 - [x] T15 src/auth/requireReauth.ts + app/my-data.tsx placeholder guarded by fresh authentication
-- [ ] T16 Temporary logout button on the home placeholder (calls /auth/logout, clears token)
+- [x] T16 Temporary logout button on the home placeholder (calls /auth/logout, clears token)
 
 ## Docs
 
