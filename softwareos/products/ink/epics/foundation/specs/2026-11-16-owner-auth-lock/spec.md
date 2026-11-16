@@ -1,7 +1,7 @@
 # Owner Auth & App Lock
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/foundation/owner-auth-lock
 > Covers: POST /auth/login, POST /auth/logout, GET /auth/sessions, DELETE /auth/sessions/{id}, apps/api/src/main/java/app/ink/api/auth/**, apps/api/src/main/resources/db/migration/V2__owner_and_session.sql, apps/mobile/src/auth/**, apps/mobile/src/api/client.ts, apps/mobile/app/login.tsx, apps/mobile/app/my-data.tsx (placeholder), lock screen + auth guard in apps/mobile/app/_layout.tsx
 
