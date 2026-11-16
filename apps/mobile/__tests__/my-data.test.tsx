@@ -9,6 +9,7 @@ const mockRequireReauth = jest.fn<(...args: unknown[]) => Promise<boolean>>();
 jest.mock('@/auth/requireReauth', () => ({ requireReauth: (...args: unknown[]) => mockRequireReauth(...args) }));
 jest.mock('@/auth/localAuth', () => ({ authenticateLocally: jest.fn() }));
 
+import { AppLockContext } from '@/auth/useAppLock';
 import MyData from '../app/my-data';
 
 beforeEach(() => {
@@ -52,5 +53,31 @@ describe('My Data (placeholder)', () => {
     await render(<MyData />);
     await screen.findByText('הנתונים שלי');
     expect(mockRequireReauth).toHaveBeenCalledTimes(2);
+  });
+
+  it('goes back when local authentication throws', async () => {
+    mockRequireReauth.mockRejectedValue(new Error('auth service failed'));
+    mockRouter.canGoBack.mockReturnValue(true);
+    await render(<MyData />);
+    await waitFor(() => expect(mockRouter.back).toHaveBeenCalled());
+    expect(screen.queryByText('הנתונים שלי')).toBeNull();
+  });
+
+  it('waits for the app lock to open before asking (no overlapping Face ID prompts)', async () => {
+    mockRequireReauth.mockResolvedValue(true);
+    const view = await render(
+      <AppLockContext.Provider value={true}>
+        <MyData />
+      </AppLockContext.Provider>,
+    );
+    expect(mockRequireReauth).not.toHaveBeenCalled();
+
+    await view.rerender(
+      <AppLockContext.Provider value={false}>
+        <MyData />
+      </AppLockContext.Provider>,
+    );
+    expect(await screen.findByText('הנתונים שלי')).toBeOnTheScreen();
+    expect(mockRequireReauth).toHaveBeenCalledTimes(1);
   });
 });

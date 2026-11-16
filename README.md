@@ -47,11 +47,13 @@ The app has one user, the owner, created from two env vars when the API starts:
 | `OWNER_EMAIL` | The login email (case-insensitive) |
 | `OWNER_PASSWORD_HASH` | A bcrypt hash of the password, never the password itself |
 
-Make the hash with the `hashPassword` task. It reads the password from stdin, so it stays out of shell history:
+Make the hash with the `hashPassword` task. It reads the password from stdin, so it stays out of shell history.
+Gradle doesn't give it a real terminal, so typing straight into it would show the password on screen. Read it
+silently first and pipe it in:
 
 ```sh
 cd apps/api
-./gradlew -q hashPassword    # type the password and press Enter; prints $2a$12$...
+read -rs P && printf '%s\n' "$P" | ./gradlew -q hashPassword; unset P   # type the password (hidden), Enter; prints $2a$12$...
 ```
 
 Put both in `.env`, with the hash in **single quotes** (it contains `$`):
