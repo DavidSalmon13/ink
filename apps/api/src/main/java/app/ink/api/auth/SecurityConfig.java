@@ -11,11 +11,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 /**
  * Stateless API security: an opaque per-device session token in {@code Authorization: Bearer}.
  * No HTTP sessions and no cookies (so no CSRF), no form or basic login. Public: {@code GET /health},
- * {@code POST /auth/login} and CORS preflight. Everything else, including unknown routes, answers
+ * {@code POST /auth/login} and CORS preflight requests. Everything else, including unknown routes, answers
  * a JSON 401 without a valid token.
  */
 @Configuration
@@ -41,7 +42,8 @@ public class SecurityConfig {
 						.authenticationEntryPoint(unauthorized)
 						.accessDeniedHandler((request, response, ex) -> unauthorized.commence(request, response, null)))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+						// Only real CORS preflights; other OPTIONS calls need a token like any route.
+						.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 						.requestMatchers(HttpMethod.GET, "/health").permitAll()
 						.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 						// Spring's error page must not turn a 401/404 into something else.

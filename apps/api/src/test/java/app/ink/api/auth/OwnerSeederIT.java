@@ -136,9 +136,19 @@ class OwnerSeederIT {
     }
 
     @Test
+    void tokensOfASoftDeletedOwnerStopWorking() {
+        try (ConfigurableApplicationContext ctx = start(AuthIT.EMAIL, AuthIT.PASSWORD_HASH)) {
+            String token = loginToken(ctx, AuthIT.EMAIL, AuthIT.PASSWORD);
+            ctx.getBean(JdbcTemplate.class).update("update owner set deleted_at = now()");
+
+            assertThat(sessionsStatus(ctx, token).value()).isEqualTo(401);
+        }
+    }
+
+    @Test
     void withoutOwnerConfigTheApiStartsWarnsAndEveryLoginFails(CapturedOutput output) {
         try (ConfigurableApplicationContext ctx = start(null, null)) {
-            assertThat(output.getAll()).contains("WARN").contains("OWNER_EMAIL");
+            assertThat(output.getAll().lines()).anyMatch(l -> l.contains("WARN") && l.contains("OWNER_EMAIL"));
             assertThat(loginStatus(ctx, AuthIT.EMAIL, AuthIT.PASSWORD).value()).isEqualTo(401);
             assertThat(client(ctx).get().uri("/health").exchange((req, res) -> res.getStatusCode()).value()).isEqualTo(200);
         }

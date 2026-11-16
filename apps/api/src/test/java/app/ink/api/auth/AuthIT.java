@@ -119,6 +119,14 @@ class AuthIT {
         jdbc.update("update owner_session set last_used_at = ? where id = ?", Timestamp.from(at), sessionId);
     }
 
+    /** Rejected exactly like a request with no token at all (AC6: no hint about why). */
+    private void assertRejected(String token) {
+        ResponseEntity<String> withToken = getWith("/auth/sessions", "Bearer " + token);
+        ResponseEntity<String> noToken = getWith("/auth/sessions", null);
+        assertThat(withToken.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(withToken.getBody()).isEqualTo(noToken.getBody());
+    }
+
     record Session(String token, UUID id) {}
 
     // ---- AC4: login issues an opaque token, stored only as a SHA-256 hash ----------------------
@@ -242,7 +250,7 @@ class AuthIT {
         Session s = loginOk("iPhone");
         setLastUsedAt(s.id(), Instant.now().minus(91, ChronoUnit.DAYS));
 
-        assertThat(listSessions(s.token()).getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertRejected(s.token());
     }
 
     @Test
@@ -276,7 +284,7 @@ class AuthIT {
         ResponseEntity<Void> res = rest.exchange("/auth/logout", HttpMethod.POST, new HttpEntity<>(auth("Bearer " + phone.token())), Void.class);
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-        assertThat(listSessions(phone.token()).getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertRejected(phone.token());
         assertThat(listSessions(ipad.token()).getStatusCode()).isEqualTo(HttpStatus.OK);
         // soft delete: the row stays, marked revoked
         assertThat(jdbc.queryForObject("select deleted_at is not null from owner_session where id = ?", Boolean.class, phone.id())).isTrue();
@@ -324,7 +332,7 @@ class AuthIT {
                 new HttpEntity<>(auth("Bearer " + phone.token())), Void.class);
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-        assertThat(listSessions(lost.token()).getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertRejected(lost.token());
         assertThat(listSessions(phone.token()).getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

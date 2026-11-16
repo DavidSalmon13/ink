@@ -70,12 +70,17 @@ public class SessionTokenService {
 		return sessions.findActiveByOwner(ownerId, clock.instant().minus(props.sessionTtl()));
 	}
 
-	/** Revokes one of the owner's live sessions. False when there is no such live session for this owner. */
+	/**
+	 * Revokes one of the owner's live sessions. False (→ 404) when there is no such session for this
+	 * owner, or it is already revoked or expired, matching what {@link #listActive} shows.
+	 */
 	@Transactional
 	public boolean revoke(UUID ownerId, UUID sessionId) {
+		Instant now = clock.instant();
+		Instant cutoff = now.minus(props.sessionTtl());
 		Optional<OwnerSession> session = sessions.findById(sessionId)
-				.filter(s -> s.getOwnerId().equals(ownerId) && s.getDeletedAt() == null);
-		session.ifPresent(s -> s.revoke(clock.instant()));
+				.filter(s -> s.getOwnerId().equals(ownerId) && s.getDeletedAt() == null && s.getLastUsedAt().isAfter(cutoff));
+		session.ifPresent(s -> s.revoke(now));
 		return session.isPresent();
 	}
 

@@ -96,4 +96,13 @@ class SessionTokenServiceTest {
 		assertThat(mine.getDeletedAt()).isEqualTo(NOW);
 		assertThat(service.revoke(OWNER, mine.getId())).isFalse(); // already revoked
 	}
+
+	@Test
+	void anExpiredSessionCannotBeRevoked() {
+		OwnerSession expired = new OwnerSession(OWNER, "h", "d", "ios", NOW.minus(Duration.ofDays(91)));
+		when(repo.findById(expired.getId())).thenReturn(Optional.of(expired));
+
+		assertThat(service.revoke(OWNER, expired.getId())).isFalse();
+		assertThat(expired.getDeletedAt()).isNull();
+	}
 }

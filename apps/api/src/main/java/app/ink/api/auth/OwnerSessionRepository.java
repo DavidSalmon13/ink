@@ -12,10 +12,14 @@ import org.springframework.data.repository.query.Param;
 
 public interface OwnerSessionRepository extends JpaRepository<OwnerSession, UUID> {
 
-	/** A session that isn't revoked and was used after {@code usedAfter} (the sliding-expiry cutoff). */
+	/**
+	 * A session that isn't revoked, was used after {@code usedAfter} (the sliding-expiry cutoff), and
+	 * whose owner still exists (not soft-deleted).
+	 */
 	@Query("""
 			select s from OwnerSession s
-			where s.tokenHash = :tokenHash and s.deletedAt is null and s.lastUsedAt > :usedAfter""")
+			where s.tokenHash = :tokenHash and s.deletedAt is null and s.lastUsedAt > :usedAfter
+			and exists (select 1 from Owner o where o.id = s.ownerId and o.deletedAt is null)""")
 	Optional<OwnerSession> findActiveByTokenHash(@Param("tokenHash") String tokenHash, @Param("usedAfter") Instant usedAfter);
 
 	@Query("""
