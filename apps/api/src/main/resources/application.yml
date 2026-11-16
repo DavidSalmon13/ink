@@ -21,6 +21,11 @@ spring:
     exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
 server:
+  # Behind Railway's proxy, getRemoteAddr() would be the proxy for every caller, so one attacker
+  # could trip the per-IP login limit for everyone. Tomcat's RemoteIpValve takes the client IP from
+  # X-Forwarded-For, but only when the hop is a trusted internal proxy (private ranges by default),
+  # so callers can't spoof it. deploy-pipeline: confirm Railway's proxy IP falls in that range.
+  forward-headers-strategy: native
   error:
     # Never leak exception details to (anonymous) callers through /error.
     include-stacktrace: never
