@@ -4,7 +4,7 @@
 
 - Expo (React Native) + TypeScript, Expo Router, one codebase for iPhone and iPad
 - Hebrew UI, RTL forced via `I18nManager` (needs an app reload to take effect)
-- `expo-local-authentication` (Face ID / device passcode), `expo-secure-store` (tokens)
+- `expo-local-authentication` (Face ID / device passcode), `expo-secure-store` (session token)
 - Server state: TanStack Query with a persisted on-device cache (read offline)
 - `expo-print` + `expo-sharing` for the monthly PDF report (HTML → PDF, RTL-safe)
 - `expo-image-picker` for tattoo photos and sketches
@@ -14,7 +14,8 @@
 ## Backend
 
 - Spring Boot 3, Java 21 (LTS), Gradle
-- Spring Web (REST/JSON), Spring Security (single owner account, JWT access + refresh tokens)
+- Spring Web (REST/JSON), Spring Security (single owner account, opaque per-device session token
+  sent as `Authorization: Bearer`, looked up by hash in the `owner_session` table; no JWT, no cookies)
 - Spring Data JPA + Flyway migrations
 - Bean Validation; pricing and income logic in pure, unit-tested domain services
 - Phase 2: Spring scheduling (`@Scheduled`/Quartz) for scheduled email sends

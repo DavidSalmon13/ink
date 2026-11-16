@@ -15,8 +15,11 @@
 
 ## Data Flow
 
-- App → API: HTTPS JSON, `Authorization: Bearer <access token>`. Refresh tokens are kept in
-  `expo-secure-store`.
+- App → API: HTTPS JSON, `Authorization: Bearer <session token>`. The session token is an opaque
+  random value issued at login, one per device, kept in `expo-secure-store`. The API stores only its
+  hash in an `owner_session` table, so any device can be logged out (revoked) from the server.
+  No cookies: the web preview and the API live on different domains, where browsers block
+  cross-site cookies, and a header needs no CSRF protection.
 - Image upload: the app asks the API for a presigned PUT URL, uploads straight to R2, then
   saves the record pointing to that `Attachment`. Downloads use presigned GET URLs.
 - Sync (MVP, online-first): every device reads and writes through the API; TanStack
@@ -35,7 +38,7 @@
 - **Local**: Postgres in Docker Compose, API via `./gradlew bootRun`, app via Expo Go /
   dev client.
 - **Production**: API container + Postgres on Railway, R2 bucket.
-- **Preview (during the MVP)**: web build of the Expo app (static files on Railway) at a public URL Aya can open; Expo Go via EAS Update for the iPhone experience. The web build is a preview, not a supported platform: no device lock, and tokens are kept in memory.
+- **Preview (during the MVP)**: web build of the Expo app (static files on Railway) at a public URL Aya can open; Expo Go via EAS Update for the iPhone experience. The web build is a preview, not a supported platform: no device lock, and the session token is kept in memory only (a page reload means logging in again).
 - **After MVP acceptance**: native app via TestFlight.
 - **Staging**: TBD.
 
