@@ -48,13 +48,19 @@ export const formMaxWidth = 460;
 
 export const type = {
   display: { fontSize: 28, lineHeight: 34, fontWeight: '700' },
+  title1: { fontSize: 22, lineHeight: 28, fontWeight: '700' },
   callout: { fontSize: 14, lineHeight: 20, fontWeight: '400' },
   /** design-system.html `.field label` and `.helper` */
   label: { fontSize: 13, fontWeight: '600' },
   /** design-system.html `.input` / `.btn` (16px also stops iOS zooming into the field) */
   input: { fontSize: 16 },
   button: { fontSize: 16, fontWeight: '600' },
+  /** ClientMode.html `.lock-pill` */
+  pill: { fontSize: 14, fontWeight: '600' },
 } as const;
+
+/** design-system.html `.field` (label-to-input gap) and `.input` (inner padding). */
+export const field = { gap: 6, inputPaddingHorizontal: 14 } as const;
 
 /** tokens.json shadows.card */
 export const cardShadow = {

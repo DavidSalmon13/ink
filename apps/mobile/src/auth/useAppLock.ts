@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 
 import type { LocalAuthResult } from '@/auth/localAuth';
@@ -18,6 +18,13 @@ export interface AppLock {
   unavailable: boolean;
   /** Prompt again (e.g. the user tapped the unlock button). */
   unlock(): Promise<void>;
+}
+
+/** Whether the app lock is up, for screens that must not prompt underneath it (My Data). */
+export const AppLockContext = createContext(false);
+
+export function useIsAppLocked(): boolean {
+  return useContext(AppLockContext);
 }
 
 /**
@@ -46,12 +53,18 @@ export function useAppLock({ enabled, authenticate }: AppLockOptions): AppLock {
 
   const inFlight = useRef(false);
   const wentToBackground = useRef(false);
+  /** Bumped on every trip to the background: a prompt that started before it is stale. */
+  const backgroundCount = useRef(0);
 
   const prompt = useCallback(async () => {
     if (inFlight.current) return;
     inFlight.current = true;
+    const startedAt = backgroundCount.current;
     try {
-      const result = await authenticate();
+      // A native error (e.g. the auth service failing) counts as a failed attempt: stay locked.
+      const result = await authenticate().catch((): LocalAuthResult => 'failed');
+      // The app went to the background while the prompt was up: it needs a fresh check.
+      if (backgroundCount.current !== startedAt) return;
       if (result === 'success') {
         setLocked(false);
         setUnavailable(false);
@@ -74,12 +87,14 @@ export function useAppLock({ enabled, authenticate }: AppLockOptions): AppLock {
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'background') {
         wentToBackground.current = true;
+        backgroundCount.current += 1;
         setLocked(true);
       } else if (state === 'inactive') {
         setCovered(true);
       } else if (state === 'active') {
         setCovered(false);
-        if (wentToBackground.current) {
+        // Only consume the trip to the background when a prompt can actually start.
+        if (wentToBackground.current && !inFlight.current) {
           wentToBackground.current = false;
           void prompt();
         }

@@ -16,6 +16,7 @@ import { useAuth } from '@/auth/AuthProvider';
 import {
   borderWidth,
   cardShadow,
+  field,
   formMaxWidth,
   radii,
   spacing,
@@ -151,11 +152,11 @@ function makeStyles(c: AuthColors) {
       shadowColor: c.shadow,
       ...cardShadow,
     },
-    field: { gap: 6 },
+    field: { gap: field.gap },
     label: { ...type.label, color: c.textMuted },
     input: {
       minHeight: touch.inputHeight,
-      paddingHorizontal: 14,
+      paddingHorizontal: field.inputPaddingHorizontal,
       borderWidth: borderWidth.hairline,
       borderColor: c.borderStrong,
       borderRadius: radii.md,

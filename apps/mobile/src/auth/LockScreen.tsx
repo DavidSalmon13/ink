@@ -1,19 +1,21 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { formMaxWidth, radii, spacing, touch, type, useAuthColors, type AuthColors } from '@/auth/tokens';
-
-/** tokens.json zIndex.lock: above everything, including modals and toasts. */
-const LOCK_Z = 300;
+import { borderWidth, formMaxWidth, radii, spacing, touch, type, useAuthColors, type AuthColors } from '@/auth/tokens';
 
 /**
- * Full-screen lock above the navigation stack (so its state is kept). No mockup: built from tokens,
- * the primary button and ClientMode.html's lock-pill ("דורש Face ID או קוד").
+ * The app lock and the app-switcher privacy cover. Rendered in a full-screen native Modal, so it
+ * also sits above any modal or sheet screen that's open (a plain View only covers the root view).
+ * No mockup: built from tokens, the primary button and ClientMode.html's lock-pill ("דורש Face ID או קוד").
  */
-export function LockScreen({
+export function LockOverlay({
+  locked,
+  covered,
   unavailable,
   onUnlock,
   onUsePassword,
 }: {
+  locked: boolean;
+  covered: boolean;
   unavailable: boolean;
   onUnlock: () => void;
   onUsePassword: () => void;
@@ -22,46 +24,50 @@ export function LockScreen({
   const styles = makeStyles(colors);
 
   return (
-    <View style={styles.overlay} accessibilityViewIsModal>
-      <Text style={styles.wordmark} accessibilityRole="header">
-        AYA INK
-      </Text>
-      {unavailable ? (
-        <View style={styles.stack}>
-          <Text style={styles.message}>אין במכשיר Face ID או קוד גישה. אפשר להיכנס שוב עם הסיסמה.</Text>
-          <Pressable accessibilityRole="button" onPress={onUsePassword} style={styles.button}>
-            <Text style={styles.buttonText}>כניסה עם סיסמה</Text>
-          </Pressable>
+    <Modal
+      visible={locked || covered}
+      animationType="none"
+      presentationStyle="fullScreen"
+      statusBarTranslucent
+      onRequestClose={() => {}}
+    >
+      {locked ? (
+        <View style={styles.screen} accessibilityViewIsModal>
+          <Text style={styles.wordmark} accessibilityRole="header">
+            AYA INK
+          </Text>
+          {unavailable ? (
+            <View style={styles.stack}>
+              <Text style={styles.message}>אין במכשיר Face ID או קוד גישה. אפשר להיכנס שוב עם הסיסמה.</Text>
+              <Pressable accessibilityRole="button" onPress={onUsePassword} style={styles.button}>
+                <Text style={styles.buttonText}>כניסה עם סיסמה</Text>
+              </Pressable>
+            </View>
+          ) : (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="פתיחה — דורש Face ID או קוד"
+              onPress={onUnlock}
+              style={styles.pill}
+            >
+              <Text style={styles.pillText}>פתיחה</Text>
+            </Pressable>
+          )}
         </View>
       ) : (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="פתיחה — דורש Face ID או קוד"
-          onPress={onUnlock}
-          style={styles.pill}
-        >
-          <Text style={styles.pillText}>פתיחה</Text>
-        </Pressable>
+        // App switcher / inactive: hides the content without locking.
+        <View style={styles.screen} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+          <Text style={styles.wordmark}>AYA INK</Text>
+        </View>
       )}
-    </View>
-  );
-}
-
-/** App switcher / inactive: hides the content without locking. */
-export function PrivacyCover() {
-  const styles = makeStyles(useAuthColors());
-  return (
-    <View style={styles.overlay} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Text style={styles.wordmark}>AYA INK</Text>
-    </View>
+    </Modal>
   );
 }
 
 function makeStyles(c: AuthColors) {
   return StyleSheet.create({
-    overlay: {
-      ...StyleSheet.absoluteFill,
-      zIndex: LOCK_Z,
+    screen: {
+      flex: 1,
       backgroundColor: c.bg,
       alignItems: 'center',
       justifyContent: 'center',
@@ -74,13 +80,13 @@ function makeStyles(c: AuthColors) {
     pill: {
       minHeight: touch.buttonHeight,
       paddingHorizontal: spacing.lg,
-      borderWidth: 1,
+      borderWidth: borderWidth.hairline,
       borderColor: c.primary,
       borderRadius: radii.pill,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    pillText: { fontSize: 14, fontWeight: '600', color: c.primary },
+    pillText: { ...type.pill, color: c.primary },
     button: {
       minHeight: touch.buttonHeight,
       paddingHorizontal: spacing.xl,
