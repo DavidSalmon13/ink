@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Component;
  * client IP, blocks further logins for that email or IP for 15 minutes, even with the correct
  * password. Successful logins don't count. In memory, which is enough for the single API instance
  * (distributed limiting is out of scope).
+ *
+ * <p>An attempt is reserved <em>before</em> the slow password check ({@link #tryAcquire}), so a burst
+ * of parallel requests can't run more than 5 guesses: in-flight attempts count toward the cap. The
+ * caller then reports {@link Attempt#failed()} or {@link Attempt#succeeded()}.
  */
 @Component
 public class LoginRateLimiter {
@@ -22,12 +27,20 @@ public class LoginRateLimiter {
 	static final int MAX_FAILURES = 5;
 	static final Duration WINDOW = Duration.ofMinutes(15);
 	static final Duration BLOCK = Duration.ofMinutes(15);
-	/** Above this many tracked keys, stale entries are swept on the next failure. */
+	/** Above this many tracked keys, stale entries are swept on the next attempt. */
 	private static final int SWEEP_THRESHOLD = 10_000;
 
-	private static final class Attempts {
-		final Deque<Instant> failures = new ArrayDeque<>();
+	/** Failed and in-flight attempts for one key (an email or an IP). Guarded by its own monitor. */
+	private static final class Window {
+		final Deque<Instant> attempts = new ArrayDeque<>();
 		Instant blockedUntil;
+
+		void prune(Instant now) {
+			Instant cutoff = now.minus(WINDOW);
+			while (!attempts.isEmpty() && !attempts.peekFirst().isAfter(cutoff)) {
+				attempts.pollFirst();
+			}
+		}
 
 		boolean blocked(Instant now) {
 			return blockedUntil != null && now.isBefore(blockedUntil);
@@ -35,75 +48,105 @@ public class LoginRateLimiter {
 
 		boolean stale(Instant now) {
 			prune(now);
-			return failures.isEmpty() && !blocked(now);
+			return attempts.isEmpty() && !blocked(now);
+		}
+	}
+
+	/** One reserved login attempt; report its outcome exactly once. */
+	public final class Attempt {
+		private final String[] keys;
+		private final Instant at;
+
+		private Attempt(String[] keys, Instant at) {
+			this.keys = keys;
+			this.at = at;
 		}
 
-		void prune(Instant now) {
-			Instant cutoff = now.minus(WINDOW);
-			while (!failures.isEmpty() && !failures.peekFirst().isAfter(cutoff)) {
-				failures.pollFirst();
+		/** Wrong credentials: the attempt stays counted, and the 5th failure starts the block. */
+		public void failed() {
+			Instant now = clock.instant();
+			for (String key : keys) {
+				Window w = windows.get(key);
+				if (w != null) {
+					synchronized (w) {
+						w.prune(now);
+						if (w.attempts.size() >= MAX_FAILURES) {
+							w.blockedUntil = now.plus(BLOCK);
+							w.attempts.clear();
+						}
+					}
+				}
+			}
+		}
+
+		/** Correct credentials: the attempt is released and doesn't count as a failure. */
+		public void succeeded() {
+			for (String key : keys) {
+				Window w = windows.get(key);
+				if (w != null) {
+					synchronized (w) {
+						w.attempts.removeFirstOccurrence(at);
+					}
+				}
 			}
 		}
 	}
 
-	private final Map<String, Attempts> attempts = new ConcurrentHashMap<>();
+	private final Map<String, Window> windows = new ConcurrentHashMap<>();
 	private final Clock clock;
 
 	public LoginRateLimiter(Clock clock) {
 		this.clock = clock;
 	}
 
-	/** True when this email or this IP is currently blocked. {@code email} must already be lowercased. */
-	public boolean isBlocked(String email, String clientIp) {
+	/**
+	 * Reserves an attempt for this email (already lowercased) and IP, or returns empty when either is
+	 * blocked or already has 5 failed or in-flight attempts in the window.
+	 */
+	public Optional<Attempt> tryAcquire(String email, String clientIp) {
 		Instant now = clock.instant();
-		return blocked(emailKey(email), now) || blocked(ipKey(clientIp), now);
+		sweepIfLarge(now);
+		String emailKey = "email:" + email;
+		String ipKey = "ip:" + (clientIp == null ? "unknown" : clientIp);
+		if (!reserve(emailKey, now)) {
+			return Optional.empty();
+		}
+		if (!reserve(ipKey, now)) {
+			release(emailKey, now);
+			return Optional.empty();
+		}
+		return Optional.of(new Attempt(new String[] { emailKey, ipKey }, now));
 	}
 
-	/** Counts one failed login against both the email and the IP. */
-	public void recordFailure(String email, String clientIp) {
-		Instant now = clock.instant();
-		if (attempts.size() > SWEEP_THRESHOLD) {
-			attempts.entrySet().removeIf(e -> {
+	private boolean reserve(String key, Instant now) {
+		Window w = windows.computeIfAbsent(key, k -> new Window());
+		synchronized (w) {
+			w.prune(now);
+			if (w.blocked(now) || w.attempts.size() >= MAX_FAILURES) {
+				return false;
+			}
+			w.attempts.addLast(now);
+			return true;
+		}
+	}
+
+	private void release(String key, Instant at) {
+		Window w = windows.get(key);
+		if (w != null) {
+			synchronized (w) {
+				w.attempts.removeFirstOccurrence(at);
+			}
+		}
+	}
+
+	private void sweepIfLarge(Instant now) {
+		if (windows.size() > SWEEP_THRESHOLD) {
+			windows.entrySet().removeIf(e -> {
 				synchronized (e.getValue()) {
 					return e.getValue().stale(now);
 				}
 			});
 		}
-		fail(emailKey(email), now);
-		fail(ipKey(clientIp), now);
-	}
-
-	private boolean blocked(String key, Instant now) {
-		Attempts a = attempts.get(key);
-		if (a == null) {
-			return false;
-		}
-		synchronized (a) {
-			return a.blocked(now);
-		}
-	}
-
-	private void fail(String key, Instant now) {
-		attempts.compute(key, (k, a) -> {
-			Attempts current = a == null ? new Attempts() : a;
-			synchronized (current) {
-				current.prune(now);
-				current.failures.addLast(now);
-				if (current.failures.size() >= MAX_FAILURES) {
-					current.blockedUntil = now.plus(BLOCK);
-					current.failures.clear();
-				}
-			}
-			return current;
-		});
-	}
-
-	private static String emailKey(String email) {
-		return "email:" + email;
-	}
-
-	private static String ipKey(String clientIp) {
-		return "ip:" + (clientIp == null ? "unknown" : clientIp);
 	}
 
 }
