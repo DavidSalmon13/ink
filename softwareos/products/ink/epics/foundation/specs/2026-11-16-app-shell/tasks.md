@@ -3,6 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-16-app-shell
 > Branch: feat/foundation/app-shell
+> PR: https://github.com/DavidSalmon13/ink/pull/29 (draft — spec shaping, stacked on #28)
 
 ## Theme & foundations
 
