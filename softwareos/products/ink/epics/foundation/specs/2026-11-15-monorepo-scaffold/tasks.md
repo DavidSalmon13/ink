@@ -32,5 +32,5 @@
 
 ## Verification
 
-- [ ] T15 Write tests: API HealthIT (Testcontainers, /health UP, Flyway applied); mobile placeholder render + unreachable state (testing skill)
+- [x] T15 Write tests: API HealthIT (Testcontainers, /health UP, Flyway applied); mobile placeholder render + unreachable state (testing skill)
 - [ ] T16 Run QA against acceptance criteria (qa skill)
