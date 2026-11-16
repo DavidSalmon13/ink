@@ -17,7 +17,7 @@ specs:
       - .nvmrc
   - slug: 2026-11-16-owner-auth-lock
     title: Owner Auth & App Lock
-    status: shaped
+    status: done
     branch: feat/foundation/owner-auth-lock
     covers:
       - POST /auth/login
