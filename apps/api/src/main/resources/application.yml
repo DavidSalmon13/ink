@@ -16,6 +16,9 @@ spring:
           time_zone: UTC
   flyway:
     enabled: true
+  autoconfigure:
+    # No in-memory user / generated password: auth is the owner session token (owner-auth-lock).
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
 management:
   endpoints:
