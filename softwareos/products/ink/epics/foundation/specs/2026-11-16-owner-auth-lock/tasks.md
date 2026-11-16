@@ -3,7 +3,9 @@
 > Epic: foundation
 > Spec: 2026-11-16-owner-auth-lock
 > Branch: feat/foundation/owner-auth-lock
-> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2) · https://github.com/DavidSalmon13/ink/pull/17 (API, T7+T8) · https://github.com/DavidSalmon13/ink/pull/18 (API, T9) · https://github.com/DavidSalmon13/ink/pull/19 (tests, review fixes) · https://github.com/DavidSalmon13/ink/pull/20 (T9 + review-fix tests → main) · https://github.com/DavidSalmon13/ink/pull/21 (mobile, T10–T12) · https://github.com/DavidSalmon13/ink/pull/22 (mobile, T13–T14) · https://github.com/DavidSalmon13/ink/pull/23 (mobile + docs, T15–T18)
+> PR: https://github.com/DavidSalmon13/ink/pull/15 (API, T1+T3–T6) · https://github.com/DavidSalmon13/ink/pull/16 (mobile, T2) · https://github.com/DavidSalmon13/ink/pull/17 (API, T7+T8) · https://github.com/DavidSalmon13/ink/pull/18 (API, T9) · https://github.com/DavidSalmon13/ink/pull/19 (tests, review fixes) · https://github.com/DavidSalmon13/ink/pull/20 (T9 + review-fix tests → main) · https://github.com/DavidSalmon13/ink/pull/21 (mobile, T10–T12) · https://github.com/DavidSalmon13/ink/pull/22 (mobile, T13–T14) · https://github.com/DavidSalmon13/ink/pull/23 (mobile + docs, T15–T18; #22 and #23 merged into stacked branches, not main) · https://github.com/DavidSalmon13/ink/pull/24 (review fix, T12) · https://github.com/DavidSalmon13/ink/pull/25 (T13–T14 → main + review fixes) · https://github.com/DavidSalmon13/ink/pull/26 (T15–T18 → main + review fixes)
+> Reviewed: 2026-11-16 — REQUEST CHANGES (code-reviewer: 1 HIGH, 3 MEDIUM, 2 LOW on #21–#23); all fixed in #24–#26 except AC10 RTL, which depends on app-shell (to record via /spec-changes)
+> SecurityReviewed: 2026-11-16 — PASS (security-reviewer: 2 MEDIUM, 3 LOW on #21–#23; all fixed in #24–#26)
 
 ## Tests first (TDD)
 
