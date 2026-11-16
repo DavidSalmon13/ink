@@ -26,7 +26,7 @@
 
 ## CI & docs
 
-- [ ] T12 .github/workflows/api.yml: Temurin 21, Gradle cache, ./gradlew build; paths filter apps/api/**
+- [x] T12 .github/workflows/api.yml: Temurin 21, Gradle cache, ./gradlew build; paths filter apps/api/**
 - [ ] T13 .github/workflows/mobile.yml: Node from .nvmrc, npm ci, typecheck, lint, test; paths filter apps/mobile/**
 - [ ] T14 Root README: prerequisites + run commands (Compose, bootRun, Expo: Simulator / web / Expo Go on LAN)
 
