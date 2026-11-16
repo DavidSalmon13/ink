@@ -40,7 +40,7 @@ export function useAuthColors(): AuthColors {
 }
 
 export const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32, screenPadding: 16 } as const;
-export const radii = { md: 8, lg: 12 } as const;
+export const radii = { md: 8, lg: 12, pill: 999 } as const;
 export const borderWidth = { hairline: 1, strong: 1.5 } as const;
 export const touch = { buttonHeight: 44, inputHeight: 44 } as const;
 /** modalMaxWidth.tablet: keeps the form a readable width on iPad. */
