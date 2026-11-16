@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,23 +23,30 @@ public final class HashPasswordCli {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String password = readPassword();
-		if (password == null || password.isEmpty()) {
-			System.err.println("No password given on stdin.");
-			System.exit(1);
-		}
-		System.out.println(new BCryptPasswordEncoder(AuthConfig.BCRYPT_STRENGTH).encode(password));
-	}
-
-	private static String readPassword() throws IOException {
 		Console console = System.console();
+		String password;
 		if (console != null) {
 			char[] chars = console.readPassword("Password: ");
-			return chars == null ? null : new String(chars);
+			password = chars == null ? null : new String(chars);
+		} else {
+			System.err.println("Password (then Enter):");
+			password = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8)).readLine();
 		}
-		System.err.println("Password (then Enter):");
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
-		return in.readLine();
+		System.exit(run(password, System.out, System.err));
+	}
+
+	/** Prints the hash of {@code password} and returns 0, or explains the problem and returns 1. */
+	static int run(String password, PrintStream out, PrintStream err) {
+		if (password == null || password.isEmpty()) {
+			err.println("No password given on stdin.");
+			return 1;
+		}
+		if (password.getBytes(StandardCharsets.UTF_8).length > LoginService.MAX_PASSWORD_BYTES) {
+			err.println("Password is longer than " + LoginService.MAX_PASSWORD_BYTES + " bytes; bcrypt would ignore the rest.");
+			return 1;
+		}
+		out.println(new BCryptPasswordEncoder(AuthConfig.BCRYPT_STRENGTH).encode(password));
+		return 0;
 	}
 
 }

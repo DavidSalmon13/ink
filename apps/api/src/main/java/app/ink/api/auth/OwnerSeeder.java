@@ -2,7 +2,7 @@ package app.ink.api.auth;
 
 import java.time.Clock;
 import java.util.Locale;
-import java.util.Optional;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class OwnerSeeder implements ApplicationRunner {
 		String email = props.ownerEmail().toLowerCase(Locale.ROOT);
 		String hash = props.ownerPasswordHash();
 		if (email.isEmpty() || hash.isEmpty()) {
-			if (owners.count() == 0) {
+			if (owners.findAllActive().isEmpty()) {
 				log.warn("OWNER_EMAIL and OWNER_PASSWORD_HASH are not set and no owner exists: every login will fail. "
 						+ "Set both (hash from ./gradlew -q hashPassword) and restart.");
 			} else {
@@ -54,18 +54,31 @@ public class OwnerSeeder implements ApplicationRunner {
 			throw new IllegalStateException("OWNER_PASSWORD_HASH is not a bcrypt hash; generate it with ./gradlew -q hashPassword");
 		}
 
-		Optional<Owner> existing = owners.findActiveByEmail(email);
-		if (existing.isEmpty()) {
+		// Ink has exactly one owner: a changed OWNER_EMAIL renames that owner, it never adds a second one.
+		List<Owner> live = owners.findAllActive();
+		if (live.size() > 1) {
+			throw new IllegalStateException("More than one live owner exists; Ink supports a single owner. "
+					+ "Soft-delete the extra rows (owner.deleted_at) and restart.");
+		}
+		if (live.isEmpty()) {
 			owners.save(new Owner(email, hash, clock.instant()));
 			log.info("Created the owner account from OWNER_EMAIL.");
 			return;
 		}
-		Owner owner = existing.get();
-		if (!owner.getPasswordHash().equals(hash)) {
+		Owner owner = live.get(0);
+		boolean emailChanged = !owner.getEmail().equalsIgnoreCase(email);
+		boolean hashChanged = !owner.getPasswordHash().equals(hash);
+		if (emailChanged) {
+			owner.changeEmail(email, clock.instant());
+		}
+		if (hashChanged) {
 			owner.changePasswordHash(hash, clock.instant());
+		}
+		if (emailChanged || hashChanged) {
 			owners.flush();
 			int revoked = tokens.revokeAll(owner.getId());
-			log.info("Owner password changed from OWNER_PASSWORD_HASH; revoked {} session(s).", revoked);
+			log.info("Owner {} changed from env; revoked {} session(s).",
+					emailChanged && hashChanged ? "email and password" : emailChanged ? "email" : "password", revoked);
 		}
 	}
 
