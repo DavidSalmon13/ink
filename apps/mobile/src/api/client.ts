@@ -24,8 +24,11 @@ export interface ApiClientOptions {
   baseUrl?: string;
   timeoutMs?: number;
   getToken: () => Promise<string | null>;
-  /** Called once when an authenticated request gets a 401 (expired/revoked session). */
-  onUnauthorized: () => void;
+  /**
+   * Called once when an authenticated request gets a 401 (expired/revoked session), with the token
+   * that request sent, so a late 401 from an old session can't end a newer one.
+   */
+  onUnauthorized: (rejectedToken: string | null) => void;
 }
 
 export interface ApiRequest {
@@ -68,8 +71,9 @@ export function createApiClient({
   ): Promise<T> {
     const headers: Record<string, string> = { accept: 'application/json' };
     if (body !== undefined) headers['content-type'] = 'application/json';
+    let token: string | null = null;
     if (auth) {
-      const token = await getToken();
+      token = await getToken();
       if (token) headers.authorization = `Bearer ${token}`;
     }
 
@@ -92,7 +96,7 @@ export function createApiClient({
     if (!res.ok) {
       const { code, message } = await readError(res);
       // Public endpoints (login) answer 401 for bad credentials; only an authenticated 401 ends the session.
-      if (res.status === 401 && auth) onUnauthorized();
+      if (res.status === 401 && auth) onUnauthorized(token);
       throw new ApiError(res.status, code, message);
     }
     if (res.status === 204) return undefined as T;
