@@ -1,0 +1,4 @@
+-- V1 baseline migration.
+-- Intentionally empty (comment-only): it exists to prove the Flyway pipeline runs
+-- on application start and records a baseline in flyway_schema_history.
+-- Real tables arrive in later Foundation specs (api-conventions and beyond).
