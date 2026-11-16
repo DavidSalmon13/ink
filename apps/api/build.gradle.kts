@@ -17,6 +17,10 @@ repositories {
 	mavenCentral()
 }
 
+// Boot 3.5.3 manages Testcontainers 1.21.2, which speaks a Docker API version that Docker Engine 29+
+// rejects ("Could not find a valid Docker environment", HTTP 400). 1.21.4 negotiates a supported one.
+extra["testcontainers.version"] = "1.21.4"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")

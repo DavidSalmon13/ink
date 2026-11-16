@@ -1,0 +1,38 @@
+name: API
+
+on:
+  push:
+    paths:
+      - "apps/api/**"
+      - ".github/workflows/api.yml"
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - ".github/workflows/api.yml"
+
+concurrency:
+  group: api-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+          cache-dependency-path: |
+            apps/api/*.gradle*
+            apps/api/gradle/wrapper/gradle-wrapper.properties
+
+      # Compiles, runs unit + Testcontainers tests (the runner's Docker hosts Postgres).
+      - name: ./gradlew build
+        run: ./gradlew build --no-daemon

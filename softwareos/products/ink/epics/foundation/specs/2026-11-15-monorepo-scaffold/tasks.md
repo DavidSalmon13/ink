@@ -3,6 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-15-monorepo-scaffold
 > Branch: feat/foundation/monorepo-scaffold
+> PR: https://github.com/DavidSalmon13/ink/pull/12
 
 ## Repo & local infra
 
@@ -26,11 +27,11 @@
 
 ## CI & docs
 
-- [ ] T12 .github/workflows/api.yml: Temurin 21, Gradle cache, ./gradlew build; paths filter apps/api/**
-- [ ] T13 .github/workflows/mobile.yml: Node from .nvmrc, npm ci, typecheck, lint, test; paths filter apps/mobile/**
-- [ ] T14 Root README: prerequisites + run commands (Compose, bootRun, Expo: Simulator / web / Expo Go on LAN)
+- [x] T12 .github/workflows/api.yml: Temurin 21, Gradle cache, ./gradlew build; paths filter apps/api/**
+- [x] T13 .github/workflows/mobile.yml: Node from .nvmrc, npm ci, typecheck, lint, test; paths filter apps/mobile/**
+- [x] T14 Root README: prerequisites + run commands (Compose, bootRun, Expo: Simulator / web / Expo Go on LAN)
 
 ## Verification
 
-- [ ] T15 Write tests: API HealthIT (Testcontainers, /health UP, Flyway applied); mobile placeholder render + unreachable state (testing skill)
-- [ ] T16 Run QA against acceptance criteria (qa skill)
+- [x] T15 Write tests: API HealthIT (Testcontainers, /health UP, Flyway applied); mobile placeholder render + unreachable state (testing skill)
+- [x] T16 Run QA against acceptance criteria (qa skill)
