@@ -30,7 +30,7 @@
 
 ## Hand-off from owner-auth-lock
 
-- [ ] T15 Delete src/auth/tokens.ts; migrate login/LockScreen/my-data imports to src/theme + src/ui (no visual regression); preserve AuthProvider/AppLock behavior in _layout.tsx
+- [x] T15 Delete src/auth/tokens.ts; migrate login/LockScreen/my-data imports to src/theme + src/ui (no visual regression); preserve AuthProvider/AppLock behavior in _layout.tsx
 
 ## Web & verification
 

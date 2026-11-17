@@ -1,11 +1,11 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { authenticateLocally } from '@/auth/localAuth';
 import { requireReauth } from '@/auth/requireReauth';
-import { spacing, type, useAuthColors } from '@/auth/tokens';
 import { useIsAppLocked } from '@/auth/useAppLock';
+import { spacing, Text, useColors } from '@/theme';
 
 /**
  * "My Data" placeholder behind a fresh local authentication on every open (AC14), even when the
@@ -13,7 +13,7 @@ import { useIsAppLocked } from '@/auth/useAppLock';
  */
 export default function MyData() {
   const router = useRouter();
-  const colors = useAuthColors();
+  const colors = useColors();
   const [allowed, setAllowed] = useState(false);
   // Opened under the app lock (e.g. a deep link on cold start): wait for the unlock, so the two
   // Face ID prompts don't overlap. Once allowed, an app re-lock doesn't ask a second time.
@@ -43,7 +43,7 @@ export default function MyData() {
   return (
     <View style={[styles.screen, { backgroundColor: colors.bg }]}>
       {allowed && (
-        <Text style={[styles.title, { color: colors.text }]} accessibilityRole="header">
+        <Text variant="title1" accessibilityRole="header">
           הנתונים שלי
         </Text>
       )}
@@ -53,5 +53,4 @@ export default function MyData() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.screenPadding },
-  title: type.title1,
 });
