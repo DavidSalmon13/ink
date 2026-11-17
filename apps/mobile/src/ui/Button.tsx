@@ -80,7 +80,7 @@ export function Button({
       {loading ? (
         <ActivityIndicator size="small" color={v.fg} />
       ) : icon ? (
-        <Icon name={icon} tint={v.fg} size={variant === 'ghost' ? m.button.iconSizeGhost : m.button.iconSize} />
+        <Icon name={icon} tint={v.fg} size={variant === 'ghost' || small ? m.button.iconSizeSmall : m.button.iconSize} />
       ) : null}
       <Text
         numberOfLines={1}

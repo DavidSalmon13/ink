@@ -4,7 +4,7 @@
  * Values that do exist in tokens.json are referenced from the generated module instead.
  */
 export const componentMetrics = {
-  /** `.btn`: 16px / 600, 20px side padding, 8px icon gap; `.btn-sm`: 15px, 14px padding; `.btn-ghost`: 8px padding. */
+  /** `.btn`: 16px / 600, 20px side padding, 8px icon gap; `.btn-sm`: 15px, 14px padding; `.btn-ghost`: 8px padding; ghost and small buttons use an 18px glyph. */
   button: {
     fontSize: 16,
     fontSizeSmall: 15,
@@ -13,7 +13,7 @@ export const componentMetrics = {
     paddingHorizontalGhost: 8,
     gap: 8,
     iconSize: 20,
-    iconSizeGhost: 18,
+    iconSizeSmall: 18,
   },
   /** `.iconbtn`: 44×44 round, glyph 22px. */
   iconButton: { iconSize: 22 },
@@ -62,6 +62,19 @@ export const componentMetrics = {
    * the raised shadow come from tokens). Durations aren't in the design: long enough to read a short line.
    */
   toast: { gap: 10, fontSize: 15, iconSize: 20, actionGap: 6, durationMs: 4000, errorDurationMs: 6000 },
+  /**
+   * `.st` states: 200px min height, 10px gap (16px padding from tokens); empty art 64px; error glyph
+   * 32px; `.skel` bars 14px tall, 4px radius, at 70% / 90% / 50% width.
+   */
+  state: {
+    minHeight: 200,
+    gap: 10,
+    artSize: 64,
+    errorIconSize: 32,
+    skeletonHeight: 14,
+    skeletonRadius: 4,
+    skeletonWidths: ['70%', '90%', '50%'],
+  },
   /** Opacity while pressed — iOS's standard touch feedback (the mockups show no pressed state). */
   pressedOpacity: 0.7,
 } as const;
