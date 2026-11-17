@@ -5,3 +5,8 @@ export { Search, type SearchProps } from './Search';
 export { SegmentedControl, type Segment, type SegmentedControlProps } from './SegmentedControl';
 export { Chip, Chips, type ChipProps } from './Chip';
 export { StatusDot, statusLabels, type SketchStatus, type StatusDotProps } from './StatusDot';
+export { Card, type CardProps } from './Card';
+export { Row, Rows, type RowProps } from './Row';
+export { Avatar, initialOf, type AvatarProps } from './Avatar';
+export { Badge, type BadgeProps } from './Badge';
+export { SectionHeader, type SectionHeaderProps } from './SectionHeader';
