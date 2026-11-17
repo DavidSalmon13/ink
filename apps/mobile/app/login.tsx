@@ -1,30 +1,10 @@
 import { useState } from 'react';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import { AuthError, type AuthErrorCode } from '@/auth/authApi';
 import { useAuth } from '@/auth/AuthProvider';
-import {
-  borderWidth,
-  cardShadow,
-  field,
-  formMaxWidth,
-  radii,
-  spacing,
-  touch,
-  type,
-  useAuthColors,
-  type AuthColors,
-} from '@/auth/tokens';
+import { componentMetrics as m, fontFace, layout, spacing, Text, useColors } from '@/theme';
+import { Button, Card, Field } from '@/ui';
 
 const ERROR_MESSAGES: Record<AuthErrorCode, string> = {
   invalid_credentials: 'אימייל או סיסמה שגויים',
@@ -36,8 +16,7 @@ const ERROR_MESSAGES: Record<AuthErrorCode, string> = {
 /** Owner login. No mockup: built from design-system fields, primary button and card (spec references.md). */
 export default function Login() {
   const { signIn } = useAuth();
-  const colors = useAuthColors();
-  const styles = makeStyles(colors);
+  const colors = useColors();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -64,120 +43,80 @@ export default function Login() {
     }
   }
 
+  const invalid = error === 'invalid_credentials';
+
   return (
-    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView
+      style={[styles.screen, { backgroundColor: colors.bg }]}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.column}>
-          <Text style={styles.wordmark} accessibilityRole="header">
+          <Text variant="display" style={styles.wordmark} accessibilityRole="header">
             AYA INK
           </Text>
 
-          <View style={styles.card}>
-            <View style={styles.field}>
-              <Text style={styles.label}>אימייל</Text>
-              <TextInput
-                accessibilityLabel="אימייל"
-                style={[styles.input, error === 'invalid_credentials' && styles.inputError]}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="email"
-                textContentType="username"
-                returnKeyType="next"
-                editable={!submitting}
-              />
-            </View>
+          <Card style={styles.card}>
+            <Field
+              label="אימייל"
+              invalid={invalid}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="email"
+              textContentType="username"
+              returnKeyType="next"
+              editable={!submitting}
+            />
 
-            <View style={styles.field}>
-              <Text style={styles.label}>סיסמה</Text>
-              <TextInput
-                accessibilityLabel="סיסמה"
-                style={[styles.input, error === 'invalid_credentials' && styles.inputError]}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="current-password"
-                textContentType="password"
-                returnKeyType="go"
-                onSubmitEditing={submit}
-                editable={!submitting}
-              />
-            </View>
+            <Field
+              label="סיסמה"
+              invalid={invalid}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="current-password"
+              textContentType="password"
+              returnKeyType="go"
+              onSubmitEditing={submit}
+              editable={!submitting}
+            />
 
             {error && (
-              <Text style={styles.error} accessibilityRole="alert" accessibilityLiveRegion="polite">
+              <Text
+                color="danger"
+                style={styles.error}
+                accessibilityRole="alert"
+                accessibilityLiveRegion="polite"
+              >
                 {ERROR_MESSAGES[error]}
               </Text>
             )}
 
-            <Pressable
-              accessibilityRole="button"
-              accessibilityState={{ disabled: !canSubmit, busy: submitting }}
-              disabled={!canSubmit}
-              onPress={submit}
-              style={[styles.button, !canSubmit && styles.buttonDisabled]}
-            >
-              {submitting && <ActivityIndicator size="small" color={colors.textMuted} />}
-              <Text style={[styles.buttonText, !canSubmit && styles.buttonTextDisabled]}>כניסה</Text>
-            </Pressable>
-          </View>
+            <Button label="כניסה" onPress={submit} disabled={!canSubmit} loading={submitting} />
+          </Card>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
-function makeStyles(c: AuthColors) {
-  return StyleSheet.create({
-    screen: { flex: 1, backgroundColor: c.bg },
-    scroll: {
-      flexGrow: 1,
-      justifyContent: 'center',
-      paddingHorizontal: spacing.screenPadding,
-      paddingVertical: spacing.xxxl,
-    },
-    column: { width: '100%', maxWidth: formMaxWidth, alignSelf: 'center', gap: spacing.xxl },
-    wordmark: { ...type.display, color: c.text, textAlign: 'center' },
-    card: {
-      backgroundColor: c.surface,
-      borderColor: c.border,
-      borderWidth: borderWidth.hairline,
-      borderRadius: radii.lg,
-      padding: spacing.lg,
-      gap: spacing.lg,
-      shadowColor: c.shadow,
-      ...cardShadow,
-    },
-    field: { gap: field.gap },
-    label: { ...type.label, color: c.textMuted },
-    input: {
-      minHeight: touch.inputHeight,
-      paddingHorizontal: field.inputPaddingHorizontal,
-      borderWidth: borderWidth.hairline,
-      borderColor: c.borderStrong,
-      borderRadius: radii.md,
-      backgroundColor: c.surface,
-      color: c.text,
-      ...type.input,
-    },
-    inputError: { borderColor: c.danger, borderWidth: borderWidth.strong },
-    error: { ...type.label, color: c.danger },
-    button: {
-      minHeight: touch.buttonHeight,
-      paddingHorizontal: spacing.xl,
-      borderRadius: radii.md,
-      backgroundColor: c.primary,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: spacing.sm,
-    },
-    buttonDisabled: { backgroundColor: c.surfaceAlt },
-    buttonText: { ...type.button, color: c.onPrimary },
-    buttonTextDisabled: { color: c.textMuted },
-  });
-}
+const styles = StyleSheet.create({
+  screen: { flex: 1 },
+  scroll: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.screenPadding,
+    paddingVertical: spacing.xxxl,
+  },
+  // modalMaxWidth.tablet keeps the form a readable width on iPad.
+  column: { width: '100%', maxWidth: layout.modalMaxWidth.tablet, alignSelf: 'center', gap: spacing.xxl },
+  wordmark: { textAlign: 'center' },
+  card: { padding: spacing.lg, gap: spacing.lg },
+  // design-system.html `.helper.error`: 13px / 600.
+  error: { fontFamily: fontFace('600'), fontSize: m.field.helperFontSize },
+});

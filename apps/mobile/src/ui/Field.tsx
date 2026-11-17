@@ -9,6 +9,8 @@ export type FieldProps = Omit<TextInputProps, 'style'> & {
   label: string;
   /** Shown under the input in the danger color with a warning glyph; also turns the border red. */
   error?: string | null;
+  /** Error border without a message, for a form-level error shown once elsewhere (e.g. login). */
+  invalid?: boolean;
   /** Muted hint under the input (hidden while an error shows). */
   helper?: string;
   /** Trailing unit inside the input, e.g. "ס״מ" (`.input .unit`). */
@@ -17,12 +19,13 @@ export type FieldProps = Omit<TextInputProps, 'style'> & {
 };
 
 /** design-system.html `.field` — label, 44px input, optional unit, helper or error. `ref` reaches the TextInput. */
-export function Field({ label, error, helper, unit, style, ...input }: FieldProps) {
+export function Field({ label, error, invalid = false, helper, unit, style, ...input }: FieldProps) {
   const t = useTheme();
   const c = t.colors;
   const labelId = useId();
   const hasError = Boolean(error);
   const note = hasError ? error : helper;
+  const redBorder = hasError || invalid;
 
   return (
     <View style={[{ gap: m.field.gap }, style]}>
@@ -41,8 +44,8 @@ export function Field({ label, error, helper, unit, style, ...input }: FieldProp
           paddingHorizontal: m.field.inputPaddingHorizontal,
           backgroundColor: c.surface,
           borderRadius: t.radii.md,
-          borderWidth: hasError ? t.borderWidth.strong : t.borderWidth.hairline,
-          borderColor: hasError ? c.danger : c.borderStrong,
+          borderWidth: redBorder ? t.borderWidth.strong : t.borderWidth.hairline,
+          borderColor: redBorder ? c.danger : c.borderStrong,
         }}
       >
         <TextInput
