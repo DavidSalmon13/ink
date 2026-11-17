@@ -10,3 +10,4 @@ export { Row, Rows, type RowProps } from './Row';
 export { Avatar, initialOf, type AvatarProps } from './Avatar';
 export { Badge, type BadgeProps } from './Badge';
 export { SectionHeader, type SectionHeaderProps } from './SectionHeader';
+export { Modal, modalMaxWidth, type ModalProps } from './Modal';

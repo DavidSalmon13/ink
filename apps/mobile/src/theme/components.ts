@@ -51,6 +51,12 @@ export const componentMetrics = {
   badge: { fontSize: 12 },
   /** Home.html `.section-h h2`: 13px/700, 0.6 letter-spacing, muted. (Margins come from spacing tokens.) */
   sectionHeader: { fontSize: 13, letterSpacing: 0.6 },
+  /**
+   * `.modal`: 14px radius, 760px max height; `.modal-h` 12/8 top/bottom, 20 start, 8 end; `.modal-b`
+   * 4/20/16 with 12px gaps; `.modal-f` 10px gap, 14/20/20, hairline top border. Width caps are
+   * tokens.json layout.modalMaxWidth; spacing-token values are used where they match.
+   */
+  modal: { radius: 14, maxHeight: 760, footerGap: 10, footerPaddingTop: 14 },
   /** Opacity while pressed — iOS's standard touch feedback (the mockups show no pressed state). */
   pressedOpacity: 0.7,
 } as const;
