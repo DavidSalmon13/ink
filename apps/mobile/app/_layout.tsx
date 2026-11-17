@@ -1,15 +1,27 @@
+import {
+  Heebo_400Regular,
+  Heebo_500Medium,
+  Heebo_600SemiBold,
+  Heebo_700Bold,
+  useFonts,
+} from '@expo-google-fonts/heebo';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, type ReactNode } from 'react';
-import { Platform } from 'react-native';
+import { I18nManager, Platform } from 'react-native';
 
 import { AuthProvider, useAuth } from '@/auth/AuthProvider';
 import { authenticateLocally } from '@/auth/localAuth';
 import { LockOverlay } from '@/auth/LockScreen';
 import { AppLockContext, useAppLock } from '@/auth/useAppLock';
 
-// Keep the splash up until we know whether a session token is stored.
+// Ink is Hebrew-only: lay everything out right-to-left (owner-auth-lock AC10 deferred this here).
+// On a device the first launch after this applies needs one reload; see the app-shell QA notes.
+I18nManager.allowRTL(true);
+I18nManager.forceRTL(true);
+
+// Keep the splash up until the Heebo faces are loaded and we know whether a session token is stored.
 void SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const unlockApp = () => authenticateLocally('פתיחת Ink');
@@ -37,15 +49,19 @@ function AppLockGate({ children }: { children: ReactNode }) {
   );
 }
 
-/** Signed out: only Login is reachable. Signed in: the app, never Login. */
-function RootStack() {
+/**
+ * Signed out: only Login is reachable. Signed in: the app, never Login.
+ * `fontsReady` is true once Heebo has loaded or failed to (then the system font is used, not a stuck splash).
+ */
+function RootStack({ fontsReady }: { fontsReady: boolean }) {
   const { status } = useAuth();
+  const ready = fontsReady && status !== 'loading';
 
   useEffect(() => {
-    if (status !== 'loading') void SplashScreen.hideAsync().catch(() => {});
-  }, [status]);
+    if (ready) void SplashScreen.hideAsync().catch(() => {});
+  }, [ready]);
 
-  if (status === 'loading') return null;
+  if (!ready) return null;
 
   return (
     <AppLockGate>
@@ -63,10 +79,12 @@ function RootStack() {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({ Heebo_400Regular, Heebo_500Medium, Heebo_600SemiBold, Heebo_700Bold });
+
   return (
     <AuthProvider>
       <StatusBar style="auto" />
-      <RootStack />
+      <RootStack fontsReady={fontsLoaded || fontError != null} />
     </AuthProvider>
   );
 }
