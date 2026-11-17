@@ -39,5 +39,5 @@
 ## Verification
 
 - [x] T18 Make all T1/T2 tests pass; ./gradlew build, npm run typecheck/lint/test green (testing skill)
-- [ ] T19 Manual device check: Face ID on a Simulator dev build, passcode fallback in Expo Go, background re-lock, app-switcher cover, web preview login/reload; screenshots compared against design-system.html
-- [ ] T20 Run QA against acceptance criteria (qa skill)
+- [~] T19 DEFERRED (do later) — Manual device check: Face ID on a Simulator dev build, passcode fallback in Expo Go, background re-lock, app-switcher cover, web preview login/reload; screenshots compared against design-system.html. Human-only; spec marked done ahead of it (2026-11-16).
+- [x] T20 Run QA against acceptance criteria (qa skill) — PASS WITH NOTES (qa-report.md, 2026-11-16); only T19 manual device check remains

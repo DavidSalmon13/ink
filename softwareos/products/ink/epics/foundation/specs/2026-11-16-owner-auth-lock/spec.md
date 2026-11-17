@@ -1,7 +1,7 @@
 # Owner Auth & App Lock
 
 > Epic: ../../epic.md
-> Status: in-progress
+> Status: done
 > Branch: feat/foundation/owner-auth-lock
 > Covers: POST /auth/login, POST /auth/logout, GET /auth/sessions, DELETE /auth/sessions/{id}, apps/api/src/main/java/app/ink/api/auth/**, apps/api/src/main/resources/db/migration/V2__owner_and_session.sql, apps/mobile/src/auth/**, apps/mobile/src/api/client.ts, apps/mobile/app/login.tsx, apps/mobile/app/my-data.tsx (placeholder), lock screen + auth guard in apps/mobile/app/_layout.tsx
 
@@ -102,3 +102,4 @@ Lock have no page mockups, so they are built only from design-system components 
 |---|---|---|---|---|
 | 2026-11-16 | david-schwartzman | created | Initial shaping | — |
 | 2026-11-16 | david-schwartzman | change | AC10: RTL layout depends on app-shell's forced RTL; added to Out of Scope — forced RTL is app-shell's per the tech plan, found in the code review of #21–#23 | PR #21–#23 review |
+| 2026-11-16 | david-schwartzman | done | Marked done after QA PASS WITH NOTES; T19 manual device check deferred (human-only, to run later) | qa-report.md |
