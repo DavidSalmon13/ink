@@ -33,4 +33,4 @@
 
 ## Verification
 
-- [ ] T12 Run QA against acceptance criteria (qa skill)
+- [x] T12 Run QA against acceptance criteria (qa skill)
