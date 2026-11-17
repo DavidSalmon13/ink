@@ -3,7 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-16-app-shell
 > Branch: feat/foundation/app-shell
-> PR: https://github.com/DavidSalmon13/ink/pull/29 (spec shaping) · https://github.com/DavidSalmon13/ink/pull/30 (T1) · https://github.com/DavidSalmon13/ink/pull/31 (T2) · https://github.com/DavidSalmon13/ink/pull/32 (T3–T4) · https://github.com/DavidSalmon13/ink/pull/33 (T5) · https://github.com/DavidSalmon13/ink/pull/34 (T6–T7) · https://github.com/DavidSalmon13/ink/pull/35 (T8) · https://github.com/DavidSalmon13/ink/pull/36 (T9–T11) · https://github.com/DavidSalmon13/ink/pull/37 (T12a) · https://github.com/DavidSalmon13/ink/pull/38 (T12b) · https://github.com/DavidSalmon13/ink/pull/39 (T13a) · https://github.com/DavidSalmon13/ink/pull/40 (T13b) · https://github.com/DavidSalmon13/ink/pull/41 (T14)
+> PR: https://github.com/DavidSalmon13/ink/pull/29 (spec shaping) · https://github.com/DavidSalmon13/ink/pull/30 (T1) · https://github.com/DavidSalmon13/ink/pull/31 (T2) · https://github.com/DavidSalmon13/ink/pull/32 (T3–T4) · https://github.com/DavidSalmon13/ink/pull/33 (T5) · https://github.com/DavidSalmon13/ink/pull/34 (T6–T7) · https://github.com/DavidSalmon13/ink/pull/35 (T8) · https://github.com/DavidSalmon13/ink/pull/36 (T9–T11) · https://github.com/DavidSalmon13/ink/pull/37 (T12a) · https://github.com/DavidSalmon13/ink/pull/38 (T12b) · https://github.com/DavidSalmon13/ink/pull/39 (T13a) · https://github.com/DavidSalmon13/ink/pull/40 (T13b) · https://github.com/DavidSalmon13/ink/pull/41 (T14) · https://github.com/DavidSalmon13/ink/pull/42 (T15) · https://github.com/DavidSalmon13/ink/pull/43 (T16–T17) · https://github.com/DavidSalmon13/ink/pull/44 (T18)
 
 ## Theme & foundations
 
