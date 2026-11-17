@@ -8,7 +8,7 @@
 ## Theme & foundations
 
 - [x] T1 Add deps (npx expo install @expo-google-fonts/heebo expo-font react-native-svg); scripts/gen-theme.ts generating src/theme/tokens.generated.ts from design/design-system/tokens.json; add `gen:theme` npm script
-- [ ] T2 src/theme: useTheme()/useColors() over useColorScheme; typography component mapping the scale
+- [x] T2 src/theme: useTheme()/useColors() over useColorScheme; typography component mapping the scale
 - [ ] T3 Load Heebo (400/500/600/700) in app/_layout.tsx, hold splash until fonts + auth ready
 - [ ] T4 RTL bootstrap (I18nManager allowRTL/forceRTL) in app/_layout.tsx + Num/money helper (tabular-nums, LTR isolation)
 
