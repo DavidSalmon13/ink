@@ -1,7 +1,7 @@
 # App Shell
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/foundation/app-shell
 > Covers: apps/mobile/src/theme/**, apps/mobile/src/ui/**, apps/mobile/scripts/gen-theme.*, apps/mobile/app/_layout.tsx, apps/mobile/app/index.tsx, apps/mobile/app/(tabs)/**, apps/mobile/src/auth/tokens.ts (removed)
 
