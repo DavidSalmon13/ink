@@ -9,7 +9,7 @@
 
 - [x] T1 Failing ErrorFormatIT: unknown route → 404 not_found, malformed JSON → bad_request, invalid body → validation_failed with details.fields, no token → 401 unauthorized, forced exception → internal_error without internals (AC5, AC9)
 - [x] T2 Failing SettingsIT: seeded defaults, PUT with version saves and bumps, identical retry is a 200 no-op, stale version → 409 version_conflict with details.current, negative agorot → validation_failed (AC2, AC3, AC6)
-- [ ] T3 Failing AttachmentIT (Postgres + MinIO Testcontainers): PUT creates + returns upload URL, bytes PUT to it are fetched back via download-url, identical retry no duplicate, bad mime/size rejected, DELETE soft-deletes and repeats 204, deleted → 404 (AC2, AC4, AC7, AC8)
+- [ ] T3 Failing AttachmentIT (Postgres + S3Mock Testcontainers): PUT creates + returns upload URL, bytes PUT to it are fetched back via download-url, identical retry no duplicate, bad mime/size rejected, DELETE soft-deletes and repeats 204, deleted → 404 (AC2, AC4, AC7, AC8)
 
 ## Shared conventions (api/common)
 
@@ -23,7 +23,7 @@
 
 ## Attachments
 
-- [ ] T8 Storage setup: AWS SDK s3 dependency, StorageProperties + application.yml (env-driven), minio + minio-init in docker-compose.yml, .env.example placeholders, README run note (AC8)
+- [ ] T8 Storage setup: AWS SDK s3 dependency, StorageProperties + application.yml (env-driven), s3mock in docker-compose.yml, .env.example placeholders, README run note (AC8)
 - [ ] T9 V4__attachment.sql + Attachment entity/repository (kind, storageKey, mimeType, sizeBytes, width?, height?) (AC1, AC7)
 - [ ] T10 StorageService (S3Presigner, 15-min PUT/GET) + AttachmentController PUT /attachments/{id}, GET /attachments/{id}/download-url, DELETE /attachments/{id} — T3 green (AC7)
 

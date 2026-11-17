@@ -3,7 +3,7 @@
 > Epic: ../../epic.md
 > Status: in-progress
 > Branch: feat/foundation/api-conventions
-> Covers: GET /settings, PUT /settings, PUT /attachments/{id}, GET /attachments/{id}/download-url, DELETE /attachments/{id}, apps/api/src/main/java/app/ink/api/common/**, apps/api/src/main/java/app/ink/api/settings/**, apps/api/src/main/java/app/ink/api/attachment/**, apps/api/src/main/resources/db/migration/V3__settings.sql, apps/api/src/main/resources/db/migration/V4__attachment.sql, apps/mobile/src/api/settings.ts, apps/mobile/src/api/attachments.ts, minio service in docker-compose.yml
+> Covers: GET /settings, PUT /settings, PUT /attachments/{id}, GET /attachments/{id}/download-url, DELETE /attachments/{id}, apps/api/src/main/java/app/ink/api/common/**, apps/api/src/main/java/app/ink/api/settings/**, apps/api/src/main/java/app/ink/api/attachment/**, apps/api/src/main/resources/db/migration/V3__settings.sql, apps/api/src/main/resources/db/migration/V4__attachment.sql, apps/mobile/src/api/settings.ts, apps/mobile/src/api/attachments.ts, s3mock service in docker-compose.yml
 
 ## Overview
 
@@ -12,7 +12,7 @@ Sketches and the rest add endpoints instead of reinventing them: a synced-entity
 timestamps, soft delete, version), safe-to-retry writes, one error format, the Settings row + endpoint,
 and photo/image attachments through presigned URLs. Serves the epic's "private and synced across
 iPhone and iPad" goal and the data model's "retries, sync and backup restore never create duplicates".
-Attachments run against a local S3-compatible store (MinIO) here. `deploy-pipeline` points the same
+Attachments run against a local S3-compatible store (Adobe S3Mock) here. `deploy-pipeline` points the same
 code at the real Cloudflare R2 bucket by configuration.
 
 ## Goals & User Stories
@@ -50,14 +50,14 @@ code at the real Cloudflare R2 bucket by configuration.
    (kinds `tattoo_photo` | `sketch`; types jpeg, png, heic, webp; up to 15 MB) and returns a presigned
    upload URL valid for 15 minutes. `GET /attachments/{id}/download-url` returns a presigned download URL
    valid for 15 minutes. `DELETE /attachments/{id}` soft-deletes it. The bucket is private: no public URLs.
-8. AC8: Locally, attachments use a MinIO service in `docker-compose.yml` (bucket created on start). The
+8. AC8: Locally, attachments use an S3Mock service (`adobe/s3mock`, pinned tag) in `docker-compose.yml` (bucket created on start). The
    endpoint, bucket and keys come from environment variables (`.env.example` placeholders only), so R2
    needs configuration, not code.
 9. AC9: Every new endpoint requires a valid `Authorization: Bearer` session. Without one it returns 401 `unauthorized`.
 10. AC10: The mobile API client exposes `code`, `message` and `details` on `ApiError`.
     `src/api/settings.ts` and `src/api/attachments.ts` provide typed helpers (get/save settings; request
     upload → PUT the bytes to the presigned URL; get download URL; delete).
-11. AC11: `./gradlew build` passes, including Testcontainers integration tests (Postgres + MinIO) for
+11. AC11: `./gradlew build` passes, including Testcontainers integration tests (Postgres + S3Mock) for
     AC2–AC9. Mobile `npm run typecheck`, `npm run lint` and `npm test` pass. CI is green.
 
 ## Technical Approach
@@ -87,13 +87,13 @@ same statuses). `AuthIT` must stay green unchanged.
   and a DTO with Bean Validation.
 
 **Attachments:**
-- New dependency: AWS SDK v2 `s3` (R2 and MinIO are both S3-compatible; path-style access).
+- New dependency: AWS SDK v2 `s3` (R2 and S3Mock are both S3-compatible; path-style access).
 - `StorageProperties` (`app.storage.endpoint/region/bucket/access-key/secret-key`) and `StorageService`
   (S3Presigner: 15-minute PUT/GET).
 - `V4__attachment.sql`, the `Attachment` entity, `AttachmentRepository` and `AttachmentController`.
 - `storageKey = attachments/<id>`.
-- `docker-compose.yml` gains `minio` plus a one-shot `minio-init` that creates the bucket.
-- ITs run MinIO via Testcontainers (`MinIOContainer`).
+- `docker-compose.yml` gains `s3mock`, which creates the bucket from its initial-buckets setting (no init container).
+- ITs run S3Mock via its Testcontainers module (`S3MockContainer`, `com.adobe.testing:s3mock-testcontainers`).
 
 **Mobile:**
 - `src/api/client.ts` (owner-auth-lock hand-off): `ApiError` gains `details`, and `parseErrorBody`
@@ -121,3 +121,4 @@ same statuses). `AuthIT` must stay green unchanged.
 | Date | Author | Type | Change | Ref |
 |---|---|---|---|---|
 | 2026-11-17 | David Schwartzman | created | Initial shaping (role: Both, TDD; attachments local-first on MinIO) | — |
+| 2026-11-17 | david-schwartzman | change | Local/test S3 store MinIO → Adobe S3Mock (AC8, AC11, Technical Approach, Covers) — minio/minio is no longer pullable (Docker Hub repo gone, quay.io 401) | — |
