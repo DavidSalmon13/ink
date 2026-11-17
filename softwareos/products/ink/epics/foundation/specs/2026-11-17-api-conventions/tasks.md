@@ -18,7 +18,7 @@
 
 ## Settings
 
-- [ ] T6 V3__settings.sql: single-row settings table (jsonb estimateTables/calibrationPoints) seeded with data-model.md defaults (AC6)
+- [x] T6 V3__settings.sql: single-row settings table (jsonb estimateTables/calibrationPoints) seeded with data-model.md defaults (AC6)
 - [ ] T7 settings/: Settings entity, repository, DTO validation, GET/PUT /settings via VersionedWrites — T2 green (AC6)
 
 ## Attachments
