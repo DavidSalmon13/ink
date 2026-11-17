@@ -1,0 +1,39 @@
+# Tasks — App Shell
+
+> Epic: foundation
+> Spec: 2026-11-16-app-shell
+> Branch: feat/foundation/app-shell
+> PR: https://github.com/DavidSalmon13/ink/pull/29 (draft — spec shaping, stacked on #28)
+
+## Theme & foundations
+
+- [ ] T1 Add deps (npx expo install @expo-google-fonts/heebo expo-font react-native-svg); scripts/gen-theme.ts generating src/theme/tokens.generated.ts from design/design-system/tokens.json; add `gen:theme` npm script
+- [ ] T2 src/theme: useTheme()/useColors() over useColorScheme; typography component mapping the scale
+- [ ] T3 Load Heebo (400/500/600/700) in app/_layout.tsx, hold splash until fonts + auth ready
+- [ ] T4 RTL bootstrap (I18nManager allowRTL/forceRTL) in app/_layout.tsx + Num/money helper (tabular-nums, LTR isolation)
+
+## Core components (src/ui/, from design-system.html)
+
+- [ ] T5 Button (primary/secondary/destructive/ghost/icon + disabled) and Icon set (react-native-svg)
+- [ ] T6 Field/Input, Search, helper/error
+- [ ] T7 SegmentedControl, Chip, StatusDot-with-label
+- [ ] T8 Card, Row/Rows, Avatar, Badge, SectionHeader
+- [ ] T9 Centered Modal + scrim backdrop (iPhone/iPad maxWidth, accessible)
+- [ ] T10 Toast (default+error) + toast host at toast z-index
+- [ ] T11 Empty / loading (skeleton) / error state components
+
+## Navigation & Home
+
+- [ ] T12 expo-router tab group app/(tabs)/ + custom 5-tab bar (RTL order, icons, active color) + 4 placeholder tab screens
+- [ ] T13 Home screen app/(tabs)/index.tsx per design/pages/Home.html (header, 4 tiles, empty "התורים הקרובים", "עוד" grid; no money)
+- [ ] T14 Wire "הנתונים שלי" → /my-data; other "עוד"/settings → placeholder routes
+
+## Hand-off from owner-auth-lock
+
+- [ ] T15 Delete src/auth/tokens.ts; migrate login/LockScreen/my-data imports to src/theme + src/ui (no visual regression); preserve AuthProvider/AppLock behavior in _layout.tsx
+
+## Web & verification
+
+- [ ] T16 Web fallbacks: guard forceRTL against reload loop; ensure tab bar + Home render under react-native-web
+- [ ] T17 Write tests (testing skill): gen-theme generator diff, RTL/numeric helper, web fallback logic; typecheck/lint/test green
+- [ ] T18 Run QA against acceptance criteria (qa skill)

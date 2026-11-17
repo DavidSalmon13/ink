@@ -31,3 +31,15 @@ specs:
       - apps/mobile/app/login.tsx
       - "apps/mobile/app/my-data.tsx (placeholder)"
       - "lock screen + auth guard in apps/mobile/app/_layout.tsx"
+  - slug: 2026-11-16-app-shell
+    title: App Shell
+    status: shaped
+    branch: feat/foundation/app-shell
+    covers:
+      - "apps/mobile/src/theme/**"
+      - "apps/mobile/src/ui/**"
+      - "apps/mobile/scripts/gen-theme.*"
+      - apps/mobile/app/_layout.tsx
+      - apps/mobile/app/index.tsx
+      - "apps/mobile/app/(tabs)/**"
+      - "apps/mobile/src/auth/tokens.ts (removed)"
