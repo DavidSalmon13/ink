@@ -8,7 +8,7 @@
 ## Tests first (TDD)
 
 - [x] T1 Failing ErrorFormatIT: unknown route → 404 not_found, malformed JSON → bad_request, invalid body → validation_failed with details.fields, no token → 401 unauthorized, forced exception → internal_error without internals (AC5, AC9)
-- [ ] T2 Failing SettingsIT: seeded defaults, PUT with version saves and bumps, identical retry is a 200 no-op, stale version → 409 version_conflict with details.current, negative agorot → validation_failed (AC2, AC3, AC6)
+- [x] T2 Failing SettingsIT: seeded defaults, PUT with version saves and bumps, identical retry is a 200 no-op, stale version → 409 version_conflict with details.current, negative agorot → validation_failed (AC2, AC3, AC6)
 - [ ] T3 Failing AttachmentIT (Postgres + MinIO Testcontainers): PUT creates + returns upload URL, bytes PUT to it are fetched back via download-url, identical retry no duplicate, bad mime/size rejected, DELETE soft-deletes and repeats 204, deleted → 404 (AC2, AC4, AC7, AC8)
 
 ## Shared conventions (api/common)
