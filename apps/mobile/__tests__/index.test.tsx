@@ -9,7 +9,7 @@ jest.mock('@/auth/AuthProvider', () => ({
   useAuth: () => ({ status: 'signedIn', signIn: jest.fn(), signOut: mockSignOut, sessionExpired: jest.fn() }),
 }));
 
-import Index from '../app/index';
+import Index from '../app/(tabs)/index';
 
 const mockFetch = jest.fn<(input: string, init?: RequestInit) => Promise<Response>>();
 

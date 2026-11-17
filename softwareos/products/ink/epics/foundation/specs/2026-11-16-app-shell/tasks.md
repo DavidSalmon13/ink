@@ -24,7 +24,7 @@
 
 ## Navigation & Home
 
-- [ ] T12 expo-router tab group app/(tabs)/ + custom 5-tab bar (RTL order, icons, active color) + 4 placeholder tab screens
+- [x] T12 expo-router tab group app/(tabs)/ + custom 5-tab bar (RTL order, icons, active color) + 4 placeholder tab screens
 - [ ] T13 Home screen app/(tabs)/index.tsx per design/pages/Home.html (header, 4 tiles, empty "התורים הקרובים", "עוד" grid; no money)
 - [ ] T14 Wire "הנתונים שלי" → /my-data; other "עוד"/settings → placeholder routes
 
