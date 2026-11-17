@@ -14,7 +14,7 @@
 
 ## Core components (src/ui/, from design-system.html)
 
-- [ ] T5 Button (primary/secondary/destructive/ghost/icon + disabled) and Icon set (react-native-svg)
+- [x] T5 Button (primary/secondary/destructive/ghost/icon + disabled) and Icon set (react-native-svg)
 - [ ] T6 Field/Input, Search, helper/error
 - [ ] T7 SegmentedControl, Chip, StatusDot-with-label
 - [ ] T8 Card, Row/Rows, Avatar, Badge, SectionHeader

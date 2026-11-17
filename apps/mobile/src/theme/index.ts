@@ -4,3 +4,4 @@ export { useColors, useTheme, type ColorName, type Palette, type Theme } from '.
 export { Text, type TextProps } from './Text';
 export { Num, type NumProps } from './Num';
 export { formatMoney, ltrIsolate, LRI, PDI } from './numeric';
+export { componentMetrics } from './components';
