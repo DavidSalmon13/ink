@@ -3,7 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-17-api-conventions
 > Branch: feat/foundation/api-conventions
-> PR: https://github.com/DavidSalmon13/ink/pull/46 (spec shaping)
+> PR: https://github.com/DavidSalmon13/ink/pull/46 (spec shaping) · https://github.com/DavidSalmon13/ink/pull/47 (T1–T2)
 
 ## Tests first (TDD)
 
