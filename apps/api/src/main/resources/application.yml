@@ -61,3 +61,11 @@ app:
     # Sliding expiry: a device's session stops working after this long unused.
     session-ttl: 90d
     touch-interval: 1h
+  storage:
+    # S3-compatible attachment store: s3mock locally (docker-compose.yml), Cloudflare R2 in production.
+    # Private bucket; the app only ever hands out 15-minute presigned URLs.
+    endpoint: ${STORAGE_ENDPOINT:http://localhost:9090}
+    region: ${STORAGE_REGION:us-east-1}
+    bucket: ${STORAGE_BUCKET:ink-attachments}
+    access-key: ${STORAGE_ACCESS_KEY:local}
+    secret-key: ${STORAGE_SECRET_KEY:local}

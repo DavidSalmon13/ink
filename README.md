@@ -6,7 +6,7 @@ A private studio-management app for a solo tattoo artist: Hebrew right-to-left U
 |---|---|
 | `apps/api` | Spring Boot 3 API, Java 21, Gradle (Kotlin DSL), Flyway |
 | `apps/mobile` | Expo Router + TypeScript app |
-| `docker-compose.yml` | Local PostgreSQL 16 |
+| `docker-compose.yml` | Local PostgreSQL 16 and S3Mock (attachment storage) |
 | `softwareos/`, `design/` | Product docs, specs, standards and design (start with `CLAUDE.md`) |
 
 ## Prerequisites
@@ -24,18 +24,22 @@ A private studio-management app for a solo tattoo artist: Hebrew right-to-left U
 ```sh
 cp .env.example .env          # then set POSTGRES_PASSWORD and DB_PASSWORD (same value)
 docker compose up -d          # Postgres 16 on localhost:5432, data in the ink-pgdata volume
+                              # S3Mock on localhost:9090 with the ink-attachments bucket
 ```
+
+S3Mock keeps attachments in memory: they're gone when its container is removed. The API's `STORAGE_*`
+variables point at it by default; production sets them to Cloudflare R2.
 
 ### 2. API
 
 ```sh
 cd apps/api
-set -a; source ../../.env; set +a   # DB_URL / DB_USER / DB_PASSWORD
+set -a; source ../../.env; set +a   # DB_* and STORAGE_* variables
 ./gradlew bootRun                   # http://localhost:8080 — Flyway migrates on start
 curl localhost:8080/health          # {"status":"UP",...}
 ```
 
-Tests (`./gradlew test`, or `./gradlew build` for compile + tests) start their own Postgres with Testcontainers,
+Tests (`./gradlew test`, or `./gradlew build` for compile + tests) start their own Postgres and S3Mock with Testcontainers,
 so Docker must be running.
 
 #### Owner login

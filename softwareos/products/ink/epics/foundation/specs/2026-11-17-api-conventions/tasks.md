@@ -23,7 +23,7 @@
 
 ## Attachments
 
-- [ ] T8 Storage setup: AWS SDK s3 dependency, StorageProperties + application.yml (env-driven), s3mock in docker-compose.yml, .env.example placeholders, README run note (AC8)
+- [x] T8 Storage setup: AWS SDK s3 dependency, StorageProperties + application.yml (env-driven), s3mock in docker-compose.yml, .env.example placeholders, README run note (AC8)
 - [ ] T9 V4__attachment.sql + Attachment entity/repository (kind, storageKey, mimeType, sizeBytes, width?, height?) (AC1, AC7)
 - [ ] T10 StorageService (S3Presigner, 15-min PUT/GET) + AttachmentController PUT /attachments/{id}, GET /attachments/{id}/download-url, DELETE /attachments/{id} — T3 green (AC7)
 

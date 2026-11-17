@@ -1,4 +1,4 @@
-# Local development database only.
+# Local development services: the database and an S3-compatible attachment store.
 # Usage: cp .env.example .env  (set POSTGRES_PASSWORD)  &&  docker compose up -d
 services:
   postgres:
@@ -20,6 +20,17 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  # Attachments (S3-compatible, like Cloudflare R2 in production). Creates the bucket on start.
+  # In-memory store: uploaded files are gone when the container is removed.
+  s3mock:
+    image: adobe/s3mock:4.12.4
+    container_name: ink-s3mock
+    restart: unless-stopped
+    environment:
+      initialBuckets: ${STORAGE_BUCKET:-ink-attachments}
+    ports:
+      - "${S3MOCK_PORT:-9090}:9090"
 
 volumes:
   ink-pgdata:
