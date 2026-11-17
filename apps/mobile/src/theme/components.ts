@@ -43,6 +43,14 @@ export const componentMetrics = {
   chip: { minHeight: 34, paddingHorizontal: 10, fontSize: 13, gap: 6, groupGap: 8 },
   /** `.status` / `.dot`: 10px dot, 6px gap, 13px/500 label. */
   status: { dotSize: 10, gap: 6, fontSize: 13 },
+  /** `.row` trailing chevron: 18px muted glyph. (Row height/padding/gap come from spacing tokens.) */
+  row: { chevronSize: 18 },
+  /** `.avatar`: 44px circle, 16px/700 initial on primaryTint. */
+  avatar: { size: 44, fontSize: 16 },
+  /** `.badge`: 12px/600 pill on primaryTint. (Padding comes from spacing tokens.) */
+  badge: { fontSize: 12 },
+  /** Home.html `.section-h h2`: 13px/700, 0.6 letter-spacing, muted. (Margins come from spacing tokens.) */
+  sectionHeader: { fontSize: 13, letterSpacing: 0.6 },
   /** Opacity while pressed — iOS's standard touch feedback (the mockups show no pressed state). */
   pressedOpacity: 0.7,
 } as const;
