@@ -17,11 +17,12 @@ const ACTIONS: readonly { label: string; icon: IconName; href: Href }[] = [
 ];
 
 /** Home.html `nav[aria-label="ניווט משני"]` — the "עוד" grid, two per row. */
-const MORE: readonly { label: string; icon: IconName }[] = [
-  { label: 'גלריית עבודות', icon: 'gallery' },
-  { label: 'הנתונים שלי', icon: 'myData' },
-  { label: 'שיווק והודעות', icon: 'marketing' },
-  { label: 'הגדרות', icon: 'settings' },
+const MORE: readonly { label: string; icon: IconName; href: Href }[] = [
+  { label: 'גלריית עבודות', icon: 'gallery', href: '/gallery' },
+  // The existing owner-auth-lock screen; its re-authentication guard runs on arrival (AC11).
+  { label: 'הנתונים שלי', icon: 'myData', href: '/my-data' },
+  { label: 'שיווק והודעות', icon: 'marketing', href: '/marketing' },
+  { label: 'הגדרות', icon: 'settings', href: '/settings' },
 ];
 
 /**
@@ -61,7 +62,7 @@ export default function Home() {
             AYA INK
           </Text>
         </View>
-        <IconButton icon="settings" accessibilityLabel="הגדרות" />
+        <IconButton icon="settings" accessibilityLabel="הגדרות" onPress={() => router.navigate('/settings')} />
       </View>
 
       {/* .tile ×4 */}
@@ -129,13 +130,15 @@ export default function Home() {
                 <Pressable
                   accessibilityRole="link"
                   accessibilityLabel={item.label}
-                  style={{
+                  onPress={() => router.navigate(item.href)}
+                  style={({ pressed }) => ({
                     flexDirection: 'row',
                     alignItems: 'center',
                     gap: m.miniGap,
                     minHeight: t.spacing.rowHeight,
                     paddingHorizontal: m.miniPaddingHorizontal,
-                  }}
+                    opacity: pressed ? componentMetrics.pressedOpacity : 1,
+                  })}
                 >
                   <Icon name={item.icon} size={m.miniIconSize} color="primary" />
                   <Text style={{ fontFamily: fontFace('500'), fontSize: m.miniFontSize, color: c.text }}>
