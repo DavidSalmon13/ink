@@ -122,3 +122,5 @@ guarded as today. Home's "הנתונים שלי" → `/my-data`; other "עוד"/
 | Date | Author | Type | Change | Ref |
 |---|---|---|---|---|
 | 2026-11-16 | David Schwartzman | created | Initial shaping (role: Both, tests-after) | — |
+| 2026-11-17 | David Schwartzman | deviation | T13 Home compared with `design/pages/Home.html` from **web-preview** screenshots (`visuals/home-*`), not the iOS Simulator (no Xcode on the dev machine): layout, type, text and light/dark palettes match. Known differences: the web preview renders mirrored (LTR) until T16's web RTL fallback; "התורים הקרובים" shows the empty state per AC10; no notch inset on web. **Owed:** an iPhone simulator/device screenshot before QA (T18). | T13 |
+| 2026-11-17 | David Schwartzman | note | owner-auth-lock's temporary logout and API-status line moved from the placeholder Home to the Settings placeholder (`app/(tabs)/settings.tsx`, hidden from the tab bar), per the user's decision, until the Settings epic. | T13 |
