@@ -69,6 +69,28 @@ export const componentMetrics = {
    */
   tabBar: { padding: 8, itemMinWidth: 60, itemGap: 3, iconSize: 24, fontSize: 11 },
   /**
+   * Home.html: `.top` 56px min header with 4/12 padding; `.overline` date at 700 (the page's class,
+   * bolder than the scale's 600); `.tile` 92px min, 12px radius, 12/2 padding, 6px gap, 12px/600 label;
+   * `.well` 44px, 10px radius, 24px glyph; `.mini` 52px row, 12px padding, 10px gap, 20px glyph,
+   * 14px/500 label; both grids 8px gaps.
+   */
+  home: {
+    headerMinHeight: 56,
+    tileMinHeight: 92,
+    tilePaddingVertical: 12,
+    tilePaddingHorizontal: 2,
+    tileGap: 6,
+    tileFontSize: 12,
+    wellSize: 44,
+    wellRadius: 10,
+    wellIconSize: 24,
+    miniPaddingHorizontal: 12,
+    miniGap: 10,
+    miniIconSize: 20,
+    miniFontSize: 14,
+    gridGap: 8,
+  },
+  /**
    * `.st` states: 200px min height, 10px gap (16px padding from tokens); empty art 64px; error glyph
    * 32px; `.skel` bars 14px tall, 4px radius, at 70% / 90% / 50% width.
    */

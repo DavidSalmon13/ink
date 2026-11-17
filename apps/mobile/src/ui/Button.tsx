@@ -66,7 +66,8 @@ export function Button({
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          alignSelf: block ? 'stretch' : 'flex-start',
+          // Inline like the design's `.btn`: follows the parent's alignment unless `block`.
+          alignSelf: block ? 'stretch' : undefined,
           gap: m.button.gap,
           borderRadius: t.radii.md,
           borderWidth: t.borderWidth.strong,

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,13 +9,15 @@ import { EmptyState } from './States';
 export type PlaceholderScreenProps = {
   /** The screen's Hebrew name, as on the tab bar / Home. */
   title: string;
+  /** Temporary extras shown under the placeholder (e.g. Settings' logout until the Settings epic). */
+  children?: ReactNode;
 };
 
 /**
  * A screen whose real content arrives in a later epic (app-shell AC9/AC11). No mockup exists for it,
  * so it's built only from existing pieces: the title1 heading and the design-system empty state.
  */
-export function PlaceholderScreen({ title }: PlaceholderScreenProps) {
+export function PlaceholderScreen({ title, children }: PlaceholderScreenProps) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   return (
@@ -31,6 +34,7 @@ export function PlaceholderScreen({ title }: PlaceholderScreenProps) {
         {title}
       </Text>
       <EmptyState title="בקרוב" message="המסך הזה ייבנה בשלב הבא." />
+      {children}
     </ScrollView>
   );
 }
