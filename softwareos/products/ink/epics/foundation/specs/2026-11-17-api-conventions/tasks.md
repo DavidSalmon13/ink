@@ -29,7 +29,7 @@
 
 ## Mobile client
 
-- [ ] T11 Tests first, then: ApiError.details in src/api/client.ts (owner-auth-lock hand-off); src/api/settings.ts; src/api/attachments.ts (request upload, PUT bytes to presigned URL, download URL, delete) (AC10)
+- [x] T11 Tests first, then: ApiError.details in src/api/client.ts (owner-auth-lock hand-off); src/api/settings.ts; src/api/attachments.ts (request upload, PUT bytes to presigned URL, download URL, delete) (AC10)
 
 ## Verification
 
