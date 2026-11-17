@@ -63,6 +63,12 @@ export const componentMetrics = {
    */
   toast: { gap: 10, fontSize: 15, iconSize: 20, actionGap: 6, durationMs: 4000, errorDurationMs: 6000 },
   /**
+   * Home.html `.tabbar`: 8px top/side padding, items 60px min wide with a 3px icon-label gap,
+   * 24px glyphs, 11px/500 muted labels (active 700 primary). The mockup's 30px bottom padding is the
+   * home-indicator area, so the real bar uses the bottom safe-area inset instead.
+   */
+  tabBar: { padding: 8, itemMinWidth: 60, itemGap: 3, iconSize: 24, fontSize: 11 },
+  /**
    * `.st` states: 200px min height, 10px gap (16px padding from tokens); empty art 64px; error glyph
    * 32px; `.skel` bars 14px tall, 4px radius, at 70% / 90% / 50% width.
    */
