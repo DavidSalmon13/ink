@@ -2,4 +2,4 @@
 generated: 2026-11-17
 product: ink
 epics:
-  - { slug: foundation, name: Foundation, status: in-progress, spec_count: 3, path: epics/foundation/ }
+  - { slug: foundation, name: Foundation, status: in-progress, spec_count: 4, path: epics/foundation/ }
