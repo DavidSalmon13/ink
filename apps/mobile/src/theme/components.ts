@@ -4,7 +4,7 @@
  * Values that do exist in tokens.json are referenced from the generated module instead.
  */
 export const componentMetrics = {
-  /** `.btn`: 16px / 600, 20px side padding, 8px icon gap; `.btn-sm`: 15px, 14px padding; `.btn-ghost`: 8px padding. */
+  /** `.btn`: 16px / 600, 20px side padding, 8px icon gap; `.btn-sm`: 15px, 14px padding; `.btn-ghost`: 8px padding; ghost and small buttons use an 18px glyph. */
   button: {
     fontSize: 16,
     fontSizeSmall: 15,
@@ -13,7 +13,7 @@ export const componentMetrics = {
     paddingHorizontalGhost: 8,
     gap: 8,
     iconSize: 20,
-    iconSizeGhost: 18,
+    iconSizeSmall: 18,
   },
   /** `.iconbtn`: 44×44 round, glyph 22px. */
   iconButton: { iconSize: 22 },
@@ -51,6 +51,30 @@ export const componentMetrics = {
   badge: { fontSize: 12 },
   /** Home.html `.section-h h2`: 13px/700, 0.6 letter-spacing, muted. (Margins come from spacing tokens.) */
   sectionHeader: { fontSize: 13, letterSpacing: 0.6 },
+  /**
+   * `.modal`: 14px radius, 760px max height; `.modal-h` 12/8 top/bottom, 20 start, 8 end; `.modal-b`
+   * 4/20/16 with 12px gaps; `.modal-f` 10px gap, 14/20/20, hairline top border. Width caps are
+   * tokens.json layout.modalMaxWidth; spacing-token values are used where they match.
+   */
+  modal: { radius: 14, maxHeight: 760, footerGap: 10, footerPaddingTop: 14 },
+  /**
+   * `.toast`: 10px gap, 15px/500, 20px glyph, inline action 700 with 6px start margin (padding 12/16 and
+   * the raised shadow come from tokens). Durations aren't in the design: long enough to read a short line.
+   */
+  toast: { gap: 10, fontSize: 15, iconSize: 20, actionGap: 6, durationMs: 4000, errorDurationMs: 6000 },
+  /**
+   * `.st` states: 200px min height, 10px gap (16px padding from tokens); empty art 64px; error glyph
+   * 32px; `.skel` bars 14px tall, 4px radius, at 70% / 90% / 50% width.
+   */
+  state: {
+    minHeight: 200,
+    gap: 10,
+    artSize: 64,
+    errorIconSize: 32,
+    skeletonHeight: 14,
+    skeletonRadius: 4,
+    skeletonWidths: ['70%', '90%', '50%'],
+  },
   /** Opacity while pressed — iOS's standard touch feedback (the mockups show no pressed state). */
   pressedOpacity: 0.7,
 } as const;

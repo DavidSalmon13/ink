@@ -15,6 +15,7 @@ import { AuthProvider, useAuth } from '@/auth/AuthProvider';
 import { authenticateLocally } from '@/auth/localAuth';
 import { LockOverlay } from '@/auth/LockScreen';
 import { AppLockContext, useAppLock } from '@/auth/useAppLock';
+import { ToastProvider } from '@/ui';
 
 // Ink is Hebrew-only: lay everything out right-to-left (owner-auth-lock AC10 deferred this here).
 // On a device the first launch after this applies needs one reload; see the app-shell QA notes.
@@ -65,15 +66,18 @@ function RootStack({ fontsReady }: { fontsReady: boolean }) {
 
   return (
     <AppLockGate>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={status === 'signedIn'}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="my-data" />
-        </Stack.Protected>
-        <Stack.Protected guard={status === 'signedOut'}>
-          <Stack.Screen name="login" />
-        </Stack.Protected>
-      </Stack>
+      {/* Inside the lock gate, so the lock overlay still covers any toast. */}
+      <ToastProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Protected guard={status === 'signedIn'}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="my-data" />
+          </Stack.Protected>
+          <Stack.Protected guard={status === 'signedOut'}>
+            <Stack.Screen name="login" />
+          </Stack.Protected>
+        </Stack>
+      </ToastProvider>
     </AppLockGate>
   );
 }

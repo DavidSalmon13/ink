@@ -18,9 +18,9 @@
 - [x] T6 Field/Input, Search, helper/error
 - [x] T7 SegmentedControl, Chip, StatusDot-with-label
 - [x] T8 Card, Row/Rows, Avatar, Badge, SectionHeader
-- [ ] T9 Centered Modal + scrim backdrop (iPhone/iPad maxWidth, accessible)
-- [ ] T10 Toast (default+error) + toast host at toast z-index
-- [ ] T11 Empty / loading (skeleton) / error state components
+- [x] T9 Centered Modal + scrim backdrop (iPhone/iPad maxWidth, accessible)
+- [x] T10 Toast (default+error) + toast host at toast z-index
+- [x] T11 Empty / loading (skeleton) / error state components
 
 ## Navigation & Home
 
