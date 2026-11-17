@@ -57,6 +57,11 @@ export const componentMetrics = {
    * tokens.json layout.modalMaxWidth; spacing-token values are used where they match.
    */
   modal: { radius: 14, maxHeight: 760, footerGap: 10, footerPaddingTop: 14 },
+  /**
+   * `.toast`: 10px gap, 15px/500, 20px glyph, inline action 700 with 6px start margin (padding 12/16 and
+   * the raised shadow come from tokens). Durations aren't in the design: long enough to read a short line.
+   */
+  toast: { gap: 10, fontSize: 15, iconSize: 20, actionGap: 6, durationMs: 4000, errorDurationMs: 6000 },
   /** Opacity while pressed — iOS's standard touch feedback (the mockups show no pressed state). */
   pressedOpacity: 0.7,
 } as const;
