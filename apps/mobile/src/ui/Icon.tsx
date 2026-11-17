@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 
 import { useColors, type ColorName } from '@/theme';
@@ -62,6 +63,16 @@ const glyphs = {
 } satisfies Record<string, Shape[]>;
 
 export type IconName = keyof typeof glyphs;
+
+/**
+ * Hides a decorative graphic from screen readers. react-native-svg renders real DOM on web, where the
+ * native-only props would leak as unknown attributes, so web gets `aria-hidden` instead.
+ */
+export const decorativeProps = (
+  Platform.OS === 'web'
+    ? { 'aria-hidden': true }
+    : { accessibilityElementsHidden: true, importantForAccessibility: 'no-hide-descendants' }
+) as object;
 export const iconNames = Object.keys(glyphs) as IconName[];
 
 export type IconProps = {
@@ -88,8 +99,7 @@ export function Icon({ name, size = 24, color = 'text', tint }: IconProps) {
       strokeWidth={1.5}
       strokeLinecap="round"
       strokeLinejoin="round"
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
+      {...decorativeProps}
       testID={`icon-${name}`}
     >
       {glyphs[name].map((shape, i) => {

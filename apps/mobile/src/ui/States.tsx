@@ -6,7 +6,7 @@ import { componentMetrics as m, fontFace, Text, useTheme } from '@/theme';
 
 import { Button } from './Button';
 import { Card } from './Card';
-import { Icon } from './Icon';
+import { decorativeProps, Icon } from './Icon';
 
 type Framed = {
   /** Wrap in a Card, as on design-system.html (default). Pass false when already inside one. */
@@ -72,8 +72,7 @@ export function EmptyArt({ size = m.state.artSize }: { size?: number }) {
       strokeWidth={1.3}
       strokeLinecap="round"
       strokeLinejoin="round"
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
+      {...decorativeProps}
       testID="empty-art"
     >
       <Path d="M58 20a31 31 0 1 0 0 60 25 25 0 1 1 0-60z" />
