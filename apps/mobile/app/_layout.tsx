@@ -70,7 +70,7 @@ function RootStack({ fontsReady }: { fontsReady: boolean }) {
       <ToastProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Protected guard={status === 'signedIn'}>
-            <Stack.Screen name="index" />
+            <Stack.Screen name="(tabs)" />
             <Stack.Screen name="my-data" />
           </Stack.Protected>
           <Stack.Protected guard={status === 'signedOut'}>
