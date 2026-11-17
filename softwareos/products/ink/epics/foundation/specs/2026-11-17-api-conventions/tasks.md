@@ -13,7 +13,7 @@
 
 ## Shared conventions (api/common)
 
-- [ ] T4 common/SyncedEntity (@MappedSuperclass: client UUID, timestamps, deletedAt, @Version) + VersionedWrites (create-or-update by id, identical-retry no-op, conflict, soft delete) (AC1–AC4)
+- [x] T4 common/SyncedEntity (@MappedSuperclass: client UUID, timestamps, deletedAt, @Version) + VersionedWrites (create-or-update by id, identical-retry no-op, conflict, soft delete) (AC1–AC4)
 - [ ] T5 common/ApiError + GlobalExceptionHandler; move AuthExceptionHandler's mappings in and build ApiErrorWriter's body from ApiError (owner-auth-lock hand-off; AuthIT unchanged and green) — T1 green (AC5, AC9)
 
 ## Settings
