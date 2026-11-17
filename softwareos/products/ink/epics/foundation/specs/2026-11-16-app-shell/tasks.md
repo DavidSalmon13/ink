@@ -15,8 +15,8 @@
 ## Core components (src/ui/, from design-system.html)
 
 - [x] T5 Button (primary/secondary/destructive/ghost/icon + disabled) and Icon set (react-native-svg)
-- [ ] T6 Field/Input, Search, helper/error
-- [ ] T7 SegmentedControl, Chip, StatusDot-with-label
+- [x] T6 Field/Input, Search, helper/error
+- [x] T7 SegmentedControl, Chip, StatusDot-with-label
 - [ ] T8 Card, Row/Rows, Avatar, Badge, SectionHeader
 - [ ] T9 Centered Modal + scrim backdrop (iPhone/iPad maxWidth, accessible)
 - [ ] T10 Toast (default+error) + toast host at toast z-index
