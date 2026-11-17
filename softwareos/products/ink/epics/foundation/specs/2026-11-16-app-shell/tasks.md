@@ -36,4 +36,4 @@
 
 - [x] T16 Web fallbacks: guard forceRTL against reload loop; ensure tab bar + Home render under react-native-web
 - [x] T17 Write tests (testing skill): gen-theme generator diff, RTL/numeric helper, web fallback logic; typecheck/lint/test green
-- [ ] T18 Run QA against acceptance criteria (qa skill)
+- [x] T18 Run QA against acceptance criteria (qa skill)
