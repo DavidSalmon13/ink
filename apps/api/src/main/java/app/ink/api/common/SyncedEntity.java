@@ -1,6 +1,7 @@
 package app.ink.api.common;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -43,21 +44,30 @@ public abstract class SyncedEntity {
 
 	@PrePersist
 	void onCreate() {
-		Instant now = Instant.now();
+		Instant now = now();
 		this.createdAt = now;
 		this.updatedAt = now;
 	}
 
 	@PreUpdate
 	void onUpdate() {
-		this.updatedAt = Instant.now();
+		this.updatedAt = now();
 	}
 
 	/** Sets {@code deletedAt} once; later calls keep the first timestamp. */
 	void markDeleted(Instant now) {
 		if (deletedAt == null) {
-			deletedAt = now;
+			deletedAt = now.truncatedTo(ChronoUnit.MICROS);
 		}
+	}
+
+	/**
+	 * Server time at microsecond precision — the resolution Postgres {@code timestamptz} stores. Truncating
+	 * here keeps the just-saved in-memory value byte-equal to the one a later read loads back, so an
+	 * identical-retry response (AC2) matches the first one instead of differing in sub-microsecond digits.
+	 */
+	private static Instant now() {
+		return Instant.now().truncatedTo(ChronoUnit.MICROS);
 	}
 
 	public boolean isDeleted() {
