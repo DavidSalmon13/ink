@@ -1,6 +1,7 @@
 package app.ink.api.common;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -41,16 +42,24 @@ public abstract class SyncedEntity {
 		this.id = id;
 	}
 
+	/**
+	 * Postgres keeps microseconds. Truncating here makes the timestamps a response returns equal to what
+	 * a later read returns (Linux clocks have nanoseconds), so an identical retry gets an identical body.
+	 */
+	private static Instant now() {
+		return Instant.now().truncatedTo(ChronoUnit.MICROS);
+	}
+
 	@PrePersist
 	void onCreate() {
-		Instant now = Instant.now();
+		Instant now = now();
 		this.createdAt = now;
 		this.updatedAt = now;
 	}
 
 	@PreUpdate
 	void onUpdate() {
-		this.updatedAt = Instant.now();
+		this.updatedAt = now();
 	}
 
 	/** Sets {@code deletedAt} once; later calls keep the first timestamp. */
