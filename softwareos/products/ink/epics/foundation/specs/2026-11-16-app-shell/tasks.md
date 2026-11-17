@@ -3,7 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-16-app-shell
 > Branch: feat/foundation/app-shell
-> PR: https://github.com/DavidSalmon13/ink/pull/29 (draft — spec shaping, stacked on #28)
+> PR: https://github.com/DavidSalmon13/ink/pull/29 (spec shaping) · https://github.com/DavidSalmon13/ink/pull/30 (T1) · https://github.com/DavidSalmon13/ink/pull/31 (T2) · https://github.com/DavidSalmon13/ink/pull/32 (T3–T4)
 
 ## Theme & foundations
 
@@ -14,7 +14,7 @@
 
 ## Core components (src/ui/, from design-system.html)
 
-- [ ] T5 Button (primary/secondary/destructive/ghost/icon + disabled) and Icon set (react-native-svg)
+- [x] T5 Button (primary/secondary/destructive/ghost/icon + disabled) and Icon set (react-native-svg)
 - [ ] T6 Field/Input, Search, helper/error
 - [ ] T7 SegmentedControl, Chip, StatusDot-with-label
 - [ ] T8 Card, Row/Rows, Avatar, Badge, SectionHeader
