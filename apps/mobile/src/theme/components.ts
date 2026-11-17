@@ -34,6 +34,15 @@ export const componentMetrics = {
   },
   /** `.search`: 12px side padding, 8px gap, 20px glyph, 16px text, surfaceAlt fill. */
   search: { paddingHorizontal: 12, gap: 8, iconSize: 20, fontSize: 16 },
+  /**
+   * `.seg`: 3px inset, 2px gap; segments 38px tall, 6px side padding, 14px/500 (selected 700 primary
+   * on surface with the card shadow), optional 11px/400 muted sub-label.
+   */
+  segmented: { padding: 3, gap: 2, minHeight: 38, paddingHorizontal: 6, fontSize: 14, subFontSize: 11 },
+  /** `.chip`: 34px tall, 10px side padding, 13px, 6px gap (selected 600 on primary); `.chips` wrap with 8px gaps. */
+  chip: { minHeight: 34, paddingHorizontal: 10, fontSize: 13, gap: 6, groupGap: 8 },
+  /** `.status` / `.dot`: 10px dot, 6px gap, 13px/500 label. */
+  status: { dotSize: 10, gap: 6, fontSize: 13 },
   /** Opacity while pressed — iOS's standard touch feedback (the mockups show no pressed state). */
   pressedOpacity: 0.7,
 } as const;
