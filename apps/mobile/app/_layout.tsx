@@ -9,18 +9,19 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, type ReactNode } from 'react';
-import { I18nManager, Platform } from 'react-native';
+import { Platform } from 'react-native';
 
 import { AuthProvider, useAuth } from '@/auth/AuthProvider';
 import { authenticateLocally } from '@/auth/localAuth';
 import { LockOverlay } from '@/auth/LockScreen';
 import { AppLockContext, useAppLock } from '@/auth/useAppLock';
+import { applyRTL } from '@/theme';
 import { ToastProvider } from '@/ui';
 
 // Ink is Hebrew-only: lay everything out right-to-left (owner-auth-lock AC10 deferred this here).
-// On a device the first launch after this applies needs one reload; see the app-shell QA notes.
-I18nManager.allowRTL(true);
-I18nManager.forceRTL(true);
+// On a device the first launch after this applies needs one restart; on web it sets <html dir="rtl">
+// and never reloads (AC13). See src/theme/rtl.ts.
+applyRTL();
 
 // Keep the splash up until the Heebo faces are loaded and we know whether a session token is stored.
 void SplashScreen.preventAutoHideAsync().catch(() => {});
