@@ -235,5 +235,4 @@ export const layout = {
 } as const;
 
 export type ColorScheme = keyof typeof colors;
-export type ColorName = keyof (typeof colors)['light'];
 export type TypeScaleName = keyof typeof typeScale;

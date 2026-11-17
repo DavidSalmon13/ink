@@ -84,7 +84,6 @@ export function renderTheme(tokens: JsonObject): string {
     '',
     sections.join('\n'),
     'export type ColorScheme = keyof typeof colors;',
-    'export type ColorName = keyof (typeof colors)[\'light\'];',
     'export type TypeScaleName = keyof typeof typeScale;',
     '',
   ].join('\n');
