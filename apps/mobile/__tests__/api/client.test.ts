@@ -91,6 +91,33 @@ describe('apiFetch', () => {
     expect(onUnauthorized).not.toHaveBeenCalled();
   });
 
+  // api-conventions AC10: the shared error body's details reach the caller.
+  it('exposes code, message and details from the error body on ApiError', async () => {
+    mockFetch.mockResolvedValue(
+      response(409, {
+        error: { code: 'version_conflict', message: 'Changed elsewhere', details: { current: { version: 3 } } },
+      }),
+    );
+    const error = await client()
+      .apiFetch('/settings', { method: 'PUT', body: {} })
+      .catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error).toMatchObject({
+      status: 409,
+      code: 'version_conflict',
+      message: 'Changed elsewhere',
+      details: { current: { version: 3 } },
+    });
+  });
+
+  it('leaves details undefined when the error body has none', async () => {
+    mockFetch.mockResolvedValue(response(404, { error: { code: 'not_found', message: 'Not found' } }));
+    const error = await client()
+      .apiFetch('/x')
+      .catch((e: unknown) => e);
+    expect((error as ApiError).details).toBeUndefined();
+  });
+
   it('throws NetworkError when fetch rejects', async () => {
     mockFetch.mockRejectedValue(new TypeError('Network request failed'));
     await expect(client().apiFetch('/x')).rejects.toBeInstanceOf(NetworkError);

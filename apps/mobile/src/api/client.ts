@@ -1,11 +1,16 @@
 import { API_BASE_URL } from '@/config/api';
 
-/** A non-2xx API response. `code` is the API's `error.code`, when the body has one. */
+/**
+ * A non-2xx API response, from the shared error body `{ error: { code, message, details? } }`.
+ * `code` is the stable snake_case code to switch on (e.g. `version_conflict`, `validation_failed`);
+ * `details` carries extras such as `current` (on a conflict) or `fields` (on a validation failure).
+ */
 export class ApiError extends Error {
   constructor(
     readonly status: number,
     readonly code?: string,
     message?: string,
+    readonly details?: Record<string, unknown>,
   ) {
     super(message ?? `API error ${status}`);
     this.name = 'ApiError';
@@ -45,14 +50,25 @@ export interface ApiClient {
 
 const DEFAULT_TIMEOUT_MS = 10000;
 
-/** Reads `{ error: { code, message } }` from an error response, if it has one. */
-async function readError(res: Response): Promise<{ code?: string; message?: string }> {
+interface ErrorBody {
+  code?: string;
+  message?: string;
+  details?: Record<string, unknown>;
+}
+
+/** Reads `{ error: { code, message, details? } }` from an error response, if it has one. */
+async function readError(res: Response): Promise<ErrorBody> {
   try {
     const body: unknown = await res.json();
-    const error = (body as { error?: { code?: unknown; message?: unknown } } | null)?.error;
+    const error = (body as { error?: { code?: unknown; message?: unknown; details?: unknown } } | null)?.error;
+    const details = error?.details;
     return {
       code: typeof error?.code === 'string' ? error.code : undefined,
       message: typeof error?.message === 'string' ? error.message : undefined,
+      details:
+        details && typeof details === 'object' && !Array.isArray(details)
+          ? (details as Record<string, unknown>)
+          : undefined,
     };
   } catch {
     return {};
@@ -94,10 +110,10 @@ export function createApiClient({
     }
 
     if (!res.ok) {
-      const { code, message } = await readError(res);
+      const { code, message, details } = await readError(res);
       // Public endpoints (login) answer 401 for bad credentials; only an authenticated 401 ends the session.
       if (res.status === 401 && auth) onUnauthorized(token);
-      throw new ApiError(res.status, code, message);
+      throw new ApiError(res.status, code, message, details);
     }
     if (res.status === 204) return undefined as T;
     const text = await res.text();
