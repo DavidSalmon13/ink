@@ -89,13 +89,16 @@ class ClientIT {
         return rest.exchange("/clients/" + id, HttpMethod.GET, new HttpEntity<>(headers(token())), JSON_OBJECT);
     }
 
-    /** GET /clients[?q=]: read as Object so a non-array error body fails an assertion, not deserialization. */
+    /**
+     * GET /clients[?q=]: read as Object so a non-array error body fails an assertion, not deserialization.
+     * Passes the encoded URI itself: a String would be encoded a second time (%D7 → %25D7).
+     */
     private ResponseEntity<Object> list(String q) {
         UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/clients");
         if (q != null) {
             uri.queryParam("q", q);
         }
-        return rest.exchange(uri.encode().build().toUri().toString(), HttpMethod.GET,
+        return rest.exchange(uri.encode().build().toUri(), HttpMethod.GET,
                 new HttpEntity<>(headers(token())), Object.class);
     }
 

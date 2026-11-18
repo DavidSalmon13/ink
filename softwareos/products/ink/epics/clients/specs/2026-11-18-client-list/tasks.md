@@ -14,7 +14,7 @@
 
 - [x] T4 V5__client.sql: client table, normalized search columns + indexes (AC4, AC5)
 - [x] T5 client/ClientSearch normalizer: T1 green (AC5)
-- [ ] T6 client/ Client entity, ClientRepository (list + search), ClientController PUT/GET/list via VersionedWrites: T2 green (AC1–AC5, AC9)
+- [x] T6 client/ Client entity, ClientRepository (list + search), ClientController PUT/GET/list via VersionedWrites: T2 green (AC1–AC5, AC9)
 
 ## Mobile
 
