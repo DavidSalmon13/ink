@@ -15,6 +15,7 @@ import { AuthProvider, useAuth } from '@/auth/AuthProvider';
 import { authenticateLocally } from '@/auth/localAuth';
 import { LockOverlay } from '@/auth/LockScreen';
 import { AppLockContext, useAppLock } from '@/auth/useAppLock';
+import { QueryProvider } from '@/query';
 import { applyRTL } from '@/theme';
 import { ToastProvider } from '@/ui';
 
@@ -89,7 +90,10 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <StatusBar style="auto" />
-      <RootStack fontsReady={fontsLoaded || fontError != null} />
+      {/* Inside AuthProvider: the query cache is cleared whenever the session ends (client-list AC7). */}
+      <QueryProvider>
+        <RootStack fontsReady={fontsLoaded || fontError != null} />
+      </QueryProvider>
     </AuthProvider>
   );
 }
