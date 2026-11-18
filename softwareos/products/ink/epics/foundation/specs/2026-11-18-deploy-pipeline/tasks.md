@@ -31,7 +31,7 @@
 
 ## Docs
 
-- [ ] T13 README "Deploy" section (services, every variable, one-time human steps, how to roll back) + .env.example production placeholders (AC9)
+- [x] T13 README "Deploy" section (services, every variable, one-time human steps, how to roll back) + .env.example production placeholders (AC9)
 
 ## Verification
 
