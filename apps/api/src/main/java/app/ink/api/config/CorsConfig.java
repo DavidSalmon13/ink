@@ -8,11 +8,12 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Dev CORS for the API's own MVC endpoints (future controllers). Origins come from
- * {@code app.cors.allowed-origins} (default the Expo web dev server). The actuator
- * {@code /health} endpoint is covered separately by
- * {@code management.endpoints.web.cors.*} in application.yml. deploy-pipeline sets
- * the production origin.
+ * CORS for the API's own MVC endpoints, applied through Spring Security's {@code .cors()}.
+ * Origins come from {@code app.cors.allowed-origins}: the Expo web dev server by default, and
+ * in production the web preview's origin from the {@code APP_CORS_ALLOWED_ORIGINS} variable
+ * (comma-separated), which replaces the default. The actuator {@code /health} endpoint reads
+ * the same property through {@code management.endpoints.web.cors.*} in application.yml.
+ * Tested by CorsConfigIT.
  */
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
