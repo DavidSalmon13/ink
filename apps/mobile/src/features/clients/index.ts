@@ -9,3 +9,4 @@ export {
   type SaveClientVars,
 } from './useClients';
 export { ClientsList, SEARCH_DEBOUNCE_MS, tattooCountLabel, type ClientsListProps } from './ClientsList';
+export { ClientFormModal, type ClientFormModalProps } from './ClientFormModal';
