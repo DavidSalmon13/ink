@@ -3,6 +3,9 @@
     "name": "Ink",
     "slug": "ink",
     "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "ink",
