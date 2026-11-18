@@ -24,16 +24,22 @@ export interface ClientInput {
   version?: number;
 }
 
-// Skeleton only (client-list T3, failing-first): implemented in T8.
-
-export function listClients(_api: ApiClient, _q?: string): Promise<Client[]> {
-  throw new Error('not implemented (T8)');
+/** GET /clients, or GET /clients?q= when `q` isn't blank: server-side search (AC5), sorted by name (AC4). */
+export function listClients(api: ApiClient, q?: string): Promise<Client[]> {
+  const query = q?.trim();
+  return api.apiFetch<Client[]>(query ? `/clients?q=${encodeURIComponent(query)}` : '/clients', { method: 'GET' });
 }
 
-export function getClient(_api: ApiClient, _id: string): Promise<Client> {
-  throw new Error('not implemented (T8)');
+/** One live client; ApiError `not_found` when it's unknown or deleted. */
+export function getClient(api: ApiClient, id: string): Promise<Client> {
+  return api.apiFetch<Client>(`/clients/${id}`, { method: 'GET' });
 }
 
-export function putClient(_api: ApiClient, _id: string, _input: ClientInput): Promise<Client> {
-  throw new Error('not implemented (T8)');
+/**
+ * Creates (no `version`, device-generated `id`) or updates (the last-seen `version`) a client.
+ * Retrying the same call is safe. Throws ApiError `version_conflict` with `details.current` when
+ * another device saved first, and `validation_failed` with `details.fields` for invalid input.
+ */
+export function putClient(api: ApiClient, id: string, input: ClientInput): Promise<Client> {
+  return api.apiFetch<Client>(`/clients/${id}`, { method: 'PUT', body: input });
 }
