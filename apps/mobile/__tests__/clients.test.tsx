@@ -153,7 +153,7 @@ describe('list states', () => {
 
     const retry = await screen.findByRole('button', { name: 'נסו שוב' });
     fail = false;
-    fireEvent.press(retry);
+    await fireEvent.press(retry);
 
     expect(await screen.findByText('מאיה לוי')).toBeOnTheScreen();
   });
@@ -168,8 +168,8 @@ describe('search', () => {
     await screen.findByText('מאיה לוי');
 
     const search = screen.getByRole('search', { name: 'חיפוש לקוח' });
-    fireEvent.changeText(search, 'נ');
-    fireEvent.changeText(search, 'נוע');
+    await fireEvent.changeText(search, 'נ');
+    await fireEvent.changeText(search, 'נוע');
     expect(listQueries()).not.toContain('נוע');
 
     await waitFor(() => expect(listQueries()).toContain('נוע'));
@@ -183,7 +183,7 @@ describe('search', () => {
     await renderTab();
     await screen.findByText('מאיה לוי');
 
-    fireEvent.changeText(screen.getByRole('search', { name: 'חיפוש לקוח' }), 'זזז');
+    await fireEvent.changeText(screen.getByRole('search', { name: 'חיפוש לקוח' }), 'זזז');
 
     expect(await screen.findByText('לא נמצאו לקוחות עבור ״זזז״')).toBeOnTheScreen();
   });
@@ -197,13 +197,13 @@ describe('create', () => {
     await renderTab();
     await screen.findByText('מאיה לוי');
 
-    fireEvent.press(screen.getAllByRole('button', { name: 'לקוח חדש' })[0]);
+    await fireEvent.press(screen.getAllByRole('button', { name: 'לקוח חדש' })[0]);
     expect(await screen.findByRole('header', { name: 'לקוח חדש' })).toBeOnTheScreen();
     expect(screen.getByRole('button', { name: 'שמירה' })).toBeDisabled();
 
-    fireEvent.changeText(screen.getByLabelText('שם'), '  רוני אבן ');
+    await fireEvent.changeText(screen.getByLabelText('שם'), '  רוני אבן ');
     expect(screen.getByRole('button', { name: 'שמירה' })).toBeEnabled();
-    fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
 
     await waitFor(() => expect(puts()).toHaveLength(1));
     expect(puts()[0].id).toBe(NEW_ID);
@@ -222,10 +222,10 @@ describe('create', () => {
     await renderTab();
     await screen.findByText('מאיה לוי');
 
-    fireEvent.press(screen.getAllByRole('button', { name: 'לקוח חדש' })[0]);
-    fireEvent.changeText(screen.getByLabelText('שם'), 'רוני אבן');
-    fireEvent.changeText(screen.getByLabelText('אימייל'), 'not-an-email');
-    fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
+    await fireEvent.press(screen.getAllByRole('button', { name: 'לקוח חדש' })[0]);
+    await fireEvent.changeText(screen.getByLabelText('שם'), 'רוני אבן');
+    await fireEvent.changeText(screen.getByLabelText('אימייל'), 'not-an-email');
+    await fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
 
     expect(await screen.findByText('כתובת אימייל לא תקינה')).toBeOnTheScreen();
     expect(screen.getByRole('header', { name: 'לקוח חדש' })).toBeOnTheScreen();
@@ -236,9 +236,9 @@ describe('create', () => {
     await renderTab();
     await screen.findByText('מאיה לוי');
 
-    fireEvent.press(screen.getAllByRole('button', { name: 'לקוח חדש' })[0]);
-    fireEvent.changeText(screen.getByLabelText('שם'), 'רוני אבן');
-    fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
+    await fireEvent.press(screen.getAllByRole('button', { name: 'לקוח חדש' })[0]);
+    await fireEvent.changeText(screen.getByLabelText('שם'), 'רוני אבן');
+    await fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
 
     expect(await screen.findByText('אין חיבור לאינטרנט. הלקוח לא נשמר.')).toBeOnTheScreen();
     expect(screen.getByRole('header', { name: 'לקוח חדש' })).toBeOnTheScreen();
@@ -253,13 +253,13 @@ describe('edit', () => {
     serve();
     await renderTab();
 
-    fireEvent.press(await screen.findByText('מאיה לוי'));
+    await fireEvent.press(await screen.findByText('מאיה לוי'));
     expect(await screen.findByRole('header', { name: 'עריכת לקוח' })).toBeOnTheScreen();
     expect(screen.getByLabelText('שם')).toHaveDisplayValue('מאיה לוי');
     expect(screen.getByLabelText('טלפון')).toHaveDisplayValue('054-381-2290');
 
-    fireEvent.changeText(screen.getByLabelText('טלפון'), '052-111-2233');
-    fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
+    await fireEvent.changeText(screen.getByLabelText('טלפון'), '052-111-2233');
+    await fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
 
     await waitFor(() => expect(puts()).toHaveLength(1));
     expect(puts()[0].id).toBe(maya.id);
@@ -273,9 +273,9 @@ describe('edit', () => {
     });
     await renderTab();
 
-    fireEvent.press(await screen.findByText('מאיה לוי'));
-    fireEvent.changeText(screen.getByLabelText('הערות'), 'מהאייפון');
-    fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
+    await fireEvent.press(await screen.findByText('מאיה לוי'));
+    await fireEvent.changeText(screen.getByLabelText('הערות'), 'מהאייפון');
+    await fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
 
     expect(await screen.findByText('הלקוח עודכן במכשיר אחר. הנתונים רועננו.')).toBeOnTheScreen();
     expect(screen.getByLabelText('שם')).toHaveDisplayValue('מאיה לוי-כהן');
