@@ -7,7 +7,7 @@
 
 ## API on Railway
 
-- [ ] T1 apps/api/Dockerfile (multi-stage, non-root, PORT) + apps/api/railway.json (Dockerfile builder, healthcheck /health, watch apps/api/**); `docker build` + run locally against compose Postgres (AC1)
+- [x] T1 apps/api/Dockerfile (multi-stage, non-root, PORT) + apps/api/railway.json (Dockerfile builder, healthcheck /health, watch apps/api/**); `docker build` + run locally against compose Postgres (AC1)
 - [ ] T2 CorsConfigIT: allowed origin preflight with Authorization on an MVC route + /health, unknown origin rejected; refresh CorsConfig doc comment (AC4)
 - [ ] T3 HUMAN: Railway project: Postgres plugin + API service from the repo (root apps/api, branch main, Wait for CI); set DB_*, OWNER_*, APP_CORS_ALLOWED_ORIGINS (placeholder until T6) → first deploy, /health green (AC1, AC2, AC7)
 - [ ] T4 Verify the forwarded client IP behind Railway's proxy; set server.tomcat.remoteip.internal-proxies if needed and remove the hand-off comment in application.yml (AC6)

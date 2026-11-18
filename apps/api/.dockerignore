@@ -1,0 +1,6 @@
+# Keep the build context small and never ship local state into the image.
+.gradle
+build
+*.iml
+.idea
+.env
