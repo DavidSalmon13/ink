@@ -35,5 +35,5 @@
 
 ## Verification
 
-- [ ] T14 scripts/smoke-deploy.sh (health + db, CORS preflight, web root + deep route) and run it against the live URLs (testing skill) (AC10)
+- [~] T14 scripts/smoke-deploy.sh (health + db, CORS preflight, web root + deep route) and run it against the live URLs (testing skill) (AC10) — script done and passing locally against docker-compose.prod.yml (API + web images, Postgres, S3Mock); live run pending (needs T3, T6)
 - [ ] T15 Run QA against acceptance criteria (qa skill)

@@ -7,6 +7,7 @@ A private studio-management app for a solo tattoo artist: Hebrew right-to-left U
 | `apps/api` | Spring Boot 3 API, Java 21, Gradle (Kotlin DSL), Flyway |
 | `apps/mobile` | Expo Router + TypeScript app |
 | `docker-compose.yml` | Local PostgreSQL 16 and S3Mock (attachment storage) |
+| `docker-compose.prod.yml`, `scripts/smoke-deploy.sh` | Local prod-like rehearsal of the deploy, and the deploy smoke test (see "Deploy") |
 | `softwareos/`, `design/` | Product docs, specs, standards and design (start with `CLAUDE.md`) |
 
 ## Prerequisites
@@ -153,6 +154,17 @@ All of these are listed with placeholders in `.env.example`.
 5. **Expo Go.** After the first EAS Update run, open the `preview` channel in Expo Go on the iPhone and iPad
    (expo.dev → project → Updates → the update's QR code) and log in.
 6. **Smoke test.** `scripts/smoke-deploy.sh https://<api> https://<web>` must pass.
+
+### Rehearse locally
+
+`docker-compose.prod.yml` builds the same API and web images Railway does and runs them with Postgres and S3Mock
+(standing in for R2), in a separate project from the dev database. Stop the dev API first (port 8080).
+
+```bash
+docker compose -f docker-compose.prod.yml up -d --build --wait
+scripts/smoke-deploy.sh http://localhost:8080 http://localhost:8081   # web preview at http://localhost:8081
+docker compose -f docker-compose.prod.yml down -v
+```
 
 ### Roll back
 
