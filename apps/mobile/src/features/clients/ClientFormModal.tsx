@@ -91,18 +91,18 @@ export function ClientFormModal({ client, onClose }: ClientFormModalProps) {
       visible
       title={client ? 'עריכת לקוח' : 'לקוח חדש'}
       onClose={onClose}
-      footer={
-        <>
-          <Button variant="secondary" block label="ביטול" onPress={onClose} />
-          <Button
-            block
-            label="שמירה"
-            loading={save.isPending}
-            disabled={!values.name.trim()}
-            onPress={() => void onSave()}
-          />
-        </>
-      }
+      // An array, not a fragment: Modal lays out each footer child side by side, and a fragment counts as one child.
+      footer={[
+        <Button key="cancel" variant="secondary" block label="ביטול" onPress={onClose} />,
+        <Button
+          key="save"
+          block
+          label="שמירה"
+          loading={save.isPending}
+          disabled={!values.name.trim()}
+          onPress={() => void onSave()}
+        />,
+      ]}
     >
       <Field label="שם" value={values.name} onChangeText={set('name')} error={errors.name} maxLength={100} />
       <Field
