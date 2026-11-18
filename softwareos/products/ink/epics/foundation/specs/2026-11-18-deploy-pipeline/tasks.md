@@ -3,7 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-18-deploy-pipeline
 > Branch: feat/foundation/deploy-pipeline
-> PR: https://github.com/DavidSalmon13/ink/pull/56 (spec shaping)
+> PR: https://github.com/DavidSalmon13/ink/pull/56 (spec shaping) · https://github.com/DavidSalmon13/ink/pull/57 (T1–T2) · https://github.com/DavidSalmon13/ink/pull/58 (T5) · https://github.com/DavidSalmon13/ink/pull/59 (T10–T11) · https://github.com/DavidSalmon13/ink/pull/60 (T13–T14)
 
 ## API on Railway
 
