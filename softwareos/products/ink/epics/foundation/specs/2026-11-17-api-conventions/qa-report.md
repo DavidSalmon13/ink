@@ -20,7 +20,7 @@ Run on `feat/foundation/api-conventions--t11` (top of the stacked branches; cont
 | AC8 | Local S3Mock (pinned tag) in docker-compose, bucket created on start; env-driven endpoint/bucket/keys | pass | `docker-compose.yml` `adobe/s3mock:4.12.4` with `initialBuckets`; observed `docker compose up -d s3mock` listing `<Name>ink-attachments</Name>`; `application.yml` `app.storage.*` from `STORAGE_*`; `.env.example` placeholders only |
 | AC9 | New endpoints require a Bearer session, else 401 `unauthorized` | pass | `ErrorFormatIT.newEndpointsWithoutTokenAre401Unauthorized` (all five endpoints), `AttachmentIT.withoutATokenIs401Unauthorized` |
 | AC10 | Mobile `ApiError` exposes code/message/details; typed settings + attachments helpers | pass | `__tests__/api/client.test.ts` (details), `__tests__/api/settings.test.ts`, `__tests__/api/attachments.test.ts` (upload PUT has no Authorization header) |
-| AC11 | `./gradlew build` incl. Testcontainers ITs; mobile typecheck/lint/test; CI green | not verifiable (partly) | Local: all pass (below). CI: the stacked branches T3–T11 aren't pushed yet, so CI hasn't run on the final code; #47 (T1–T2 only) fails CI by design (red-phase tests) |
+| AC11 | `./gradlew build` incl. Testcontainers ITs; mobile typecheck/lint/test; CI green | pass | Local: all pass (below). CI: green on `main` at `6deffd6` (all of T1–T11 plus the SettingsIT timestamp fix) — added at close-out, 2026-11-18 |
 
 ## Checks Run
 
@@ -35,7 +35,7 @@ Run on `feat/foundation/api-conventions--t11` (top of the stacked branches; cont
 
 ## Notes
 
-- **AC11 CI:** confirm green CI on the PRs for `--t3` … `--t11` once pushed. The intermediate stacked PRs (#47 and the T3 branch) carry intentionally red tests, so their CI fails until the implementation PRs on top of them land; only the top of the stack should be expected green.
+- **AC11 CI (resolved 2026-11-18):** CI is green on `main` at `6deffd6`. Original note: confirm green CI on the PRs for `--t3` … `--t11` once pushed. The intermediate stacked PRs (#47 and the T3 branch) carry intentionally red tests, so their CI fails until the implementation PRs on top of them land; only the top of the stack should be expected green.
 - **Hygiene:** T12 (this QA) is the only open task. `> PR:` records #46 and #47; branches `--t3`, `--t4-t5`, `--t6-t7`, `--t8`, `--t9-t10`, `--t11` are local and have no PRs yet. Spec `> Status: in-progress` matches.
 - **Decisions made in implementation, not spelled out in the spec** (worth a reviewer's look):
   - Response fields `uploadUrl` / `downloadUrl`.

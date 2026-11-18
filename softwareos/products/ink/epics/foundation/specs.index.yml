@@ -4,7 +4,7 @@ epic: foundation
 specs:
   - folder: 2026-11-17-api-conventions
     slug: api-conventions
-    status: shaped
+    status: done
     branch: feat/foundation/api-conventions
     covers:
       - GET /settings

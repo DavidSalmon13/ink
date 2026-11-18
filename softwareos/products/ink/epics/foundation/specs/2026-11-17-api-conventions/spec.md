@@ -1,7 +1,7 @@
 # API Conventions
 
 > Epic: ../../epic.md
-> Status: in-progress
+> Status: done
 > Branch: feat/foundation/api-conventions
 > Covers: GET /settings, PUT /settings, PUT /attachments/{id}, GET /attachments/{id}/download-url, DELETE /attachments/{id}, apps/api/src/main/java/app/ink/api/common/**, apps/api/src/main/java/app/ink/api/settings/**, apps/api/src/main/java/app/ink/api/attachment/**, apps/api/src/main/resources/db/migration/V3__settings.sql, apps/api/src/main/resources/db/migration/V4__attachment.sql, apps/mobile/src/api/settings.ts, apps/mobile/src/api/attachments.ts, s3mock service in docker-compose.yml
 
