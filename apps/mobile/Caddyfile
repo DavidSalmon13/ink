@@ -1,0 +1,23 @@
+# Serves the static web export (expo export --platform web) on Railway's PORT.
+# TLS terminates at Railway's edge, so Caddy listens on plain HTTP.
+{
+	admin off
+	auto_https off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+
+	# Expo Router's static output has one HTML file per route (/settings → settings.html);
+	# anything else falls back to the SPA shell so deep links and refreshes work.
+	try_files {path} {path}.html {path}/index.html /index.html
+
+	# Hashed bundles are immutable; HTML must revalidate so a redeploy is picked up.
+	@hashed path /_expo/static/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+	@html not path /_expo/static/*
+	header @html Cache-Control "no-cache"
+
+	file_server
+}
