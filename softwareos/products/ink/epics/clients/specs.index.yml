@@ -4,7 +4,7 @@ epic: clients
 specs:
   - folder: 2026-11-18-client-list
     slug: client-list
-    status: shaped
+    status: in-progress
     branch: feat/clients/client-list
     covers:
       - "PUT /clients/{id}"
