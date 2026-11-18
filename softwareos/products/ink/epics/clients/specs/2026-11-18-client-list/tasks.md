@@ -7,7 +7,7 @@
 ## Tests first (TDD)
 
 - [x] T1 Failing ClientSearchTest (unit): Hebrew final letters, niqqud and case; phone `054-381-2290` ≡ `+972 54 381 2290` ≡ `972543812290`; Instagram `@Maya.Lines` → `maya.lines` (AC5)
-- [ ] T2 Failing ClientIT: name-only create, identical retry no-op, update bumps the version, stale → 409 with details.current, validation_failed fields (AC2), GET by id + soft-deleted → 404, list sorted and excluding deleted, search by name/phone/Instagram, 401 without a token (AC1–AC5, AC9)
+- [x] T2 Failing ClientIT: name-only create, identical retry no-op, update bumps the version, stale → 409 with details.current, validation_failed fields (AC2), GET by id + soft-deleted → 404, list sorted and excluding deleted, search by name/phone/Instagram, 401 without a token (AC1–AC5, AC9)
 - [ ] T3 Failing mobile tests: `__tests__/api/clients.test.ts` (PUT with version, list with an encoded `q`) and `__tests__/clients.test.tsx` (list rows + tattoo wording, empty / no-results / error states, debounced search, create sends a UUID, 409 → toast + form refresh, offline save error) (AC1, AC3, AC4, AC6, AC7)
 
 ## API
