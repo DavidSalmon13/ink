@@ -25,8 +25,8 @@
 ## Expo Go via EAS Update
 
 - [ ] T9 HUMAN: Expo account; `eas init` locally; create EXPO_TOKEN and add it as a GitHub secret, and API_URL as a GitHub variable (AC8)
-- [ ] T10 Install expo-updates; app.json runtimeVersion policy sdkVersion + updates.url/projectId; apps/mobile/eas.json with preview channel (AC8)
-- [ ] T11 .github/workflows/eas-update.yml: on push to main touching apps/mobile/**, publish `eas update --channel preview` with EXPO_PUBLIC_API_URL (AC8)
+- [x] T10 Install expo-updates; app.json runtimeVersion policy sdkVersion + updates.url/projectId; apps/mobile/eas.json with preview channel (AC8) — TODO(T9): `extra.eas.projectId` + `updates.url` are not in app.json yet; `eas init` in T9 writes both (a placeholder ID would make `eas init` fail)
+- [x] T11 .github/workflows/eas-update.yml: on push to main touching apps/mobile/**, publish `eas update --channel preview` with EXPO_PUBLIC_API_URL (AC8) — inert (skips with a notice) until T9 adds EXPO_TOKEN + API_URL
 - [ ] T12 HUMAN: open the preview channel in Expo Go on Aya's iPhone + iPad, log in (AC8)
 
 ## Docs
