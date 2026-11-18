@@ -1,7 +1,7 @@
 # Client List
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/clients/client-list
 > Covers: PUT /clients/{id}, GET /clients, GET /clients/{id}, apps/api/src/main/java/app/ink/api/client/**, apps/api/src/main/resources/db/migration/V5__client.sql, apps/mobile/src/api/clients.ts, apps/mobile/src/query/**, apps/mobile/app/(tabs)/clients.tsx, apps/mobile/src/features/clients/**, QueryClientProvider in apps/mobile/app/_layout.tsx
 
