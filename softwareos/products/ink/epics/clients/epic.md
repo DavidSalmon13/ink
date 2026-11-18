@@ -19,4 +19,4 @@ computed summary are the hub that later epics fill in as they add appointments, 
 
 | Spec | Status | Branch |
 |---|---|---|
-| [2026-11-18-client-list](specs/2026-11-18-client-list/spec.md) | in-progress | feat/clients/client-list |
+| [2026-11-18-client-list](specs/2026-11-18-client-list/spec.md) | in-progress | feat/clients/client-list · [#66](https://github.com/DavidSalmon13/ink/pull/66) [#61](https://github.com/DavidSalmon13/ink/pull/61) [#62](https://github.com/DavidSalmon13/ink/pull/62) [#63](https://github.com/DavidSalmon13/ink/pull/63) [#64](https://github.com/DavidSalmon13/ink/pull/64) [#65](https://github.com/DavidSalmon13/ink/pull/65) [#67](https://github.com/DavidSalmon13/ink/pull/67) |
