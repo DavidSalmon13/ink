@@ -1,0 +1,68 @@
+name: EAS Update
+
+# Publishes the JS bundle to the EAS "preview" channel, which Expo Go opens on Aya's iPhone and iPad.
+# Inert until the one-time Expo setup (deploy-pipeline T9) is done: needs the EXPO_TOKEN secret and the
+# API_URL variable (the deployed API base URL) in the repo settings. Without them the job skips with a notice.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/mobile/**"
+      - ".github/workflows/eas-update.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: eas-update-preview
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    name: Publish preview update
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/mobile
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_PUBLIC_API_URL: ${{ vars.API_URL }}
+    steps:
+      - name: Check Expo setup
+        id: setup
+        working-directory: .
+        run: |
+          if [ -z "$EXPO_TOKEN" ] || [ -z "$EXPO_PUBLIC_API_URL" ]; then
+            echo "::notice::EXPO_TOKEN secret or API_URL variable not set yet (deploy-pipeline T9) - skipping EAS Update."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.setup.outputs.ready == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.setup.outputs.ready == 'true'
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: apps/mobile/package-lock.json
+
+      - uses: expo/expo-github-action@v8
+        if: steps.setup.outputs.ready == 'true'
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: npm ci
+        if: steps.setup.outputs.ready == 'true'
+
+      # The commit message goes through env, never inline in the script, so it can't inject shell.
+      - name: eas update --channel preview
+        if: steps.setup.outputs.ready == 'true'
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message || 'manual run' }}
+        run: npx eas update --channel preview --message "${COMMIT_MESSAGE%%$'\n'*}" --non-interactive
