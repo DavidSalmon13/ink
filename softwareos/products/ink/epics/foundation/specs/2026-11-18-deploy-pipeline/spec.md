@@ -1,7 +1,7 @@
 # Deploy Pipeline
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/foundation/deploy-pipeline
 > Covers: apps/api/Dockerfile, apps/api/railway.json, apps/mobile/Dockerfile.web, apps/mobile/Caddyfile, apps/mobile/eas.json, expo-updates settings in apps/mobile/app.json, .github/workflows/eas-update.yml, apps/api/src/main/java/app/ink/api/config/CorsConfig.java (production origins), README.md "Deploy" section
 
