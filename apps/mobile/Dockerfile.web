@@ -1,0 +1,24 @@
+# Web preview image for Railway (deploy-pipeline). Build context: apps/mobile.
+#   docker build -f Dockerfile.web --build-arg EXPO_PUBLIC_API_URL=http://localhost:8080 -t ink-web apps/mobile
+#   docker run --rm -p 8081:8080 ink-web          # → http://localhost:8081
+# The web build is a preview only (no device lock; the token stays in memory).
+
+# --- Build: static export of the Expo Router app.
+FROM node:24-alpine AS build
+WORKDIR /src
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY . .
+# Inlined into the bundle at export time, so it is a build arg (a Railway variable), not a runtime env.
+ARG EXPO_PUBLIC_API_URL
+RUN test -n "$EXPO_PUBLIC_API_URL" || (echo "EXPO_PUBLIC_API_URL build arg is required" >&2; exit 1)
+ENV EXPO_PUBLIC_API_URL=$EXPO_PUBLIC_API_URL
+RUN npx expo export --platform web --output-dir dist
+
+# --- Serve: Caddy with the static routes and an index.html fallback (see Caddyfile).
+FROM caddy:2-alpine
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /src/dist /srv
+# Railway injects PORT; 8080 locally.
+ENV PORT=8080
+EXPOSE 8080

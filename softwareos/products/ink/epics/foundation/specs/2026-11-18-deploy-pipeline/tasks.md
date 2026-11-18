@@ -14,7 +14,7 @@
 
 ## Web preview
 
-- [ ] T5 apps/mobile/Dockerfile.web (expo export --platform web with EXPO_PUBLIC_API_URL build arg) + apps/mobile/Caddyfile (static routes → index.html fallback); build and run locally (AC3)
+- [x] T5 apps/mobile/Dockerfile.web (expo export --platform web with EXPO_PUBLIC_API_URL build arg) + apps/mobile/Caddyfile (static routes → index.html fallback); build and run locally (AC3)
 - [ ] T6 HUMAN: Railway web service (root apps/mobile, Dockerfile.web, watch apps/mobile/**, EXPO_PUBLIC_API_URL); set the API's APP_CORS_ALLOWED_ORIGINS to the web URL; login → home in browser + iPhone Safari (AC3, AC4, AC7)
 
 ## Attachments on R2
