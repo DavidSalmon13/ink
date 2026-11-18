@@ -3,7 +3,7 @@
 > Epic: foundation
 > Spec: 2026-11-18-deploy-pipeline
 > Branch: feat/foundation/deploy-pipeline
-> PR: https://github.com/DavidSalmon13/ink/pull/56 (spec shaping)
+> PR: https://github.com/DavidSalmon13/ink/pull/56 (spec shaping) · https://github.com/DavidSalmon13/ink/pull/57 (T1–T2) · https://github.com/DavidSalmon13/ink/pull/58 (T5) · https://github.com/DavidSalmon13/ink/pull/59 (T10–T11) · https://github.com/DavidSalmon13/ink/pull/60 (T13–T14)
 
 ## API on Railway
 
@@ -31,9 +31,9 @@
 
 ## Docs
 
-- [ ] T13 README "Deploy" section (services, every variable, one-time human steps, how to roll back) + .env.example production placeholders (AC9)
+- [x] T13 README "Deploy" section (services, every variable, one-time human steps, how to roll back) + .env.example production placeholders (AC9)
 
 ## Verification
 
-- [ ] T14 scripts/smoke-deploy.sh (health + db, CORS preflight, web root + deep route) and run it against the live URLs (testing skill) (AC10)
+- [~] T14 scripts/smoke-deploy.sh (health + db, CORS preflight, web root + deep route) and run it against the live URLs (testing skill) (AC10) — script done and passing locally against docker-compose.prod.yml (API + web images, Postgres, S3Mock); live run pending (needs T3, T6)
 - [ ] T15 Run QA against acceptance criteria (qa skill)

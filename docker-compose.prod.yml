@@ -1,0 +1,75 @@
+# Local prod-like rehearsal of the deploy (deploy-pipeline T14): the same images Railway builds
+# (API + web preview), Postgres, and S3Mock standing in for R2. Separate project and volume from
+# docker-compose.yml, so it doesn't touch the dev database.
+#   docker compose -f docker-compose.prod.yml up -d --build --wait
+#   scripts/smoke-deploy.sh http://localhost:8080 http://localhost:8081
+#   docker compose -f docker-compose.prod.yml down -v
+# Stop the dev API first if it's running (port 8080). Uses POSTGRES_PASSWORD and OWNER_* from .env.
+# Presigned attachment URLs point at http://s3mock:9090 and only resolve inside this network.
+name: ink-prodlike
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ink
+      POSTGRES_USER: ink
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env (copy .env.example)}
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ink -d ink"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  s3mock:
+    image: adobe/s3mock:4.12.4
+    environment:
+      initialBuckets: ink-attachments
+
+  api:
+    build: apps/api
+    depends_on:
+      postgres:
+        condition: service_healthy
+      s3mock:
+        condition: service_started
+    environment:
+      PORT: 8080
+      DB_URL: jdbc:postgresql://postgres:5432/ink
+      DB_USER: ink
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      OWNER_EMAIL: ${OWNER_EMAIL:-}
+      OWNER_PASSWORD_HASH: ${OWNER_PASSWORD_HASH:-}
+      APP_CORS_ALLOWED_ORIGINS: http://localhost:8081
+      STORAGE_ENDPOINT: http://s3mock:9090
+      STORAGE_REGION: us-east-1
+      STORAGE_BUCKET: ink-attachments
+      STORAGE_ACCESS_KEY: local
+      STORAGE_SECRET_KEY: local
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  web:
+    build:
+      context: apps/mobile
+      dockerfile: Dockerfile.web
+      args:
+        # The browser calls the API from the host, so this is the host-mapped port.
+        EXPO_PUBLIC_API_URL: http://localhost:8080
+    environment:
+      PORT: 8080
+    ports:
+      - "8081:8080"
+
+volumes:
+  pgdata:
