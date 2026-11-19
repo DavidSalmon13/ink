@@ -18,3 +18,17 @@ specs:
       - apps/mobile/src/features/clients/**
       - "QueryClientProvider in apps/mobile/app/_layout.tsx"
       - "the `ltr` prop of apps/mobile/src/ui/Field.tsx"
+  - folder: 2026-11-19-client-card
+    slug: client-card
+    status: shaped
+    branch: feat/clients/client-card
+    covers:
+      - "DELETE /clients/{id}"
+      - "GET /clients/{id}/summary"
+      - apps/api/src/main/java/app/ink/api/client/ClientSummary*
+      - "apps/mobile/app/clients/[id].tsx"
+      - apps/mobile/src/features/clients/card/**
+      - "the iPad split in apps/mobile/app/(tabs)/clients.tsx"
+      - apps/mobile/src/ui/Tabs.tsx
+      - "the phone/whatsapp/instagram/edit/more/trash icons in apps/mobile/src/ui/Icon.tsx"
+      - "formatMonthYear in apps/mobile/src/ui/hebrewDate.ts"
