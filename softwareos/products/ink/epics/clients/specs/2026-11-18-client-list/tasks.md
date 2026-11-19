@@ -3,6 +3,7 @@
 > Epic: clients
 > Spec: 2026-11-18-client-list
 > Branch: feat/clients/client-list
+> PR: https://github.com/DavidSalmon13/ink/pull/66 · https://github.com/DavidSalmon13/ink/pull/61 · https://github.com/DavidSalmon13/ink/pull/62 · https://github.com/DavidSalmon13/ink/pull/63 · https://github.com/DavidSalmon13/ink/pull/64 · https://github.com/DavidSalmon13/ink/pull/65 · https://github.com/DavidSalmon13/ink/pull/67 (stacked, merge in this order)
 
 ## Tests first (TDD)
 
@@ -20,8 +21,8 @@
 
 - [x] T7 Install TanStack Query + persister + AsyncStorage + expo-crypto; src/query/ (QueryClient, native-only persister, clearQueryCache); provider in app/_layout.tsx; clear on logout (AC7) — dependency install done in T3 (tests needed them to load)
 - [x] T8 src/api/clients.ts + src/features/clients/ hooks (useClients, useSaveClient with 409 handling) (AC1, AC3, AC5, AC7)
-- [ ] T9 ClientsList in (tabs)/clients.tsx per ClientCard.ipad.html list pane: search, rows, states, pull-to-refresh, refetch on focus (AC4–AC6, AC8, AC10)
-- [ ] T10 ClientFormModal create/edit per the CalendarNewAppointment.html modal pattern; inline errors; T3 green (AC1–AC3, AC10)
+- [x] T9 ClientsList in (tabs)/clients.tsx per ClientCard.ipad.html list pane: search, rows, states, pull-to-refresh, refetch on focus (AC4–AC6, AC8, AC10)
+- [x] T10 ClientFormModal create/edit per the CalendarNewAppointment.html modal pattern; inline errors; T3 green (AC1–AC3, AC10)
 
 ## Verification
 
