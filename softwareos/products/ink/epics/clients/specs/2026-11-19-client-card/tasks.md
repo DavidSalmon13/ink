@@ -16,7 +16,7 @@
 
 ## Mobile
 
-- [ ] T5 src/ui: `Tabs.tsx` per design-system `.tabs`; phone / whatsapp / instagram / edit / more / trash icons in `Icon.tsx`; `formatMonthYear` in `hebrewDate.ts` (AC2, AC5, AC10)
+- [x] T5 src/ui: `Tabs.tsx` per design-system `.tabs`; phone / whatsapp / instagram / edit / more / trash icons in `Icon.tsx`; `formatMonthYear` in `hebrewDate.ts` (AC2, AC5, AC10)
 - [ ] T6 `src/api/clients.ts` deleteClient + getClientSummary; `features/clients/card/useClientCard.ts` (useClient, useClientSummary, useDeleteClient) (AC4, AC7, AC8)
 - [ ] T7 `ClientCard` per ClientCard.html: header, chips, summary tiles, tabs + empty states, notes (AC2, AC4, AC5, AC10)
 - [ ] T8 ContactSheet (call / WhatsApp) + Instagram link via expo-linking; more-actions → DeleteClientDialog (AC3, AC7)
