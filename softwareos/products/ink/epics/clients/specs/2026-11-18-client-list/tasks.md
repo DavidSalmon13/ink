@@ -16,6 +16,8 @@
 - [x] T4 V5__client.sql: client table, normalized search columns + indexes (AC4, AC5)
 - [x] T5 client/ClientSearch normalizer: T1 green (AC5)
 - [x] T6 client/ Client entity, ClientRepository (list + search), ClientController PUT/GET/list via VersionedWrites: T2 green (AC1–AC5, AC9)
+- [x] T14 Failing ClientIT case: `PUT` with instagram `@Maya.Lines` → 200, stored and returned as `maya.lines`, and found by `?q=MAYA` (AC2, AC5)
+- [x] T15 `ClientInput` lowercases the handle via `ClientSearch.instagram` before validation: T14 green (AC2)
 
 ## Mobile
 
@@ -27,5 +29,5 @@
 ## Verification
 
 - [x] T11 Simulator screenshots on iPhone + iPad vs the cited mockups; fix or record each deviation in the Changelog (AC10) — web-preview sizes, simulator check owed (see Changelog)
-- [ ] T12 HUMAN: Aya approves the derived screens (list, modal create/edit/errors, empty, no results) (AC10)
+- [x] T12 HUMAN: Aya approves the derived screens (list, modal create/edit/errors, empty, no results) (AC10) — approved by Aya 2026-11-19 (reported by david-schwartzman)
 - [ ] T13 Run QA against acceptance criteria (qa skill)
