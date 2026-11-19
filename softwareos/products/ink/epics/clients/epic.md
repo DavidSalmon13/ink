@@ -1,7 +1,7 @@
 # Clients
 
 > Product: ../../mission.md
-> Status: planning
+> Status: in-progress
 > Created: 2026-11-18 · Roles planned: PM, Tech
 
 ## Summary
@@ -19,4 +19,4 @@ computed summary are the hub that later epics fill in as they add appointments, 
 
 | Spec | Status | Branch |
 |---|---|---|
-| [2026-11-18-client-list](specs/2026-11-18-client-list/spec.md) | shaped | feat/clients/client-list |
+| [2026-11-18-client-list](specs/2026-11-18-client-list/spec.md) | in-progress | feat/clients/client-list |
