@@ -1,8 +1,8 @@
-// covers client-list AC1, AC3, AC5, T3 — typed /clients helpers.
+// covers client-list AC1, AC3, AC5, T3; client-card AC4, AC7, T2 — typed /clients helpers.
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { ApiError, createApiClient } from '@/api/client';
-import { getClient, listClients, putClient, type Client } from '@/api/clients';
+import { deleteClient, getClient, getClientSummary, listClients, putClient, type Client } from '@/api/clients';
 
 const BASE = 'http://api.test';
 const mockFetch = jest.fn<(input: string, init?: RequestInit) => Promise<Response>>();
@@ -90,5 +90,24 @@ describe('putClient', () => {
     expect(err).toBeInstanceOf(ApiError);
     expect((err as ApiError).code).toBe('version_conflict');
     expect((err as ApiError).details?.current).toEqual(current);
+  });
+});
+
+describe('deleteClient', () => {
+  it('DELETEs /clients/{id} and resolves on 204', async () => {
+    mockFetch.mockResolvedValue(new Response(null, { status: 204 }));
+    await expect(deleteClient(api(), ID)).resolves.toBeUndefined();
+    const [url, init] = mockFetch.mock.calls[0];
+    expect(url).toBe(`${BASE}/clients/${ID}`);
+    expect(init?.method).toBe('DELETE');
+  });
+});
+
+describe('getClientSummary', () => {
+  it('GETs /clients/{id}/summary', async () => {
+    const summary = { tattooCount: 0, completedIncomeAgorot: 0, nextAppointmentAt: null };
+    mockFetch.mockResolvedValue(response(200, summary));
+    await expect(getClientSummary(api(), ID)).resolves.toEqual(summary);
+    expect(mockFetch.mock.calls[0][0]).toBe(`${BASE}/clients/${ID}/summary`);
   });
 });

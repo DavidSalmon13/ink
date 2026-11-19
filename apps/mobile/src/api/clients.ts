@@ -43,3 +43,21 @@ export function getClient(api: ApiClient, id: string): Promise<Client> {
 export function putClient(api: ApiClient, id: string, input: ClientInput): Promise<Client> {
   return api.apiFetch<Client>(`/clients/${id}`, { method: 'PUT', body: input });
 }
+
+/** Soft-deletes a client (client-card AC7). Idempotent: deleting twice, or an unknown id, also succeeds. */
+export function deleteClient(api: ApiClient, id: string): Promise<void> {
+  return api.apiFetch<void>(`/clients/${id}`, { method: 'DELETE' });
+}
+
+/** The card's computed summary (client-card AC4): 0 / 0 / null until the later epics fill it. */
+export interface ClientSummary {
+  tattooCount: number;
+  /** Integer agorot. */
+  completedIncomeAgorot: number;
+  nextAppointmentAt: string | null;
+}
+
+/** GET /clients/{id}/summary; ApiError `not_found` when the client is unknown or deleted. */
+export function getClientSummary(api: ApiClient, id: string): Promise<ClientSummary> {
+  return api.apiFetch<ClientSummary>(`/clients/${id}/summary`, { method: 'GET' });
+}

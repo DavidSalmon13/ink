@@ -35,11 +35,12 @@ export function conflictCurrent(error: unknown): Client | null {
   return null;
 }
 
-/** Replaces this client in every cached list (by id). */
+/** Replaces this client in every cached list (by id), and in its card's cached record. */
 function replaceInLists(queryClient: QueryClient, client: Client) {
-  queryClient.setQueriesData<Client[]>({ queryKey: clientsKey }, (old) =>
+  queryClient.setQueriesData<Client[]>({ queryKey: [...clientsKey, 'list'] }, (old) =>
     old?.map((c) => (c.id === client.id ? client : c)),
   );
+  queryClient.setQueryData<Client>([...clientsKey, 'detail', client.id], (old) => (old ? client : old));
 }
 
 export interface SaveClientVars {
