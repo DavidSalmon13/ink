@@ -10,13 +10,16 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ink.api.common.VersionedWrites;
@@ -33,7 +36,8 @@ import jakarta.validation.constraints.Size;
 /**
  * Clients (client-list): {@code PUT /clients/{id}} creates or updates under the versioned-write rules
  * (AC1, AC3), {@code GET /clients/{id}} reads one (AC4), and {@code GET /clients?q=} lists the live
- * clients, optionally narrowed by a server-side search (AC4, AC5).
+ * clients, optionally narrowed by a server-side search (AC4, AC5). {@code DELETE /clients/{id}} soft-deletes
+ * one and {@code GET /clients/{id}/summary} returns the card's summary (client-card AC4, AC7).
  */
 @RestController
 @RequestMapping("/clients")
@@ -95,10 +99,12 @@ class ClientController {
 
 	private final VersionedWrites writes;
 	private final ClientRepository clients;
+	private final ClientSummaryService summaries;
 
-	ClientController(VersionedWrites writes, ClientRepository clients) {
+	ClientController(VersionedWrites writes, ClientRepository clients, ClientSummaryService summaries) {
 		this.writes = writes;
 		this.clients = clients;
+		this.summaries = summaries;
 	}
 
 	@PutMapping("/{id}")
@@ -113,6 +119,19 @@ class ClientController {
 	@GetMapping("/{id}")
 	ClientView get(@PathVariable UUID id) {
 		return writes.get(Client.class, id, ClientController::view);
+	}
+
+	/** The card's summary (client-card AC4): zeros until the later epics; unknown or deleted → 404. */
+	@GetMapping("/{id}/summary")
+	ClientSummary summary(@PathVariable UUID id) {
+		return summaries.summarize(id);
+	}
+
+	/** Soft delete (client-card AC7): the row stays with {@code deleted_at}; repeats and unknown ids are 204. */
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	void delete(@PathVariable UUID id) {
+		writes.softDelete(Client.class, id);
 	}
 
 	@GetMapping
