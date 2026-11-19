@@ -8,7 +8,7 @@ export {
   useSaveClient,
   type SaveClientVars,
 } from './useClients';
-export { ClientsList, SEARCH_DEBOUNCE_MS, tattooCountLabel, type ClientsListProps } from './ClientsList';
+export { ClientsList, SEARCH_DEBOUNCE_MS, tattooCountLabel, WIDE_MIN_WIDTH, type ClientsListProps } from './ClientsList';
 export { ClientFormModal, type ClientFormModalProps } from './ClientFormModal';
 export {
   CLIENT_DELETED_MESSAGE,

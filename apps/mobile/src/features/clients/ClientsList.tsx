@@ -17,8 +17,8 @@ export const SEARCH_DEBOUNCE_MS = 250;
  * 8px × 20px padding, and its avatar is 40px with a 15px initial; the subtitle is 13px muted.
  */
 const listMetrics = { rowMinHeight: 60, avatarSize: 40, avatarFontSize: 15, subtitleFontSize: 13 } as const;
-/** iPad widths and up use the mockup's 20px pane inset; iPhone keeps the 16px screen padding. */
-const WIDE_MIN_WIDTH = 768;
+/** iPad widths and up use the mockup's 20px pane inset and the list + card split; iPhone keeps the 16px screen padding. */
+export const WIDE_MIN_WIDTH = 768;
 
 /** "N קעקועים" / "קעקוע אחד" / "אין עדיין קעקועים" (AC4). */
 export function tattooCountLabel(count: number): string {
@@ -41,6 +41,8 @@ export interface ClientsListProps {
   onCreate: () => void;
   /** A row was tapped. */
   onSelect: (client: Client) => void;
+  /** iPad split: the client shown in the card pane, highlighted like `.list .row[aria-current=page]`. */
+  selectedId?: string | null;
 }
 
 /**
@@ -48,7 +50,7 @@ export interface ClientsListProps {
  * adds the split view): title + "לקוח חדש", server-side search, rows, the AC6 states, pull-to-refresh,
  * and a refetch whenever the tab regains focus (AC8).
  */
-export function ClientsList({ onCreate, onSelect }: ClientsListProps) {
+export function ClientsList({ onCreate, onSelect, selectedId = null }: ClientsListProps) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -133,7 +135,12 @@ export function ClientsList({ onCreate, onSelect }: ClientsListProps) {
               <Row
                 onPress={() => onSelect(item)}
                 accessibilityLabel={`${item.name}, ${tattooCountLabel(item.tattooCount)}`}
-                style={{ minHeight: listMetrics.rowMinHeight, paddingHorizontal: inset }}
+                accessibilityState={{ selected: item.id === selectedId }}
+                style={{
+                  minHeight: listMetrics.rowMinHeight,
+                  paddingHorizontal: inset,
+                  backgroundColor: item.id === selectedId ? t.colors.primaryTint : undefined,
+                }}
               >
                 <Avatar name={item.name} size={listMetrics.avatarSize} fontSize={listMetrics.avatarFontSize} />
                 <View style={{ flex: 1, minWidth: 0 }}>

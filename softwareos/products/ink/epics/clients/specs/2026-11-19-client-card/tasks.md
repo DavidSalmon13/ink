@@ -20,8 +20,8 @@
 - [x] T6 `src/api/clients.ts` deleteClient + getClientSummary; `features/clients/card/useClientCard.ts` (useClient, useClientSummary, useDeleteClient) (AC4, AC7, AC8)
 - [x] T7 `ClientCard` per ClientCard.html: header, chips, summary tiles, tabs + empty states, notes (AC2, AC4, AC5, AC10)
 - [x] T8 ContactSheet (call / WhatsApp) + Instagram link via expo-linking; more-actions → DeleteClientDialog (AC3, AC7)
-- [ ] T9 `app/clients/[id].tsx` registered in app/_layout.tsx (signed-in guard); iPhone row → card; edit from the card via ClientFormModal; not-found state (AC1, AC6, AC8)
-- [ ] T10 iPad split in `(tabs)/clients.tsx` per ClientCard.ipad.html: list pane + card pane, selection highlight, "בחרו לקוח מהרשימה"; T2 green (AC1, AC10)
+- [x] T9 `app/clients/[id].tsx` registered in app/_layout.tsx (signed-in guard); iPhone row → card; edit from the card via ClientFormModal; not-found state (AC1, AC6, AC8)
+- [x] T10 iPad split in `(tabs)/clients.tsx` per ClientCard.ipad.html: list pane + card pane, selection highlight, "בחרו לקוח מהרשימה"; T2 green (AC1, AC10)
 
 ## Verification
 

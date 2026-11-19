@@ -31,6 +31,7 @@ jest.mock('expo-router', () => ({
 }));
 
 import ClientsTab from '../app/(tabs)/clients';
+import { ClientCard } from '@/features/clients';
 
 const mockFetch = jest.fn<(input: string, init?: RequestInit) => Promise<Response>>();
 
@@ -69,6 +70,13 @@ function serve({
   mockFetch.mockImplementation(async (input, init) => {
     const url = new URL(input);
     if ((init?.method ?? 'GET') === 'GET' && url.pathname === '/clients') return list(url.searchParams.get('q'));
+    // The client card (client-card), where editing starts.
+    const [, , id, sub] = url.pathname.split('/');
+    if ((init?.method ?? 'GET') === 'GET' && id) {
+      const found = [maya, noa, shira].find((c) => c.id === id);
+      if (!found) return response(404, { error: { code: 'not_found', message: 'Not found' } });
+      return response(200, sub === 'summary' ? { tattooCount: 0, completedIncomeAgorot: 0, nextAppointmentAt: null } : found);
+    }
     if (init?.method === 'PUT' && url.pathname.startsWith('/clients/')) {
       return put(url.pathname.split('/')[2], JSON.parse(String(init.body)));
     }
@@ -114,6 +122,13 @@ afterEach(() => {
 
 async function renderTab() {
   await render(<ClientsTab />, { wrapper: Providers });
+}
+
+/** Editing moved from the list row to the client card's "עריכת פרטים" (client-card AC6). */
+async function openEditFromCard(client: Client) {
+  await render(<ClientCard id={client.id} onGone={() => {}} />, { wrapper: Providers });
+  await fireEvent.press(await screen.findByRole('button', { name: 'עריכת פרטים' }));
+  await screen.findByRole('header', { name: 'עריכת לקוח' });
 }
 
 // ---- AC4: list ----------------------------------------------------------------------------------
@@ -261,12 +276,10 @@ describe('create', () => {
 // ---- AC3: edit ----------------------------------------------------------------------------------
 
 describe('edit', () => {
-  it('opens "עריכת לקוח" prefilled from the row and PUTs with the last-seen version', async () => {
+  it('opens "עריכת לקוח" prefilled from the client card and PUTs with the last-seen version', async () => {
     serve();
-    await renderTab();
+    await openEditFromCard(maya);
 
-    await fireEvent.press(await screen.findByText('מאיה לוי'));
-    expect(await screen.findByRole('header', { name: 'עריכת לקוח' })).toBeOnTheScreen();
     expect(screen.getByLabelText('שם')).toHaveDisplayValue('מאיה לוי');
     expect(screen.getByLabelText('טלפון')).toHaveDisplayValue('054-381-2290');
 
@@ -283,10 +296,9 @@ describe('edit', () => {
     serve({
       put: () => response(409, { error: { code: 'version_conflict', message: 'Version conflict', details: { current } } }),
     });
-    await renderTab();
+    await openEditFromCard(maya);
 
-    await fireEvent.press(await screen.findByText('מאיה לוי'));
-    await fireEvent.changeText(screen.getByLabelText('הערות'), 'מהאייפון');
+    await fireEvent.changeText(screen.getByLabelText('טלפון'), '052-111-2233');
     await fireEvent.press(screen.getByRole('button', { name: 'שמירה' }));
 
     expect(await screen.findByText('הלקוח עודכן במכשיר אחר. הנתונים רועננו.')).toBeOnTheScreen();

@@ -74,6 +74,7 @@ function RootStack({ fontsReady }: { fontsReady: boolean }) {
           <Stack.Protected guard={status === 'signedIn'}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="my-data" />
+            <Stack.Screen name="clients/[id]" />
           </Stack.Protected>
           <Stack.Protected guard={status === 'signedOut'}>
             <Stack.Screen name="login" />
