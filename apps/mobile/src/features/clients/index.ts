@@ -21,3 +21,6 @@ export {
   useClientSummary,
   useDeleteClient,
 } from './card/useClientCard';
+export { ClientCard, type ClientCardProps } from './card/ClientCard';
+export { ContactSheet, instagramUrl, LINK_FAILED_MESSAGE, telUrl, useOpenLink, whatsAppUrl } from './card/ContactSheet';
+export { DeleteClientDialog, MoreActionsSheet } from './card/DeleteClientDialog';
