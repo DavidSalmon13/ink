@@ -30,4 +30,4 @@
 
 - [x] T11 Simulator screenshots on iPhone + iPad vs the cited mockups; fix or record each deviation in the Changelog (AC10) — web-preview sizes, simulator check owed (see Changelog)
 - [x] T12 HUMAN: Aya approves the derived screens (list, modal create/edit/errors, empty, no results) (AC10) — approved by Aya 2026-11-19 (reported by david-schwartzman)
-- [ ] T13 Run QA against acceptance criteria (qa skill)
+- [x] T13 Run QA against acceptance criteria (qa skill) — PASS WITH NOTES 2026-11-19 (rerun after the phone LTR hotfix)
