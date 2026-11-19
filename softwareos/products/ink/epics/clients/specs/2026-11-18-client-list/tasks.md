@@ -17,7 +17,7 @@
 - [x] T5 client/ClientSearch normalizer: T1 green (AC5)
 - [x] T6 client/ Client entity, ClientRepository (list + search), ClientController PUT/GET/list via VersionedWrites: T2 green (AC1–AC5, AC9)
 - [x] T14 Failing ClientIT case: `PUT` with instagram `@Maya.Lines` → 200, stored and returned as `maya.lines`, and found by `?q=MAYA` (AC2, AC5)
-- [ ] T15 `ClientInput` lowercases the handle via `ClientSearch.instagram` before validation: T14 green (AC2)
+- [x] T15 `ClientInput` lowercases the handle via `ClientSearch.instagram` before validation: T14 green (AC2)
 
 ## Mobile
 

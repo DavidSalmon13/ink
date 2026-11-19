@@ -57,7 +57,7 @@ final class ClientSearch {
 		return phoneDigits(q);
 	}
 
-	/** Trimmed, without a leading {@code @}, case kept; null when blank. Used for the stored handle. */
+	/** Trimmed, without a leading {@code @}, case kept; null when blank. */
 	static String withoutAt(String raw) {
 		if (raw == null) {
 			return null;

@@ -41,7 +41,8 @@ class ClientController {
 
 	/**
 	 * The payload, cleaned before validation (AC2): name trimmed, blank optional fields → null, the
-	 * Instagram handle without its leading {@code @}.
+	 * Instagram handle lowercased and without its leading {@code @} (so {@code @Maya.Lines} is saved as
+	 * {@code maya.lines}).
 	 */
 	record ClientInput(
 			Long version,
@@ -55,7 +56,7 @@ class ClientController {
 			name = name == null ? null : name.strip();
 			phone = blankToNull(phone);
 			email = blankToNull(email);
-			instagram = ClientSearch.withoutAt(instagram);
+			instagram = ClientSearch.instagram(instagram);
 			notes = notes == null || notes.isBlank() ? null : notes;
 		}
 
