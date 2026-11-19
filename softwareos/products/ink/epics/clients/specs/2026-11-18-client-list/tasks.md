@@ -3,7 +3,7 @@
 > Epic: clients
 > Spec: 2026-11-18-client-list
 > Branch: feat/clients/client-list
-> PR: https://github.com/DavidSalmon13/ink/pull/66 · https://github.com/DavidSalmon13/ink/pull/61 · https://github.com/DavidSalmon13/ink/pull/62 · https://github.com/DavidSalmon13/ink/pull/63 · https://github.com/DavidSalmon13/ink/pull/64 · https://github.com/DavidSalmon13/ink/pull/65 · https://github.com/DavidSalmon13/ink/pull/67 (stacked, merge in this order)
+> PR: https://github.com/DavidSalmon13/ink/pull/66 · https://github.com/DavidSalmon13/ink/pull/61 · https://github.com/DavidSalmon13/ink/pull/62 · https://github.com/DavidSalmon13/ink/pull/63 · https://github.com/DavidSalmon13/ink/pull/64 · https://github.com/DavidSalmon13/ink/pull/65 · https://github.com/DavidSalmon13/ink/pull/67 · https://github.com/DavidSalmon13/ink/pull/68 (stacked, merge in this order)
 
 ## Tests first (TDD)
 
@@ -26,6 +26,6 @@
 
 ## Verification
 
-- [ ] T11 Simulator screenshots on iPhone + iPad vs the cited mockups; fix or record each deviation in the Changelog (AC10)
+- [x] T11 Simulator screenshots on iPhone + iPad vs the cited mockups; fix or record each deviation in the Changelog (AC10) — web-preview sizes, simulator check owed (see Changelog)
 - [ ] T12 HUMAN: Aya approves the derived screens (list, modal create/edit/errors, empty, no results) (AC10)
 - [ ] T13 Run QA against acceptance criteria (qa skill)

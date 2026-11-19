@@ -137,7 +137,9 @@ export function ClientsList({ onCreate, onSelect }: ClientsListProps) {
               >
                 <Avatar name={item.name} size={listMetrics.avatarSize} fontSize={listMetrics.avatarFontSize} />
                 <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text variant="headline" numberOfLines={1}>
+                  {/* rtl base direction: a Latin name ("Daniel Mizrahi") otherwise gets an LTR paragraph and aligns
+                      to the far side of the row instead of next to its avatar. */}
+                  <Text variant="headline" numberOfLines={1} style={{ writingDirection: 'rtl' }}>
                     {item.name}
                   </Text>
                   <Text variant="callout" color="textMuted" style={{ fontSize: listMetrics.subtitleFontSize }}>
