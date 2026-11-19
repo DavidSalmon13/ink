@@ -1,4 +1,4 @@
-// covers AC1, AC2, AC3, AC4, AC5, AC9, T2
+// covers client-list AC1–AC5, AC9, T2; client-card AC4, AC7, AC9, T1
 package app.ink.api.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -363,7 +363,82 @@ class ClientIT {
         assertThat(listIds("גלית")).doesNotContain(id.toString());
     }
 
+    // ---- client-card AC7: soft delete -----------------------------------------------------------
+
+    private ResponseEntity<Map<String, Object>> delete(UUID id) {
+        return rest.exchange("/clients/" + id, HttpMethod.DELETE, new HttpEntity<>(headers(token())), JSON_OBJECT);
+    }
+
+    private ResponseEntity<Map<String, Object>> summary(UUID id) {
+        return rest.exchange("/clients/" + id + "/summary", HttpMethod.GET, new HttpEntity<>(headers(token())),
+                JSON_OBJECT);
+    }
+
+    @Test
+    void deleteIsSoftAndHidesTheClientEverywhere() {
+        UUID id = create(client("נטע ברזילי"));
+        assertThat(listIds("נטע")).contains(id.toString());
+
+        ResponseEntity<Map<String, Object>> res = delete(id);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(jdbc.queryForObject("select deleted_at is not null from client where id = ?", Boolean.class, id))
+                .as("the row stays, marked deleted").isTrue();
+        assertThat(get(id).getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(listIds(null)).doesNotContain(id.toString());
+        assertThat(listIds("נטע")).doesNotContain(id.toString());
+    }
+
+    @Test
+    void deleteIsIdempotent() {
+        UUID id = create(client("אורי"));
+
+        assertThat(delete(id).getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(delete(id).getStatusCode()).as("repeat").isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(delete(UUID.randomUUID()).getStatusCode()).as("unknown").isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    // ---- client-card AC4: summary ---------------------------------------------------------------
+
+    @Test
+    void summaryIsEmptyUntilTheLaterEpics() {
+        UUID id = create(client("מיכל"));
+
+        ResponseEntity<Map<String, Object>> res = summary(id);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(res.getBody()).containsEntry("tattooCount", 0)
+                .containsEntry("completedIncomeAgorot", 0)
+                .containsEntry("nextAppointmentAt", null);
+    }
+
+    @Test
+    void summaryOfAnUnknownOrDeletedClientIs404() {
+        ResponseEntity<Map<String, Object>> unknown = summary(UUID.randomUUID());
+        assertThat(unknown.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(error(unknown)).containsEntry("code", "not_found");
+
+        UUID id = create(client("דור"));
+        jdbc.update("update client set deleted_at = now() where id = ?", id);
+
+        assertThat(summary(id).getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
     // ---- AC9: auth -----------------------------------------------------------------------------
+
+    @Test
+    void cardEndpointsRequireTheOwnerToken() {
+        HttpEntity<Object> anonymous = new HttpEntity<>(headers(null));
+        UUID id = create(client("שקד"));
+
+        ResponseEntity<Map<String, Object>> del =
+                rest.exchange("/clients/" + id, HttpMethod.DELETE, anonymous, JSON_OBJECT);
+        assertThat(del.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(error(del)).containsEntry("code", "unauthorized");
+        assertThat(rest.exchange("/clients/" + id + "/summary", HttpMethod.GET, anonymous, Object.class)
+                .getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(get(id).getStatusCode()).as("the anonymous DELETE didn't delete").isEqualTo(HttpStatus.OK);
+    }
 
     @Test
     void everyClientEndpointRequiresTheOwnerToken() {

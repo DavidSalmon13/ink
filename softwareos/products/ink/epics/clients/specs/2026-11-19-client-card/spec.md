@@ -1,7 +1,7 @@
 # Client Card
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/clients/client-card
 > Covers: DELETE /clients/{id}, GET /clients/{id}/summary, apps/api/src/main/java/app/ink/api/client/ClientSummary*, apps/mobile/app/clients/[id].tsx, apps/mobile/src/features/clients/card/**, the iPad split in apps/mobile/app/(tabs)/clients.tsx, apps/mobile/src/ui/Tabs.tsx, the phone/whatsapp/instagram/edit/more/trash icons in apps/mobile/src/ui/Icon.tsx, formatMonthYear in apps/mobile/src/ui/hebrewDate.ts
 

@@ -6,13 +6,13 @@
 
 ## Tests first (TDD)
 
-- [ ] T1 Failing ClientIT cases: DELETE → 204, row kept with deleted_at, idempotent (unknown / repeat → 204), then excluded from list + search and GET → 404; summary 0 / 0 / null, 404 for unknown or deleted; 401 without a token on both (AC4, AC7, AC9)
-- [ ] T2 Failing mobile tests: `__tests__/api/clients.test.ts` (deleteClient, getClientSummary) and `__tests__/clientCard.test.tsx` (header + "לקוח/ה מאז", chips only when set, contact sheet tel / wa.me / Instagram URLs, summary tiles + "אין תור קרוב", tabs + empty states + notes, edit opens the prefilled modal, delete confirm → DELETE → toast, offline delete toast, 404 "הלקוח לא נמצא", iPhone row → card route, iPad split selection + empty pane) (AC1–AC8)
+- [x] T1 Failing ClientIT cases: DELETE → 204, row kept with deleted_at, idempotent (unknown / repeat → 204), then excluded from list + search and GET → 404; summary 0 / 0 / null, 404 for unknown or deleted; 401 without a token on both (AC4, AC7, AC9)
+- [x] T2 Failing mobile tests: `__tests__/api/clients.test.ts` (deleteClient, getClientSummary) and `__tests__/clientCard.test.tsx` (header + "לקוח/ה מאז", chips only when set, contact sheet tel / wa.me / Instagram URLs, summary tiles + "אין תור קרוב", tabs + empty states + notes, edit opens the prefilled modal, delete confirm → DELETE → toast, offline delete toast, 404 "הלקוח לא נמצא", iPhone row → card route, iPad split selection + empty pane) (AC1–AC8)
 
 ## API
 
-- [ ] T3 `DELETE /clients/{id}` in ClientController via `VersionedWrites.softDelete`: T1 delete cases green (AC7, AC9)
-- [ ] T4 `ClientSummary` + `ClientSummaryService` + `GET /clients/{id}/summary`: T1 green (AC4, AC9)
+- [x] T3 `DELETE /clients/{id}` in ClientController via `VersionedWrites.softDelete`: T1 delete cases green (AC7, AC9)
+- [x] T4 `ClientSummary` + `ClientSummaryService` + `GET /clients/{id}/summary`: T1 green (AC4, AC9)
 
 ## Mobile
 
