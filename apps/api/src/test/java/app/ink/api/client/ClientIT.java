@@ -340,6 +340,19 @@ class ClientIT {
     }
 
     @Test
+    void mixedCaseInstagramIsSavedLowercaseAndFound() {
+        Map<String, Object> body = client("מאיה");
+        body.put("instagram", "@Maya.Lines");
+
+        ResponseEntity<Map<String, Object>> res = put(UUID.randomUUID(), body);
+
+        assertThat(res.getStatusCode()).as("AC2: a mixed-case handle is lowercased, not rejected")
+                .isEqualTo(HttpStatus.OK);
+        assertThat(res.getBody()).containsEntry("instagram", "maya.lines");
+        assertThat(listIds("MAYA")).contains((String) res.getBody().get("id"));
+    }
+
+    @Test
     void searchExcludesNonMatchesAndDeletedClients() {
         UUID id = create(client("גלית ורד"));
         assertThat(listIds("גלית")).contains(id.toString());
