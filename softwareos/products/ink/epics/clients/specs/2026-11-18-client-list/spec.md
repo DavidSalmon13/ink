@@ -36,7 +36,8 @@ The form and the empty / no-results states have no mockup. They're built from ex
    `phone`, `email`, `instagram`, `notes` are optional. An identical retry returns the same record (no duplicate, no
    version bump). In the app, "לקוח חדש" opens the modal, and "שמירה" is enabled once the name is non-blank.
 2. AC2: Validation: `name` trimmed, 1–100 chars; `email` valid format; `phone` 9–15 digits once normalized;
-   `instagram` 1–30 of `[a-z0-9._]` after removing a leading `@`; `notes` ≤ 2000 chars. Violations → 400
+   `instagram` lowercased and without a leading `@`, then 1–30 of `[a-z0-9._]` (so `@Maya.Lines` is saved as
+   `maya.lines`); `notes` ≤ 2000 chars. Violations → 400
    `validation_failed` with `details.fields`, shown inline under the matching field in Hebrew.
 3. AC3: Edit: tapping a row opens the same modal ("עריכת לקוח") prefilled. `PUT` with the current `version` saves and
    bumps it. A stale version → 409 `version_conflict` with `details.current`; the app shows the toast
@@ -76,7 +77,8 @@ The form and the empty / no-results states have no mockup. They're built from ex
   a search query with `LIKE %…%` on the three normalized columns, the phone clause only when `q` has ≥ 3 digits);
   `ClientController` with nested `ClientInput` / `ClientView` records. `PUT /clients/{id}` goes through
   `VersionedWrites.put`; `GET /clients/{id}` through `VersionedWrites.get`. Bean Validation on `ClientInput`, so
-  errors come out as `validation_failed` via `GlobalExceptionHandler`. `tattooCount` is a constant 0 in `ClientView`
+  errors come out as `validation_failed` via `GlobalExceptionHandler`. `ClientInput` lowercases the handle (via
+  `ClientSearch.instagram`) before validation, so the stored and displayed handle is lowercase. `tattooCount` is a constant 0 in `ClientView`
   for now (the Completed tattoos epic replaces it with a computed count; the contract doesn't change).
 - **Mobile data**: `src/api/clients.ts` (`listClients(api, q?)`, `getClient`, `putClient`, using the
   `settings.ts` / `attachments.ts` style: `api` first, `version` in the body). `src/query/` holds the `QueryClient`,
@@ -114,3 +116,4 @@ The form and the empty / no-results states have no mockup. They're built from ex
 | 2026-11-18 | david-schwartzman | created | Initial shaping | — |
 | 2026-11-18 | david-schwartzman | deviation | T11 compared the list, modal (create / errors / edit), empty and no-results states with `ClientCard.ipad.html` (list pane) and the `CalendarNewAppointment.html` modal from **web-preview** screenshots at iPhone (393×852) and iPad (1180×820) sizes (`visuals/client-list-*-web.png`), not the iOS Simulator (no Xcode on the dev machine). Fixed: a Latin name aligned to the far edge of its row instead of beside the avatar (rtl base direction on the row name); the modal's ביטול / שמירה stacked full-width instead of side by side (footer passed as one fragment). Known web-only differences: the browser focus ring on the search field; no notch or safe-area inset. **Owed:** an iPhone and iPad simulator/device check before QA (T13). | T11 |
 | 2026-11-18 | david-schwartzman | finding | T11: `PUT /clients` rejects a mixed-case Instagram handle (`@Maya.Lines` → 400 `validation_failed`); AC2 validates `[a-z0-9._]` after removing `@` without lowercasing, while T1 normalizes `@Maya.Lines` → `maya.lines` for search and the Hebrew error says English letters are allowed. Not changed; decide via `/spec-changes` whether AC2 lowercases before validating. | T11 |
+| 2026-11-19 | david-schwartzman | change | AC2: lowercase the Instagram handle before validating (`@Maya.Lines` is saved as `maya.lines`) — Instagram handles are case-insensitive, and T11 found a mixed-case handle rejected while search already normalizes it | T11 |
