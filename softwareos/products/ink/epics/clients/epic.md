@@ -19,3 +19,4 @@ computed summary are the hub that later epics fill in as they add appointments, 
 
 | Spec | Status | Branch |
 |---|---|---|
+| [2026-11-18-client-list](specs/2026-11-18-client-list/spec.md) | shaped | feat/clients/client-list |
