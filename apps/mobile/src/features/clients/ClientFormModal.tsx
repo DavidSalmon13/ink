@@ -111,6 +111,7 @@ export function ClientFormModal({ client, onClose }: ClientFormModalProps) {
         onChangeText={set('phone')}
         error={errors.phone}
         keyboardType="phone-pad"
+        ltr
       />
       <Field
         label="אימייל"

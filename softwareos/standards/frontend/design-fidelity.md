@@ -24,7 +24,8 @@ it doesn't reinterpret it.
   spacing or radii in components.
 - Reuse the design-system components; a new component must look like it belongs on `design-system.html`.
 - Right-to-left: logical sides only (`start`/`end`, `marginStart`, `paddingEnd`), never `left`/`right`.
-  Numbers, times and ₪ amounts go in their own `<Text>` (isolated left-to-right runs).
+  Numbers, times and ₪ amounts go in their own `<Text>` (isolated left-to-right runs). Inputs for them
+  (phone, price, time, size) use `<Field ltr>`, or digits separated by spaces display in reversed groups.
 - Use the Hebrew wording from the mockup exactly (e.g. "הכנסות לפי תורים שהסתיימו").
 - Support light and dark mode with the tokens' paired values.
 - Status is never shown by color alone: every status dot has a text label.

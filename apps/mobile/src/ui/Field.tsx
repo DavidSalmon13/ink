@@ -15,11 +15,16 @@ export type FieldProps = Omit<TextInputProps, 'style'> & {
   helper?: string;
   /** Trailing unit inside the input, e.g. "ס״מ" (`.input .unit`). */
   unit?: string;
+  /**
+   * The value is a left-to-right run (phone, number, time), like design `.num`: digits separated by
+   * spaces would otherwise display in reversed groups in the RTL app.
+   */
+  ltr?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
 /** design-system.html `.field` — label, 44px input, optional unit, helper or error. `ref` reaches the TextInput. */
-export function Field({ label, error, invalid = false, helper, unit, style, ...input }: FieldProps) {
+export function Field({ label, error, invalid = false, helper, unit, ltr = false, style, ...input }: FieldProps) {
   const t = useTheme();
   const c = t.colors;
   const labelId = useId();
@@ -60,6 +65,7 @@ export function Field({ label, error, invalid = false, helper, unit, style, ...i
             fontFamily: fontFace('400'),
             fontSize: m.field.inputFontSize,
             color: c.text,
+            ...(ltr ? { writingDirection: 'ltr' as const } : null),
           }}
         />
         {unit ? (

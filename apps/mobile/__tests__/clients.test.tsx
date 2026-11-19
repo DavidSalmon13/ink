@@ -212,6 +212,18 @@ describe('create', () => {
     await waitFor(() => expect(screen.queryByRole('header', { name: 'לקוח חדש' })).not.toBeOnTheScreen());
   });
 
+  it('renders the phone as a left-to-right run, unlike the Hebrew fields (AC10)', async () => {
+    serve();
+    await renderTab();
+    await screen.findByText('מאיה לוי');
+
+    await fireEvent.press(screen.getAllByRole('button', { name: 'לקוח חדש' })[0]);
+    await screen.findByRole('header', { name: 'לקוח חדש' });
+
+    expect(screen.getByLabelText('טלפון')).toHaveStyle({ writingDirection: 'ltr' });
+    expect(screen.getByLabelText('שם')).not.toHaveStyle({ writingDirection: 'ltr' });
+  });
+
   it('shows server validation errors inline in Hebrew and keeps the modal open', async () => {
     serve({
       put: () =>
