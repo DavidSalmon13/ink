@@ -39,6 +39,11 @@ export const componentMetrics = {
    * on surface with the card shadow), optional 11px/400 muted sub-label.
    */
   segmented: { padding: 3, gap: 2, minHeight: 38, paddingHorizontal: 6, fontSize: 14, subFontSize: 11 },
+  /**
+   * `.tabs`: 44px items, 14px side padding, 15px/500 muted; the current tab is 700 primary with a 2px
+   * primary underline over the strip's hairline border.
+   */
+  tabs: { minHeight: 44, paddingHorizontal: 14, fontSize: 15, indicatorWidth: 2 },
   /** `.chip`: 34px tall, 10px side padding, 13px, 6px gap (selected 600 on primary); `.chips` wrap with 8px gaps. */
   chip: { minHeight: 34, paddingHorizontal: 10, fontSize: 13, gap: 6, groupGap: 8 },
   /** `.status` / `.dot`: 10px dot, 6px gap, 13px/500 label. */

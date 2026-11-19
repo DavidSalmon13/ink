@@ -20,7 +20,7 @@ const rect = (x: number, y: number, width: number, height: number, rx: number): 
 });
 
 /**
- * Glyphs copied path-for-path from design/pages/Home.html and design-system.html
+ * Glyphs copied path-for-path from design/pages/Home.html, ClientCard.html and design-system.html
  * (24×24 viewBox, 1.5 stroke, round caps/joins, no fill). Not mirrored for RTL — the mockups are
  * already drawn for right-to-left (e.g. `chevron` points left = forward).
  */
@@ -60,6 +60,17 @@ const glyphs = {
   check: [path('M5 12.5l4.5 4.5L19 7.5')],
   warning: [path('M12 4l9 16H3z'), path('M12 10v4M12 17h.01')],
   search: [circle(11, 11, 6.5), path('M20 20l-4.2-4.2')],
+  // From design/pages/ClientCard.html (contact chips and the header's icon buttons).
+  phone: [path('M6.5 4h3l1.5 4-2 1.3a10 10 0 0 0 5.7 5.7L16 13l4 1.5v3A2 2 0 0 1 18 19.5 15 15 0 0 1 4.5 6 2 2 0 0 1 6.5 4z')],
+  instagram: [rect(4, 4, 16, 16, 4.5), circle(12, 12, 3.6), path('M16.8 7.2h.01')],
+  edit: [path('M6 4h9l4 4v12H6z'), path('M15 4v4h4M9 12h7M9 16h5')],
+  more: [circle(6, 12, 1), circle(12, 12, 1), circle(18, 12, 1)],
+  // No mockup (client-card's contact sheet and delete): drawn in the same 24px, 1.5-stroke style.
+  whatsapp: [
+    path('M4.5 19.5l1.2-3.7A8 8 0 1 1 8.4 18.4z'),
+    path('M9.5 9c0 2.8 2.7 5.5 5.5 5.5l1-1.5-2-.9-.9.8a4 4 0 0 1-2-2l.8-.9-.9-2z'),
+  ],
+  trash: [path('M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13M10.5 11v5M13.5 11v5')],
 } satisfies Record<string, Shape[]>;
 
 export type IconName = keyof typeof glyphs;

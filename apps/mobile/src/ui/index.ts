@@ -3,6 +3,7 @@ export { Icon, iconNames, type IconName, type IconProps } from './Icon';
 export { Field, type FieldProps } from './Field';
 export { Search, type SearchProps } from './Search';
 export { SegmentedControl, type Segment, type SegmentedControlProps } from './SegmentedControl';
+export { Tabs, type Tab, type TabsProps } from './Tabs';
 export { Chip, Chips, type ChipProps } from './Chip';
 export { StatusDot, statusLabels, type SketchStatus, type StatusDotProps } from './StatusDot';
 export { Card, type CardProps } from './Card';
@@ -15,3 +16,4 @@ export { Toast, ToastProvider, useToast, type ToastKind, type ToastOptions, type
 export { EmptyArt, EmptyState, ErrorState, LoadingState, Skeleton, type EmptyStateProps, type ErrorStateProps, type LoadingStateProps, type SkeletonProps } from './States';
 export { TabBar, tabs, type TabName } from './TabBar';
 export { PlaceholderScreen, type PlaceholderScreenProps } from './PlaceholderScreen';
+export { formatMonthYear } from './hebrewDate';

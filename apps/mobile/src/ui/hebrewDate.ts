@@ -25,3 +25,9 @@ export function formatHomeDate(date: Date = new Date()): string {
   const weekday = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
   return `${WEEKDAYS[weekday]}, ${day} ב${MONTHS[month - 1]}`;
 }
+
+/** "מרץ 2026": the month and year of an ISO instant as seen in Israel (client-card "לקוח/ה מאז"). */
+export function formatMonthYear(iso: string): string {
+  const { year, month } = israelCalendarDay(new Date(iso));
+  return `${MONTHS[month - 1]} ${year}`;
+}
