@@ -2,5 +2,5 @@
 generated: 2026-11-19
 product: ink
 epics:
-  - { slug: clients, name: Clients, status: in-progress, spec_count: 1, path: epics/clients/ }
+  - { slug: clients, name: Clients, status: in-progress, spec_count: 2, path: epics/clients/ }
   - { slug: foundation, name: Foundation, status: in-progress, spec_count: 5, path: epics/foundation/ }
