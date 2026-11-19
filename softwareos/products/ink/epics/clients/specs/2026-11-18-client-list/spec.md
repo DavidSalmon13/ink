@@ -1,7 +1,7 @@
 # Client List
 
 > Epic: ../../epic.md
-> Status: in-progress
+> Status: done
 > Branch: feat/clients/client-list
 > Covers: PUT /clients/{id}, GET /clients, GET /clients/{id}, apps/api/src/main/java/app/ink/api/client/**, apps/api/src/main/resources/db/migration/V5__client.sql, apps/mobile/src/api/clients.ts, apps/mobile/src/query/**, apps/mobile/app/(tabs)/clients.tsx, apps/mobile/src/features/clients/**, QueryClientProvider in apps/mobile/app/_layout.tsx, the `ltr` prop of apps/mobile/src/ui/Field.tsx
 
@@ -118,3 +118,4 @@ The form and the empty / no-results states have no mockup. They're built from ex
 | 2026-11-18 | david-schwartzman | finding | T11: `PUT /clients` rejects a mixed-case Instagram handle (`@Maya.Lines` → 400 `validation_failed`); AC2 validates `[a-z0-9._]` after removing `@` without lowercasing, while T1 normalizes `@Maya.Lines` → `maya.lines` for search and the Hebrew error says English letters are allowed. Not changed; decide via `/spec-changes` whether AC2 lowercases before validating. | T11 |
 | 2026-11-19 | david-schwartzman | change | AC2: lowercase the Instagram handle before validating (`@Maya.Lines` is saved as `maya.lines`) — Instagram handles are case-insensitive, and T11 found a mixed-case handle rejected while search already normalizes it | T11 |
 | 2026-11-19 | david-schwartzman | hotfix | Fixed AC10: the client form's phone field now renders the number left-to-right (`Field ltr`); before, a phone typed with spaces displayed in reversed groups in the RTL app. Regression test: clients.test.tsx "renders the phone as a left-to-right run". Standard: frontend/design-fidelity.md now requires `Field ltr` for number, phone and time inputs. Covers: +the `ltr` prop of apps/mobile/src/ui/Field.tsx | QA 2026-11-19 |
+| 2026-11-19 | david-schwartzman | status | Marked done: all 15 tasks complete, QA PASS WITH NOTES, PRs #61–#70 merged. The iPhone/iPad simulator or device check from T11 is still owed (not blocking, per owner) | — |
