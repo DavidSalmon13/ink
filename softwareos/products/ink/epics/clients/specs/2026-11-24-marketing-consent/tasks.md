@@ -14,7 +14,7 @@
 ## Mobile  (PR 2)
 
 - [x] T5 `api/clients.ts` consent fields + `postConsent`; `formatDayDate` in `ui/hebrewDate.ts` (AC2, AC5)
-- [ ] T6 `features/clients/card/useConsent.ts` (`useChangeConsent`: cache update, list invalidate, toasts) (AC6)
+- [x] T6 `features/clients/card/useConsent.ts` (`useChangeConsent`: cache update, list invalidate, toasts) (AC6)
 - [ ] T7 `ConsentRow.tsx` (three states + confirm modal) rendered in `ClientCard.tsx` on iPhone and iPad (AC5, AC6, AC7)
 - [ ] T8 Tests: `__tests__/api/clients.test.ts` (postConsent) and `__tests__/clientCard.test.tsx` (three row states + date, grant/revoke confirm → POST → toast + new state, offline / failure toasts keep old state) (AC5, AC6)
 
