@@ -20,6 +20,6 @@
 
 ## Verification  (PR 3)
 
-- [ ] T9 Screenshots on iPhone + iPad (simulator/device, or web preview with a device check owed) vs ClientCard.html / .ipad.html; fix or record deviations in the Changelog (AC7)
+- [x] T9 Screenshots on iPhone + iPad (simulator/device, or web preview with a device check owed) vs ClientCard.html / .ipad.html; fix or record deviations in the Changelog (AC7)
 - [ ] T10 HUMAN: Aya approves the none / revoked states and both confirm dialogs (AC7)
 - [ ] T11 Run QA against acceptance criteria (qa skill)

@@ -35,6 +35,11 @@ export interface ConsentRowProps {
   client: Client;
   /** The card's horizontal inset (iPhone screen padding, or the iPad pane's). */
   inset: number;
+  /**
+   * iPad pane: the row sits inside the pane's inset, so its top border does too (ClientCard.ipad.html).
+   * iPhone: the inset is inside the bordered row, so the border runs edge to edge (`.px.consent`).
+   */
+  pane?: boolean;
 }
 
 /**
@@ -42,7 +47,7 @@ export interface ConsentRowProps {
  * granted and "מתן הסכמה" otherwise. Each opens a confirmation built on the `src/ui` Modal (no mockup,
  * like DeleteClientDialog); confirming POSTs and the row follows the cached client.
  */
-export function ConsentRow({ client, inset }: ConsentRowProps) {
+export function ConsentRow({ client, inset, pane = false }: ConsentRowProps) {
   const t = useTheme();
   const [confirm, setConfirm] = useState<ConsentAction | null>(null);
   const change = useChangeConsent(client.id);
@@ -55,9 +60,10 @@ export function ConsentRow({ client, inset }: ConsentRowProps) {
     });
 
   return (
-    <View style={{ paddingHorizontal: inset }}>
+    <View style={{ paddingHorizontal: pane ? inset : 0 }}>
       <View
         style={{
+          paddingHorizontal: pane ? 0 : inset,
           marginTop: consentMetrics.marginTop,
           paddingTop: consentMetrics.paddingTop,
           borderTopWidth: t.borderWidth.hairline,

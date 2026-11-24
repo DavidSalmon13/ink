@@ -208,7 +208,7 @@ export function ClientCard({ id, onGone, pane = false, onBack }: ClientCardProps
         onInstagram={(handle) => void openLink(instagramUrl(handle))}
       />
       <Stats summary={summary.data} pane={pane} inset={inset} />
-      <ConsentRow client={c} inset={inset} />
+      <ConsentRow client={c} inset={inset} pane={pane} />
       <Tabs<TabValue>
         accessibilityLabel="לשוניות כרטיס לקוח"
         tabs={[
