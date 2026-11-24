@@ -1,7 +1,7 @@
 # Client Card
 
 > Epic: ../../epic.md
-> Status: in-progress
+> Status: done
 > Branch: feat/clients/client-card
 > Covers: DELETE /clients/{id}, GET /clients/{id}/summary, apps/api/src/main/java/app/ink/api/client/ClientSummary*, apps/mobile/app/clients/[id].tsx, apps/mobile/src/features/clients/card/**, the iPad split in apps/mobile/app/(tabs)/clients.tsx, apps/mobile/src/ui/Tabs.tsx, the phone/whatsapp/instagram/edit/more/trash icons in apps/mobile/src/ui/Icon.tsx, formatMonthYear in apps/mobile/src/ui/hebrewDate.ts
 
@@ -135,3 +135,4 @@ built from `src/ui` components and tokens only, then approved by Aya from screen
 | 2026-11-19 | david-schwartzman | created | Initial shaping | — |
 | 2026-11-24 | david-schwartzman | deviation | T11 compared the card, contact sheet, more-actions sheet, delete confirmation, empty card, "הלקוח לא נמצא" and the iPad split (card pane + "בחרו לקוח מהרשימה") with `ClientCard.html` / `ClientCard.ipad.html` from **web-preview** screenshots at iPhone (393×852) and iPad (1180×820) sizes (`visuals/client-card-iphone-web.png`, `visuals/client-card-ipad-web.png`), not the iOS Simulator (no Xcode on the dev machine). Fixed: the stat label's wrapped line was 22px instead of the mockup's 19px (`.label` at `line-height: normal`); the not-found screen padded its header twice and still offered "עריכת פרטים" / "עוד פעולות" for a client that no longer exists. Expected differences: the mockups' tattoo list, consent row, tab counts and iPad "הצעת מחיר" / "קביעת תור" are later specs (AC5, AC10); the iPad screen keeps the app shell's tab bar; the iPhone "אין תור קרוב" line has no clock icon (it would add a seventh icon to `Icon.tsx`, beyond the six this spec covers); the iPad pane shows "עריכת פרטים", which `ClientCard.ipad.html` doesn't, because AC6 needs editing from the card on iPad too; on web there's no status-bar or notch inset. **Owed:** an iPhone and iPad simulator/device check, and Aya's approval (T12). | T11 |
 | 2026-11-24 | david-schwartzman | approval | Aya approved the card (iPhone, iPad), the contact sheet, the more-actions sheet, the delete confirmation, and the empty, not-found and no-selection states from the T11 web-preview screenshots (`visuals/client-card-iphone-web.png`, `visuals/client-card-ipad-web.png`), taken of the code at 89e79dd (AC10). The simulator/device check is still owed. | T12 |
+| 2026-11-24 | david-schwartzman | status | Marked done: all 13 tasks complete, QA PASS WITH NOTES, PRs #72–#79 merged. The iPhone/iPad simulator or device check from T11 is still owed | — |
