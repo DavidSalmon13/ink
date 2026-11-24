@@ -6,7 +6,7 @@
 
 ## API  (PR 1)
 
-- [ ] T1 `V6__consent.sql`: consent_event table + index; client.marketing_consent / consent_updated_at / unsubscribe_token with backfill, not null, unique (AC1)
+- [x] T1 `V6__consent.sql`: consent_event table + index; client.marketing_consent / consent_updated_at / unsubscribe_token with backfill, not null, unique (AC1)
 - [ ] T2 `Client` consent fields + token from SecureRandom on create; `ConsentEvent` entity + `ConsentEventRepository` (AC1)
 - [ ] T3 `ConsentService.change` + `POST /clients/{id}/consent` in ClientController; `ClientView` gains marketingConsent / consentUpdatedAt (AC2, AC3, AC4)
 - [ ] T4 ClientIT cases: migration backfill + unique token not exposed; GET/PUT carry consent and PUT ignores it; grant / revoke write one event each; same-state is a no-op without an event; 400 bad action; 404 unknown/deleted; 401; stale PUT after consent → 409 (AC1–AC4)

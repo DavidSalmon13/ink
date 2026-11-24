@@ -1,7 +1,7 @@
 # Marketing Consent
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/clients/marketing-consent
 > Covers: POST /clients/{id}/consent, apps/api/src/main/resources/db/migration/V6__consent.sql, apps/api/src/main/java/app/ink/api/client/Consent*, apps/api/src/main/java/app/ink/api/client/MarketingConsent.java, the marketingConsent / consentUpdatedAt fields of the client API, apps/mobile/src/features/clients/card/ConsentRow.tsx, apps/mobile/src/features/clients/card/useConsent.ts, the consent row in apps/mobile/src/features/clients/card/ClientCard.tsx, formatDayDate in apps/mobile/src/ui/hebrewDate.ts
 
