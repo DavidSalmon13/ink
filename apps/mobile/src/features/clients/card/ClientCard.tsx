@@ -44,6 +44,8 @@ const cardMetrics = {
   statsGap: 10,
   statPaddingVertical: 12,
   statPaddingHorizontal: 14,
+  /** `.label` is 13px at `line-height: normal`, which is 19px in Heebo (the wrapped income label). */
+  statLabelLineHeight: 19,
   nextMarginTop: 10,
   tabsMarginTop: 18,
   bodyMarginTop: 14,
@@ -115,12 +117,13 @@ export function ClientCard({ id, onGone, pane = false, onBack }: ClientCardProps
     </View>
   );
 
-  const actions = (
+  // No edit or delete for a client that no longer exists (AC8).
+  const actions = notFound ? null : (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <IconButton
         icon="edit"
         accessibilityLabel="עריכת פרטים"
-        disabled={!client.data || notFound}
+        disabled={!client.data}
         onPress={() => setEditKey((n) => n + 1)}
       />
       <IconButton icon="more" accessibilityLabel="עוד פעולות" onPress={() => setSheet('more')} />
@@ -162,17 +165,20 @@ export function ClientCard({ id, onGone, pane = false, onBack }: ClientCardProps
 
   if (notFound) {
     // The pane clears itself (effect above); the iPhone screen says so and offers the way back.
+    // topBar carries its own inset, so it sits outside the padded body (same edge as the card's header).
     return frame(
-      <View style={{ paddingHorizontal: inset }}>
+      <>
         {topBar}
         {pane ? null : (
-          <EmptyState
-            title="הלקוח לא נמצא"
-            art={false}
-            action={<Button small variant="secondary" label="חזרה לרשימה" onPress={leave} />}
-          />
+          <View style={{ paddingHorizontal: inset }}>
+            <EmptyState
+              title="הלקוח לא נמצא"
+              art={false}
+              action={<Button small variant="secondary" label="חזרה לרשימה" onPress={leave} />}
+            />
+          </View>
         )}
-      </View>,
+      </>,
     );
   }
 
@@ -353,7 +359,14 @@ function Stat({ label, children }: { label: string; children: ReactNode }) {
         gap: t.spacing.xs,
       }}
     >
-      <Text style={{ fontFamily: fontFace('600'), fontSize: m.field.labelFontSize }} color="textMuted">
+      <Text
+        style={{
+          fontFamily: fontFace('600'),
+          fontSize: m.field.labelFontSize,
+          lineHeight: cardMetrics.statLabelLineHeight,
+        }}
+        color="textMuted"
+      >
         {label}
       </Text>
       {children}
