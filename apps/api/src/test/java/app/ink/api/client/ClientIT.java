@@ -1,7 +1,8 @@
-// covers client-list AC1–AC5, AC9, T2; client-card AC4, AC7, AC9, T1
+// covers client-list AC1–AC5, AC9, T2; client-card AC4, AC7, AC9, T1; marketing-consent AC1–AC4, T4
 package app.ink.api.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -109,6 +111,19 @@ class ClientIT {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(res.getBody()).as("GET /clients returns a JSON array").isInstanceOf(List.class);
         return ((List<Map<String, Object>>) res.getBody()).stream().map(c -> (String) c.get("id")).toList();
+    }
+
+    private ResponseEntity<Map<String, Object>> consent(UUID id, Object action) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("action", action);
+        return rest.exchange("/clients/" + id + "/consent", HttpMethod.POST,
+                new HttpEntity<>(body, headers(token())), JSON_OBJECT);
+    }
+
+    /** The audit trail for one client, oldest first, as "action/source". */
+    private List<String> consentEvents(UUID id) {
+        return jdbc.queryForList("select action || '/' || source from consent_event where client_id = ? order by at",
+                String.class, id);
     }
 
     /** Creates a client (no version) and returns its id. */
@@ -453,5 +468,182 @@ class ClientIT {
                 rest.exchange("/clients/" + id, HttpMethod.PUT, new HttpEntity<>(client("x"), headers(null)), JSON_OBJECT);
         assertThat(put.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(error(put)).containsEntry("code", "unauthorized");
+    }
+
+    // ---- marketing-consent AC1: schema + token --------------------------------------------------
+
+    @Test
+    void everyClientHasAUniqueUnsubscribeTokenThatTheApiNeverSends() {
+        UUID a = create(client("טל"));
+        UUID b = create(client("עדי"));
+
+        String tokenA = jdbc.queryForObject("select unsubscribe_token from client where id = ?", String.class, a);
+        String tokenB = jdbc.queryForObject("select unsubscribe_token from client where id = ?", String.class, b);
+        assertThat(tokenA).hasSize(43).isNotEqualTo(tokenB);
+        assertThat(jdbc.queryForObject("select count(*) from client where unsubscribe_token is null", Long.class))
+                .as("backfilled and not null").isZero();
+        assertThat(jdbc.queryForObject("select count(distinct unsubscribe_token) = count(*) from client", Boolean.class))
+                .isTrue();
+
+        assertThat(get(a).getBody()).doesNotContainKey("unsubscribeToken");
+        assertThat(list(null).getBody().toString()).doesNotContain(tokenA);
+        assertThat(consent(a, "granted").getBody()).doesNotContainKey("unsubscribeToken");
+    }
+
+    @Test
+    void theMigrationDefaultsConsentToNoneAndRejectsUnknownStates() {
+        UUID id = create(client("ליה"));
+
+        assertThat(jdbc.queryForObject("select marketing_consent from client where id = ?", String.class, id))
+                .isEqualTo("none");
+        assertThat(jdbc.queryForObject(
+                "select count(*) from information_schema.columns where table_name = 'consent_event'"
+                        + " and column_name in ('id', 'client_id', 'action', 'source', 'at')", Long.class))
+                .isEqualTo(5);
+        assertThatThrownBy(
+                () -> jdbc.update("update client set marketing_consent = 'maybe' where id = ?", id))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    // ---- marketing-consent AC2: consent on the client API ---------------------------------------
+
+    @Test
+    void getListAndPutCarryConsentAndPutIgnoresIt() {
+        UUID id = create(client("נגה"));
+
+        Map<String, Object> fresh = get(id).getBody();
+        assertThat(fresh).containsEntry("marketingConsent", "none").containsEntry("consentUpdatedAt", null);
+        assertThat(listIds("נגה")).contains(id.toString());
+
+        Map<String, Object> body = client("נגה");
+        body.put("notes", "חדש");
+        body.put("version", 0);
+        body.put("marketingConsent", "granted");
+        body.put("consentUpdatedAt", "2026-01-01T00:00:00Z");
+        ResponseEntity<Map<String, Object>> res = put(id, body);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(res.getBody()).containsEntry("notes", "חדש")
+                .containsEntry("marketingConsent", "none")
+                .containsEntry("consentUpdatedAt", null);
+        assertThat(consentEvents(id)).isEmpty();
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void listItemsCarryConsent() {
+        UUID id = create(client("אגם קונסנט"));
+        consent(id, "granted");
+
+        Map<String, Object> item = ((List<Map<String, Object>>) list("אגם קונסנט").getBody()).stream()
+                .filter(c -> c.get("id").equals(id.toString())).findFirst().orElseThrow();
+        assertThat(item).containsEntry("marketingConsent", "granted");
+        assertThat(item.get("consentUpdatedAt")).isNotNull();
+    }
+
+    // ---- marketing-consent AC3: grant / revoke --------------------------------------------------
+
+    @Test
+    void grantThenRevokeWritesOneEventEachAndUpdatesTheClient() {
+        UUID id = create(client("שירה"));
+
+        ResponseEntity<Map<String, Object>> granted = consent(id, "granted");
+        assertThat(granted.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(granted.getBody()).containsEntry("id", id.toString()).containsEntry("marketingConsent", "granted");
+        String grantedAt = (String) granted.getBody().get("consentUpdatedAt");
+        assertThat(grantedAt).isNotNull();
+        assertThat(consentEvents(id)).containsExactly("granted/app");
+
+        ResponseEntity<Map<String, Object>> revoked = consent(id, "revoked");
+        assertThat(revoked.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(revoked.getBody()).containsEntry("marketingConsent", "revoked");
+        assertThat((String) revoked.getBody().get("consentUpdatedAt")).isGreaterThanOrEqualTo(grantedAt);
+        assertThat(consentEvents(id)).containsExactly("granted/app", "revoked/app");
+
+        assertThat(get(id).getBody()).containsEntry("marketingConsent", "revoked")
+                .containsEntry("consentUpdatedAt", revoked.getBody().get("consentUpdatedAt"));
+        assertThat(jdbc.queryForObject(
+                "select count(*) from consent_event e join client c on c.id = e.client_id"
+                        + " where e.client_id = ? and e.at = c.consent_updated_at and e.action = 'revoked'",
+                Long.class, id)).as("the cached state matches the latest event").isEqualTo(1);
+    }
+
+    @Test
+    void theSameStateAgainIsANoOpWithoutAnEvent() {
+        UUID id = create(client("אור"));
+        Map<String, Object> first = consent(id, "granted").getBody();
+
+        ResponseEntity<Map<String, Object>> again = consent(id, "granted");
+
+        assertThat(again.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(again.getBody()).isEqualTo(first);
+        assertThat(consentEvents(id)).containsExactly("granted/app");
+    }
+
+    @Test
+    void aBadOrMissingActionIs400ValidationFailed() {
+        UUID id = create(client("גל"));
+
+        for (Object action : new Object[] { "maybe", "none", null }) {
+            ResponseEntity<Map<String, Object>> res = consent(id, action);
+            assertThat(res.getStatusCode()).as("action %s", action).isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(fields(res)).containsKey("action");
+        }
+        assertThat(consentEvents(id)).isEmpty();
+        assertThat(get(id).getBody()).containsEntry("marketingConsent", "none");
+    }
+
+    @Test
+    void consentForAnUnknownOrDeletedClientIs404() {
+        ResponseEntity<Map<String, Object>> unknown = consent(UUID.randomUUID(), "granted");
+        assertThat(unknown.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(error(unknown)).containsEntry("code", "not_found");
+
+        UUID id = create(client("ים"));
+        jdbc.update("update client set deleted_at = now() where id = ?", id);
+
+        ResponseEntity<Map<String, Object>> deleted = consent(id, "granted");
+        assertThat(deleted.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(error(deleted)).containsEntry("code", "not_found");
+        assertThat(consentEvents(id)).isEmpty();
+    }
+
+    @Test
+    void consentRequiresTheOwnerToken() {
+        UUID id = create(client("ענבר"));
+
+        ResponseEntity<Map<String, Object>> res = rest.exchange("/clients/" + id + "/consent", HttpMethod.POST,
+                new HttpEntity<>(Map.of("action", "granted"), headers(null)), JSON_OBJECT);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(error(res)).containsEntry("code", "unauthorized");
+        assertThat(consentEvents(id)).isEmpty();
+    }
+
+    // ---- marketing-consent AC4: version ---------------------------------------------------------
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void changingConsentBumpsTheVersionSoAStaleSaveIs409() {
+        UUID id = create(client("רותם"));
+
+        Map<String, Object> granted = consent(id, "granted").getBody();
+        assertThat(version(granted)).isEqualTo(1);
+
+        // A device that still holds version 0 saves an edit.
+        Map<String, Object> stale = client("רותם");
+        stale.put("notes", "מהמכשיר השני");
+        stale.put("version", 0);
+        ResponseEntity<Map<String, Object>> res = put(id, stale);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        Map<String, Object> error = error(res);
+        assertThat(error).containsEntry("code", "version_conflict");
+        Map<String, Object> current = (Map<String, Object>) ((Map<String, Object>) error.get("details")).get("current");
+        assertThat(current).containsEntry("marketingConsent", "granted").doesNotContainKey("unsubscribeToken");
+        assertThat(version(current)).isEqualTo(1);
+
+        stale.put("version", 1);
+        assertThat(put(id, stale).getStatusCode()).as("the current version saves").isEqualTo(HttpStatus.OK);
     }
 }

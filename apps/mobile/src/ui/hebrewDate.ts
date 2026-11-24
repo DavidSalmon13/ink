@@ -31,3 +31,10 @@ export function formatMonthYear(iso: string): string {
   const { year, month } = israelCalendarDay(new Date(iso));
   return `${MONTHS[month - 1]} ${year}`;
 }
+
+/** "02.10.2026": the calendar day of an ISO instant as seen in Israel (marketing-consent's consent date). */
+export function formatDayDate(iso: string): string {
+  const { year, month, day } = israelCalendarDay(new Date(iso));
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(day)}.${pad(month)}.${year}`;
+}

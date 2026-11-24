@@ -51,6 +51,8 @@ function client(over: Partial<Client>): Client {
     instagram: null,
     notes: null,
     tattooCount: 0,
+    marketingConsent: 'none',
+    consentUpdatedAt: null,
     ...over,
   };
 }

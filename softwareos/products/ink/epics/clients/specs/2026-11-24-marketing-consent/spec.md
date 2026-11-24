@@ -1,7 +1,7 @@
 # Marketing Consent
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: done
 > Branch: feat/clients/marketing-consent
 > Covers: POST /clients/{id}/consent, apps/api/src/main/resources/db/migration/V6__consent.sql, apps/api/src/main/java/app/ink/api/client/Consent*, apps/api/src/main/java/app/ink/api/client/MarketingConsent.java, the marketingConsent / consentUpdatedAt fields of the client API, apps/mobile/src/features/clients/card/ConsentRow.tsx, apps/mobile/src/features/clients/card/useConsent.ts, the consent row in apps/mobile/src/features/clients/card/ClientCard.tsx, formatDayDate in apps/mobile/src/ui/hebrewDate.ts
 
@@ -114,3 +114,6 @@ Button, like `DeleteClientDialog`, and Aya approves them from screenshots.
 | Date | Author | Type | Change | Ref |
 |---|---|---|---|---|
 | 2026-11-24 | david-schwartzman | created | Initial shaping | — |
+| 2026-11-24 | david-schwartzman | deviation | T9 compared the consent row (none, granted, revoked) and both confirmation dialogs with `ClientCard.html` / `ClientCard.ipad.html` from **web-preview** screenshots at iPhone (393×852) and iPad (1180×820) sizes (`visuals/consent-iphone-web.png`: none → grant dialog → granted → revoke dialog → revoked; `visuals/consent-ipad-web.png`: granted, revoked), not the iOS Simulator (no Xcode on the dev machine). Fixed: on iPhone the row's top hairline was inset by the screen padding; the mockup's `.px.consent` puts the padding inside the bordered row, so the line now runs edge to edge (the iPad pane keeps it inside the pane, as in `.ipad.html`). Matches: 12px above the line, 10px under it, 14px text with the bold value, the dd.MM.yyyy date as an LTR run, the ghost small button at the end. Implementation notes: the request's `action` is a validated string, not the `ConsentAction` enum, so a bad value is `validation_failed` as AC3 requires (an enum fails JSON parsing as `bad_request`); revoking from `none` writes a `revoked` event, since AC3 only skips the current state. Unmockuped, for Aya (T10): the dialogs have the AC6 title and buttons only, no body text, and the "ביטול הסכמה" confirm uses the destructive button like "מחיקה" in the delete dialog. **Owed:** an iPhone and iPad simulator/device check. | T9 |
+| 2026-11-24 | david-schwartzman | approval | Aya approved the consent row (none, granted, revoked) and both confirmation dialogs (title + buttons only, the destructive "ביטול הסכמה") on iPhone and iPad from the T9 web-preview screenshots (`visuals/consent-iphone-web.png`, `visuals/consent-ipad-web.png`), taken of the code at 49f83e2 (AC7). The simulator/device check is still owed. | T10 |
+| 2026-11-24 | david-schwartzman | status | Marked done: all 11 tasks complete, QA PASS WITH NOTES, PR [#82](https://github.com/DavidSalmon13/ink/pull/82). Built on the session branch `ccr-c978c1e4-v8ehx0` rather than `feat/clients/marketing-consent`. The iPhone/iPad simulator or device check from T9 is still owed. Completes the Clients epic | — |

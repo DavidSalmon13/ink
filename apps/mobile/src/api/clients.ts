@@ -1,6 +1,15 @@
 import type { ApiClient } from '@/api/client';
 
-/** A client as the API returns it (client-list AC4). `tattooCount` is 0 until the Completed tattoos epic. */
+/** marketing-consent AC1: never asked → `none`; withdrawn → `revoked`. */
+export type MarketingConsent = 'none' | 'granted' | 'revoked';
+
+/** What `postConsent` records. */
+export type ConsentAction = 'granted' | 'revoked';
+
+/**
+ * A client as the API returns it (client-list AC4). `tattooCount` is 0 until the Completed tattoos epic.
+ * The consent fields are read-only here: they change only through `postConsent` (marketing-consent AC2).
+ */
 export interface Client {
   id: string;
   version: number;
@@ -12,6 +21,9 @@ export interface Client {
   instagram: string | null;
   notes: string | null;
   tattooCount: number;
+  marketingConsent: MarketingConsent;
+  /** When consent last changed; null while it's `none`. */
+  consentUpdatedAt: string | null;
 }
 
 /** The editable fields; `version` is absent when creating and the last-seen version when editing. */
@@ -60,4 +72,12 @@ export interface ClientSummary {
 /** GET /clients/{id}/summary; ApiError `not_found` when the client is unknown or deleted. */
 export function getClientSummary(api: ApiClient, id: string): Promise<ClientSummary> {
   return api.apiFetch<ClientSummary>(`/clients/${id}/summary`, { method: 'GET' });
+}
+
+/**
+ * POST /clients/{id}/consent (marketing-consent AC3): grants or withdraws consent and returns the client
+ * with its new `version`. Repeating the current state is a no-op that returns the client unchanged.
+ */
+export function postConsent(api: ApiClient, id: string, action: ConsentAction): Promise<Client> {
+  return api.apiFetch<Client>(`/clients/${id}/consent`, { method: 'POST', body: { action } });
 }
