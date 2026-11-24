@@ -27,5 +27,5 @@
 ## Verification
 
 - [x] T11 Screenshots on iPhone + iPad (simulator/device, or web preview at those sizes with a device check owed) vs the cited mockups; fix or record each deviation in the Changelog (AC10)
-- [ ] T12 HUMAN: Aya approves the card, contact sheet, delete confirmation, and the empty / not-found / no-selection states (AC10)
+- [x] T12 HUMAN: Aya approves the card, contact sheet, delete confirmation, and the empty / not-found / no-selection states (AC10)
 - [x] T13 Run QA against acceptance criteria (qa skill)
