@@ -1,5 +1,5 @@
 // covers client-card AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, T2 — the client card, its actions, the
-// iPhone route and the iPad split. The contact sheet, delete confirmation and empty / not-found /
+// iPhone route and the iPad split; marketing-consent AC5, AC6, T8 — the consent row and its dialogs. The contact sheet, delete confirmation and empty / not-found /
 // no-selection states have no mockup; the Hebrew copy here is the derived wording Aya approves in T12.
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
@@ -39,7 +39,10 @@ import ClientRoute from '../app/clients/[id]';
 import {
   ClientCard,
   CLIENT_DELETED_MESSAGE,
+  CONSENT_FAILED_MESSAGE,
+  CONSENT_UPDATED_MESSAGE,
   LINK_FAILED_MESSAGE,
+  OFFLINE_CONSENT_MESSAGE,
   OFFLINE_DELETE_MESSAGE,
 } from '@/features/clients';
 
@@ -61,6 +64,8 @@ function client(over: Partial<Client>): Client {
     instagram: null,
     notes: null,
     tattooCount: 0,
+    marketingConsent: 'none',
+    consentUpdatedAt: null,
     ...over,
   };
 }
@@ -76,11 +81,23 @@ const maya = client({
 const noa = client({ id: '6f1c2c1e-0000-4000-8000-0000000000c2', name: 'נועה ברק' });
 const EMPTY_SUMMARY = { tattooCount: 0, completedIncomeAgorot: 0, nextAppointmentAt: null };
 
+/** 01:30 on 2 October in Israel (UTC+3), still 1 October in UTC: the row shows the Israeli day. */
+const CONSENT_AT = '2026-10-01T22:30:00Z';
+
 /**
- * Routes GET /clients, GET /clients/{id}, GET /clients/{id}/summary, PUT and DELETE /clients/{id}.
- * `clients` is the server's live set; DELETE removes from it, so later reads 404 and the list shrinks.
+ * Routes GET /clients, GET /clients/{id}, GET /clients/{id}/summary, PUT and DELETE /clients/{id}, and
+ * POST /clients/{id}/consent. `clients` is the server's live set; DELETE removes from it, so later reads
+ * 404 and the list shrinks; a consent POST updates it (`consent` overrides the response).
  */
-function serve({ clients = [maya, noa], del }: { clients?: Client[]; del?: () => Response | Promise<Response> } = {}) {
+function serve({
+  clients = [maya, noa],
+  del,
+  consent,
+}: {
+  clients?: Client[];
+  del?: () => Response | Promise<Response>;
+  consent?: () => Response | Promise<Response>;
+} = {}) {
   let live = [...clients];
   mockFetch.mockImplementation(async (input, init) => {
     const url = new URL(input);
@@ -100,6 +117,13 @@ function serve({ clients = [maya, noa], del }: { clients?: Client[]; del?: () =>
       return new Response(null, { status: 204 });
     }
     if (method === 'PUT' && id) return response(200, { ...found, ...JSON.parse(String(init?.body)) });
+    if (method === 'POST' && sub === 'consent' && found) {
+      if (consent) return consent();
+      const { action } = JSON.parse(String(init?.body)) as { action: 'granted' | 'revoked' };
+      const updated = { ...found, version: found.version + 1, marketingConsent: action, consentUpdatedAt: CONSENT_AT };
+      live = live.map((c) => (c.id === id ? updated : c));
+      return response(200, updated);
+    }
     throw new Error(`unexpected request ${method} ${input}`);
   });
 }
@@ -310,6 +334,128 @@ describe('delete', () => {
     expect(await screen.findByText(OFFLINE_DELETE_MESSAGE)).toBeOnTheScreen();
     expect(onGone).not.toHaveBeenCalled();
     expect(calls('DELETE')).toHaveLength(1);
+  });
+});
+
+// ---- marketing-consent AC5, AC6: the consent row ---------------------------------------------------
+
+/** The row's text: "הסכמה לדיוור: <bold value>", with the LTR-isolate marks around the date removed. */
+function consentText() {
+  const label = screen.getByText(/^הסכמה לדיוור:/);
+  const flatten = (children: unknown): string =>
+    Array.isArray(children)
+      ? children.map(flatten).join('')
+      : typeof children === 'string'
+        ? children
+        : children && typeof children === 'object' && 'props' in children
+          ? flatten((children as { props: { children?: unknown } }).props.children)
+          : '';
+  return flatten(label.props.children).replace(/[\u2066-\u2069]/g, '');
+}
+
+describe('consent', () => {
+  it('none: "לא ניתנה" with "מתן הסכמה"', async () => {
+    serve();
+    await renderCard();
+
+    expect(consentText()).toBe('הסכמה לדיוור: לא ניתנה');
+    expect(screen.getByRole('button', { name: 'מתן הסכמה' })).toBeOnTheScreen();
+    expect(screen.queryByRole('button', { name: 'ביטול הסכמה' })).toBeNull();
+  });
+
+  it('granted: "ניתנה · dd.MM.yyyy" (the Israeli day) with "ביטול הסכמה"', async () => {
+    serve({ clients: [{ ...maya, marketingConsent: 'granted', consentUpdatedAt: CONSENT_AT }] });
+    await renderCard();
+
+    expect(consentText()).toBe('הסכמה לדיוור: ניתנה · 02.10.2026');
+    expect(screen.getByRole('button', { name: 'ביטול הסכמה' })).toBeOnTheScreen();
+  });
+
+  it('revoked: "בוטלה · dd.MM.yyyy" with "מתן הסכמה"', async () => {
+    serve({ clients: [{ ...maya, marketingConsent: 'revoked', consentUpdatedAt: CONSENT_AT }] });
+    await renderCard();
+
+    expect(consentText()).toBe('הסכמה לדיוור: בוטלה · 02.10.2026');
+    expect(screen.getByRole('button', { name: 'מתן הסכמה' })).toBeOnTheScreen();
+  });
+
+  it('the iPad pane shows the row too', async () => {
+    setWidth(1180, 820);
+    serve();
+    await renderCard(maya.id, true);
+
+    expect(consentText()).toBe('הסכמה לדיוור: לא ניתנה');
+  });
+
+  it('grant: confirms, POSTs, shows the toast and the new state with the new version', async () => {
+    serve();
+    await renderCard();
+
+    await fireEvent.press(screen.getByRole('button', { name: 'מתן הסכמה' }));
+    expect(await screen.findByRole('header', { name: 'לרשום הסכמה לדיוור?' })).toBeOnTheScreen();
+    expect(calls('POST')).toHaveLength(0);
+
+    await fireEvent.press(screen.getByRole('button', { name: 'אישור' }));
+
+    await waitFor(() => expect(calls('POST')).toEqual([`/clients/${maya.id}/consent`]));
+    const [, init] = mockFetch.mock.calls.find(([, i]) => i?.method === 'POST')!;
+    expect(JSON.parse(String(init?.body))).toEqual({ action: 'granted' });
+    expect(await screen.findByText(CONSENT_UPDATED_MESSAGE)).toBeOnTheScreen();
+    await waitFor(() => expect(consentText()).toBe('הסכמה לדיוור: ניתנה · 02.10.2026'));
+    expect(screen.queryByRole('header', { name: 'לרשום הסכמה לדיוור?' })).toBeNull();
+    expect(queryClient.getQueryData<Client>(['clients', 'detail', maya.id])?.version).toBe(maya.version + 1);
+  });
+
+  it('revoke: confirms with "ביטול הסכמה", POSTs revoked and shows "בוטלה"', async () => {
+    serve({ clients: [{ ...maya, marketingConsent: 'granted', consentUpdatedAt: CONSENT_AT }] });
+    await renderCard();
+
+    await fireEvent.press(screen.getByRole('button', { name: 'ביטול הסכמה' }));
+    expect(await screen.findByRole('header', { name: 'לבטל את ההסכמה לדיוור?' })).toBeOnTheScreen();
+    // The dialog's confirm button carries the same label as the row's; the dialog's is the last one.
+    const confirms = screen.getAllByRole('button', { name: 'ביטול הסכמה' });
+    await fireEvent.press(confirms[confirms.length - 1]);
+
+    await waitFor(() => expect(calls('POST')).toHaveLength(1));
+    const [, init] = mockFetch.mock.calls.find(([, i]) => i?.method === 'POST')!;
+    expect(JSON.parse(String(init?.body))).toEqual({ action: 'revoked' });
+    expect(await screen.findByText(CONSENT_UPDATED_MESSAGE)).toBeOnTheScreen();
+    await waitFor(() => expect(consentText()).toBe('הסכמה לדיוור: בוטלה · 02.10.2026'));
+  });
+
+  it('"ביטול" closes the dialog without a POST', async () => {
+    serve();
+    await renderCard();
+
+    await fireEvent.press(screen.getByRole('button', { name: 'מתן הסכמה' }));
+    await screen.findByRole('header', { name: 'לרשום הסכמה לדיוור?' });
+    await fireEvent.press(screen.getByRole('button', { name: 'ביטול' }));
+
+    expect(screen.queryByRole('header', { name: 'לרשום הסכמה לדיוור?' })).toBeNull();
+    expect(calls('POST')).toHaveLength(0);
+  });
+
+  it('offline: the offline toast, and the row keeps its old state', async () => {
+    serve({ consent: () => Promise.reject(new TypeError('Network request failed')) });
+    await renderCard();
+
+    await fireEvent.press(screen.getByRole('button', { name: 'מתן הסכמה' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'אישור' }));
+
+    expect(await screen.findByText(OFFLINE_CONSENT_MESSAGE)).toBeOnTheScreen();
+    expect(consentText()).toBe('הסכמה לדיוור: לא ניתנה');
+    expect(calls('POST')).toHaveLength(1);
+  });
+
+  it('a server error: the failure toast, and the row keeps its old state', async () => {
+    serve({ consent: () => response(500, { error: { code: 'internal_error', message: 'Internal error' } }) });
+    await renderCard();
+
+    await fireEvent.press(screen.getByRole('button', { name: 'מתן הסכמה' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'אישור' }));
+
+    expect(await screen.findByText(CONSENT_FAILED_MESSAGE)).toBeOnTheScreen();
+    expect(consentText()).toBe('הסכמה לדיוור: לא ניתנה');
   });
 });
 

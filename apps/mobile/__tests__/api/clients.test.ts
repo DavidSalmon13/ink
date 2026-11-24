@@ -2,7 +2,15 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { ApiError, createApiClient } from '@/api/client';
-import { deleteClient, getClient, getClientSummary, listClients, putClient, type Client } from '@/api/clients';
+import {
+  deleteClient,
+  getClient,
+  getClientSummary,
+  listClients,
+  postConsent,
+  putClient,
+  type Client,
+} from '@/api/clients';
 
 const BASE = 'http://api.test';
 const mockFetch = jest.fn<(input: string, init?: RequestInit) => Promise<Response>>();
@@ -30,6 +38,8 @@ const maya: Client = {
   instagram: 'maya.lines',
   notes: null,
   tattooCount: 3,
+  marketingConsent: 'none',
+  consentUpdatedAt: null,
 };
 
 describe('listClients', () => {
@@ -109,5 +119,19 @@ describe('getClientSummary', () => {
     mockFetch.mockResolvedValue(response(200, summary));
     await expect(getClientSummary(api(), ID)).resolves.toEqual(summary);
     expect(mockFetch.mock.calls[0][0]).toBe(`${BASE}/clients/${ID}/summary`);
+  });
+});
+
+describe('postConsent', () => {
+  it('POSTs the action to /clients/{id}/consent and returns the updated client', async () => {
+    const updated = { ...maya, version: 3, marketingConsent: 'granted', consentUpdatedAt: '2026-10-01T22:30:00Z' };
+    mockFetch.mockResolvedValue(response(200, updated));
+
+    await expect(postConsent(api(), ID, 'granted')).resolves.toEqual(updated);
+
+    const [url, init] = mockFetch.mock.calls[0];
+    expect(url).toBe(`${BASE}/clients/${ID}/consent`);
+    expect(init?.method).toBe('POST');
+    expect(JSON.parse(String(init?.body))).toEqual({ action: 'granted' });
   });
 });
