@@ -32,3 +32,17 @@ specs:
       - apps/mobile/src/ui/Tabs.tsx
       - "the phone/whatsapp/instagram/edit/more/trash icons in apps/mobile/src/ui/Icon.tsx"
       - "formatMonthYear in apps/mobile/src/ui/hebrewDate.ts"
+  - folder: 2026-11-24-marketing-consent
+    slug: marketing-consent
+    status: shaped
+    branch: feat/clients/marketing-consent
+    covers:
+      - "POST /clients/{id}/consent"
+      - apps/api/src/main/resources/db/migration/V6__consent.sql
+      - apps/api/src/main/java/app/ink/api/client/Consent*
+      - apps/api/src/main/java/app/ink/api/client/MarketingConsent.java
+      - "the marketingConsent / consentUpdatedAt fields of the client API"
+      - apps/mobile/src/features/clients/card/ConsentRow.tsx
+      - apps/mobile/src/features/clients/card/useConsent.ts
+      - "the consent row in apps/mobile/src/features/clients/card/ClientCard.tsx"
+      - "formatDayDate in apps/mobile/src/ui/hebrewDate.ts"
