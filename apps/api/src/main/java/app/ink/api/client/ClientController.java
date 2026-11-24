@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import jakarta.validation.Payload;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -38,6 +40,7 @@ import jakarta.validation.constraints.Size;
  * (AC1, AC3), {@code GET /clients/{id}} reads one (AC4), and {@code GET /clients?q=} lists the live
  * clients, optionally narrowed by a server-side search (AC4, AC5). {@code DELETE /clients/{id}} soft-deletes
  * one and {@code GET /clients/{id}/summary} returns the card's summary (client-card AC4, AC7).
+ * {@code POST /clients/{id}/consent} grants or withdraws marketing consent (marketing-consent AC3).
  */
 @RestController
 @RequestMapping("/clients")
@@ -69,9 +72,20 @@ class ClientController {
 		}
 	}
 
-	/** {@code tattooCount} is 0 until the Completed tattoos epic computes it (same contract). */
+	/**
+	 * {@code action} is a validated string rather than {@link ConsentAction}, so an unknown value is a
+	 * {@code validation_failed} with a field message (AC3) instead of an unreadable body.
+	 */
+	record ConsentInput(@NotNull @Pattern(regexp = "granted|revoked") String action) {
+	}
+
+	/**
+	 * {@code tattooCount} is 0 until the Completed tattoos epic computes it (same contract). The consent
+	 * fields are read-only here: PUT ignores them (marketing-consent AC2); the unsubscribe token is never sent.
+	 */
 	record ClientView(UUID id, long version, Instant createdAt, Instant updatedAt, String name, String phone,
-			String email, String instagram, String notes, int tattooCount) {
+			String email, String instagram, String notes, int tattooCount, MarketingConsent marketingConsent,
+			Instant consentUpdatedAt) {
 	}
 
 	/** 9–15 digits once normalized ({@link ClientSearch#phoneDigits}); null passes. */
@@ -100,11 +114,14 @@ class ClientController {
 	private final VersionedWrites writes;
 	private final ClientRepository clients;
 	private final ClientSummaryService summaries;
+	private final ConsentService consents;
 
-	ClientController(VersionedWrites writes, ClientRepository clients, ClientSummaryService summaries) {
+	ClientController(VersionedWrites writes, ClientRepository clients, ClientSummaryService summaries,
+			ConsentService consents) {
 		this.writes = writes;
 		this.clients = clients;
 		this.summaries = summaries;
+		this.consents = consents;
 	}
 
 	@PutMapping("/{id}")
@@ -134,6 +151,12 @@ class ClientController {
 		writes.softDelete(Client.class, id);
 	}
 
+	/** Grant or withdraw marketing consent (marketing-consent AC3); the same state again is a 200 no-op. */
+	@PostMapping("/{id}/consent")
+	ClientView consent(@PathVariable UUID id, @Valid @RequestBody ConsentInput in) {
+		return view(consents.change(id, ConsentAction.valueOf(in.action())));
+	}
+
 	@GetMapping
 	@Transactional(readOnly = true)
 	List<ClientView> list(@RequestParam(required = false) String q) {
@@ -155,7 +178,8 @@ class ClientController {
 
 	private static ClientView view(Client c) {
 		return new ClientView(c.getId(), c.getVersion(), c.getCreatedAt(), c.getUpdatedAt(), c.getName(),
-				c.getPhone(), c.getEmail(), c.getInstagram(), c.getNotes(), 0);
+				c.getPhone(), c.getEmail(), c.getInstagram(), c.getNotes(), 0, c.getMarketingConsent(),
+				c.getConsentUpdatedAt());
 	}
 
 }
