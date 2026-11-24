@@ -3,6 +3,7 @@
 > Epic: clients
 > Spec: 2026-11-19-client-card
 > Branch: feat/clients/client-card
+> PR: https://github.com/DavidSalmon13/ink/pull/72 · https://github.com/DavidSalmon13/ink/pull/73 · https://github.com/DavidSalmon13/ink/pull/74 · https://github.com/DavidSalmon13/ink/pull/75 · https://github.com/DavidSalmon13/ink/pull/76 · https://github.com/DavidSalmon13/ink/pull/77 · https://github.com/DavidSalmon13/ink/pull/78 (stacked, merge in this order)
 
 ## Tests first (TDD)
 
@@ -27,4 +28,4 @@
 
 - [ ] T11 Screenshots on iPhone + iPad (simulator/device, or web preview at those sizes with a device check owed) vs the cited mockups; fix or record each deviation in the Changelog (AC10)
 - [ ] T12 HUMAN: Aya approves the card, contact sheet, delete confirmation, and the empty / not-found / no-selection states (AC10)
-- [ ] T13 Run QA against acceptance criteria (qa skill)
+- [x] T13 Run QA against acceptance criteria (qa skill)
