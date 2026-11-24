@@ -22,6 +22,7 @@ import {
 
 import { ClientFormModal } from '../ClientFormModal';
 import { clientsKey } from '../useClients';
+import { ConsentRow } from './ConsentRow';
 import { ContactSheet, instagramUrl, useOpenLink } from './ContactSheet';
 import { DeleteClientDialog, MoreActionsSheet } from './DeleteClientDialog';
 import { isNotFound, useClient, useClientSummary, useDeleteClient } from './useClientCard';
@@ -71,8 +72,8 @@ export interface ClientCardProps {
 }
 
 /**
- * The client card (AC2, AC4, AC5): header with contact chips, the summary tiles, and the
- * קעקועים / הצעות מחיר / הערות tabs. Shared by the iPhone route and the iPad pane.
+ * The client card (AC2, AC4, AC5): header with contact chips, the summary tiles, the marketing-consent
+ * row (marketing-consent AC5), and the קעקועים / הצעות מחיר / הערות tabs. Shared by the iPhone route and the iPad pane.
  */
 export function ClientCard({ id, onGone, pane = false, onBack }: ClientCardProps) {
   const t = useTheme();
@@ -207,6 +208,7 @@ export function ClientCard({ id, onGone, pane = false, onBack }: ClientCardProps
         onInstagram={(handle) => void openLink(instagramUrl(handle))}
       />
       <Stats summary={summary.data} pane={pane} inset={inset} />
+      <ConsentRow client={c} inset={inset} />
       <Tabs<TabValue>
         accessibilityLabel="לשוניות כרטיס לקוח"
         tabs={[

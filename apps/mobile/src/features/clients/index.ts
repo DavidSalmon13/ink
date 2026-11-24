@@ -24,3 +24,10 @@ export {
 export { ClientCard, type ClientCardProps } from './card/ClientCard';
 export { ContactSheet, instagramUrl, LINK_FAILED_MESSAGE, telUrl, useOpenLink, whatsAppUrl } from './card/ContactSheet';
 export { DeleteClientDialog, MoreActionsSheet } from './card/DeleteClientDialog';
+export { CONSENT_LABEL, ConsentRow, type ConsentRowProps } from './card/ConsentRow';
+export {
+  CONSENT_FAILED_MESSAGE,
+  CONSENT_UPDATED_MESSAGE,
+  OFFLINE_CONSENT_MESSAGE,
+  useChangeConsent,
+} from './card/useConsent';
