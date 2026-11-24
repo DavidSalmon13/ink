@@ -321,6 +321,9 @@ describe('not found', () => {
     await render(<ClientCard id={maya.id} onGone={onGone} />, { wrapper: Providers });
 
     expect(await screen.findByText('הלקוח לא נמצא')).toBeOnTheScreen();
+    // No edit or delete for a client that no longer exists.
+    expect(screen.queryByRole('button', { name: 'עריכת פרטים' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'עוד פעולות' })).toBeNull();
     await fireEvent.press(screen.getByRole('button', { name: 'חזרה לרשימה' }));
     expect(onGone).toHaveBeenCalled();
   });
