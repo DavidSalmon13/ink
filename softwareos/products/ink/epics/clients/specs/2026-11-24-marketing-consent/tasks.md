@@ -3,6 +3,7 @@
 > Epic: clients
 > Spec: 2026-11-24-marketing-consent
 > Branch: feat/clients/marketing-consent
+> PR: https://github.com/DavidSalmon13/ink/pull/82
 
 ## API  (PR 1)
 
