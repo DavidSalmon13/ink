@@ -53,7 +53,7 @@
     { "note": "Hebrew label map + nearest-point render", "estimated": 60, "text": "דומה: ורד ≈ 60 דק׳" },
     { "estimated": 75, "text": "דומה: דובדבן ≈ 80 דק׳" },
     { "estimated": 45, "text": "דומה: ורד ≈ 60 דק׳" },
-    { "estimated": 120, "text": "דומה: צבי ≈ 120 דק׳" },
+    { "note": "120 ties figure-with-book and deer (both 120); first in list order wins", "estimated": 120, "text": "דומה: דמות עם ספר ≈ 120 דק׳" },
     { "estimated": 180, "text": "דומה: זרוע ≈ 180 דק׳" }
   ],
 

@@ -8,7 +8,7 @@
 
 - [x] T1 `fixtures/pricing-vectors.json`: seeded Settings defaults + `cases` (rose M·simple=60, arm XL=180, deer L=120, cherry M≈75, the full mockup scenario → 1,000 ₪, a roundUpTo5 float-error case, the 15-min floor, percent + amount discounts, a price override) (AC2)
 - [x] T2 Failing unit tests `apps/mobile/src/pricing/__tests__/pricing.test.ts` reading the vectors: estimate per item, visitMinutes, base/design/extras/discount, computed/final, nearestCalibration (testing skill, TDD) (AC1, AC2, AC3)
-- [ ] T3 `apps/mobile/src/pricing/` (roundUpTo5, estimate + placementTierOf, calcQuote, applyDiscount, calibration + Hebrew label map) — make T2 pass (AC1, AC3)
+- [x] T3 `apps/mobile/src/pricing/` (roundUpTo5, estimate + placementTierOf, calcQuote, applyDiscount, calibration + Hebrew label map) — make T2 pass (AC1, AC3)
 
 ## Calculator UI  (PR 2)
 
