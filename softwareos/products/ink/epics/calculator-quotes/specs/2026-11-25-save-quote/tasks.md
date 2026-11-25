@@ -8,7 +8,7 @@
 
 - [~] T1 `apps/api/src/main/resources/db/migration/V7__quote.sql`: `quote` + `quote_item` per `data-model.md` (client_id FK NOT NULL, synced-entity columns, agorot integers, soft delete; `quote_item.sketch_id` nullable/no FK) (AC2)
 - [x] T2 Failing Java pricing tests reading the shared `fixtures/pricing-vectors.json` — `app/ink/api/pricing/PricingVectorsTest.java` covering `roundUpTo5[]`, `estimateFromProduct[]`, and every `cases[]` entry (testing skill, TDD) (AC1)
-- [ ] T3 `app.ink.api.pricing` (RoundUpTo5 + EPS guard, Estimate incl. placementTierOf, PricingCalculator.calcQuote, applyDiscount round-half-up + amount clamp) — make T2 pass (AC1)
+- [x] T3 `app.ink.api.pricing` (RoundUpTo5 + EPS guard, Estimate incl. placementTierOf, PricingCalculator.calcQuote, applyDiscount round-half-up + amount clamp) — make T2 pass (AC1)
 
 ## Quotes API  (PR 2)
 
