@@ -1,5 +1,6 @@
 package app.ink.api.settings;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import app.ink.api.common.SyncedEntity;
+import app.ink.api.pricing.PricingSettings;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -77,6 +79,34 @@ public class Settings extends SyncedEntity {
 		calibrationPoints = in.calibrationPoints();
 		autoLockSeconds = in.autoLockSeconds();
 		timezone = in.timezone();
+	}
+
+	/**
+	 * The pure-pricing view of this row (no JPA/Spring) for {@code app.ink.api.quote.QuoteService} to recompute
+	 * a quote. The estimate tables are stored as editable JSON, so the nested numbers are coerced to the typed
+	 * maps the calculator expects ({@code sizeBaseMinutes} integer minutes; the multipliers doubles).
+	 */
+	public PricingSettings pricing() {
+		return new PricingSettings(minimumPriceAgorot, minimumMinutes, hourlyRateAgorot, designHourlyRateAgorot,
+				extraNeedleCostAgorot, new PricingSettings.EstimateTables(intMap("sizeBaseMinutes"),
+						doubleMap("detail"), doubleMap("shading"), doubleMap("placement")));
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> table(String key) {
+		return (Map<String, Object>) estimateTables.get(key);
+	}
+
+	private Map<String, Integer> intMap(String key) {
+		Map<String, Integer> out = new LinkedHashMap<>();
+		table(key).forEach((k, v) -> out.put(k, ((Number) v).intValue()));
+		return out;
+	}
+
+	private Map<String, Double> doubleMap(String key) {
+		Map<String, Double> out = new LinkedHashMap<>();
+		table(key).forEach((k, v) -> out.put(k, ((Number) v).doubleValue()));
+		return out;
 	}
 
 	SettingsController.SettingsView view() {
