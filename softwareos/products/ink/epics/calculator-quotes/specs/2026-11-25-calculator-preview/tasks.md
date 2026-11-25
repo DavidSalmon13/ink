@@ -3,6 +3,7 @@
 > Epic: calculator-quotes
 > Spec: 2026-11-25-calculator-preview
 > Branch: feat/calculator-quotes/calculator-preview
+> PR: https://github.com/DavidSalmon13/ink/pull/84
 
 ## Pricing  (PR 1)
 
