@@ -12,7 +12,7 @@
 
 ## Quotes API  (PR 2)
 
-- [ ] T4 `app.ink.api.quote` entities + repository: `Quote extends SyncedEntity`, `QuoteItem` child (orphan removal, position-ordered), `QuoteRepository.findLiveByClientId` (AC2, AC4)
+- [x] T4 `app.ink.api.quote` entities + repository: `Quote extends SyncedEntity`, `QuoteItem` child (orphan removal, position-ordered), `QuoteRepository.findLiveByClientId` (AC2, AC4)
 - [ ] T5 Failing `app/ink/api/quote/QuoteIT.java`: PUT create / identical-retry no-bump / version-match +1 / stale 409 `version_conflict` / deleted 404; authoritative recompute from Settings (client-sent prices ignored); `GET ?clientId=` newest-first; `GET /{id}`; idempotent soft `DELETE`; missing/dead client validation (testing skill, TDD) (AC3, AC4)
 - [ ] T6 `QuoteController` + `QuoteService` (map seeded Settings → pricing input, recompute, store) via `VersionedWrites`, mirroring `ClientController` — make T5 pass (AC3, AC4)
 
