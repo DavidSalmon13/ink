@@ -1,7 +1,7 @@
 # Save Quote
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/calculator-quotes/save-quote
 > Covers: apps/api/src/main/resources/db/migration/V7__quote.sql, apps/api/src/main/java/app/ink/api/quote/**, apps/api/src/main/java/app/ink/api/pricing/**, apps/mobile/src/api/quotes.ts, apps/mobile/src/features/quotes/**
 

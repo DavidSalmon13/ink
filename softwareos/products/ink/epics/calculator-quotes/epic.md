@@ -21,4 +21,4 @@ The device preview and the API's authoritative calculation always agree.
 | Spec | Status | Branch |
 |---|---|---|
 | [2026-11-25-calculator-preview](specs/2026-11-25-calculator-preview/spec.md) | in-progress | feat/calculator-quotes/calculator-preview · [#84](https://github.com/DavidSalmon13/ink/pull/84) |
-| [2026-11-25-save-quote](specs/2026-11-25-save-quote/spec.md) | shaped | feat/calculator-quotes/save-quote |
+| [2026-11-25-save-quote](specs/2026-11-25-save-quote/spec.md) | in-progress | feat/calculator-quotes/save-quote |
