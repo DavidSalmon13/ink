@@ -13,7 +13,7 @@
 ## Calculator UI  (PR 2)
 
 - [x] T4 `features/calculator/useSettings.ts` (TanStack Query over `getSettings`) + loading/error states wired in the screen (AC7)
-- [ ] T5 `features/calculator/ItemEditor.tsx` per `Calculator.html` `.item`: size/detail/shading/design-source segmented controls, placement chips, conditional שעות עיצוב, estimate field + override + "דומה:" hint; live recompute (AC3, AC4)
+- [x] T5 `features/calculator/ItemEditor.tsx` per `Calculator.html` `.item`: size/detail/shading/design-source segmented controls, placement chips, conditional שעות עיצוב, estimate field + override + "דומה:" hint; live recompute (AC3, AC4)
 - [ ] T6 `features/calculator/CalculatorScreen.tsx`: multiple items (קעקוע נוסף / remove), "אפשרויות נוספות" (needle stepper, הנחה %/₪, מחיר ידני), `Summary.tsx` card; replace the placeholder in `app/(tabs)/calculator.tsx` (AC4, AC5)
 - [ ] T7 `features/calculator/copyQuoteText.ts` + "העתקת הצעה" → expo-clipboard + toast "ההצעה הועתקה"; no client, nothing saved, no Save button (AC6)
 - [ ] T8 Component tests `apps/mobile/__tests__/calculator.test.tsx`: editing controls updates estimate + summary live, override, similar hint, percent/amount discount + manual override, copy-text format (AC4, AC5, AC6)
