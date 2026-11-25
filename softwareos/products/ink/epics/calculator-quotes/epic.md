@@ -1,7 +1,7 @@
 # Calculator & Quotes
 
 > Product: ../../mission.md
-> Status: planning
+> Status: in-progress
 > Created: 2026-11-24 · Roles planned: PM, Tech
 
 ## Summary
@@ -20,3 +20,4 @@ The device preview and the API's authoritative calculation always agree.
 
 | Spec | Status | Branch |
 |---|---|---|
+| [2026-11-25-calculator-preview](specs/2026-11-25-calculator-preview/spec.md) | in-progress | feat/calculator-quotes/calculator-preview · [#84](https://github.com/DavidSalmon13/ink/pull/84) |
