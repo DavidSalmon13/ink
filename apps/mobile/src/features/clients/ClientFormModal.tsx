@@ -35,6 +35,8 @@ export interface ClientFormModalProps {
   /** The client being edited; null = creating a new one. */
   client: Client | null;
   onClose: () => void;
+  /** Called with the saved client after a successful save (before `onClose`), e.g. to pick a new client. */
+  onSaved?: (client: Client) => void;
 }
 
 /**
@@ -42,7 +44,7 @@ export interface ClientFormModalProps {
  * five fields, footer "ביטול" / "שמירה". No mockup for the form itself; built from Modal and Field only.
  * Mount it fresh for each open (key it), so a new client gets one device UUID that retries reuse.
  */
-export function ClientFormModal({ client, onClose }: ClientFormModalProps) {
+export function ClientFormModal({ client, onClose, onSaved }: ClientFormModalProps) {
   const [id] = useState(() => client?.id ?? Crypto.randomUUID());
   const [version, setVersion] = useState<number | undefined>(client?.version);
   const [values, setValues] = useState<Values>(() => valuesOf(client));
@@ -64,7 +66,8 @@ export function ClientFormModal({ client, onClose }: ClientFormModalProps) {
       ...(version === undefined ? {} : { version }),
     };
     try {
-      await save.mutateAsync({ id, input });
+      const saved = await save.mutateAsync({ id, input });
+      onSaved?.(saved);
       onClose();
     } catch (error) {
       // The hook already showed the conflict / offline toast; here the form reacts.

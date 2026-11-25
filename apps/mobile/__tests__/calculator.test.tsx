@@ -174,7 +174,7 @@ describe('options and summary', () => {
 // ---- AC6: copy, no client -----------------------------------------------------------------------
 
 describe('copy quote', () => {
-  it('copies itemized Hebrew text and shows the toast, with no save button', async () => {
+  it('copies itemized Hebrew text and shows the toast; saving is disabled with no client', async () => {
     const field = await renderCalculator();
 
     await fireEvent.changeText(screen.getByLabelText('תיאור קעקוע 1'), 'ורד');
@@ -187,6 +187,7 @@ describe('copy quote', () => {
       ['הצעת מחיר', '', 'ורד · M · עדינות · 75 דק׳', '', 'משך ביקור: 75 דק׳', 'סה״כ: 597.50 ₪'].join('\n'),
     );
     expect(await screen.findByText('ההצעה הועתקה')).toBeOnTheScreen();
-    expect(screen.queryByRole('button', { name: 'שמירת הצעה' })).not.toBeOnTheScreen();
+    // save-quote adds the "שמירת הצעה" button; copying still works with no client, and saving stays disabled.
+    expect(screen.getByRole('button', { name: 'שמירת הצעה' })).toBeDisabled();
   });
 });

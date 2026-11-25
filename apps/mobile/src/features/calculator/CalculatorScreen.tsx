@@ -4,6 +4,7 @@ import { Pressable, ScrollView, TextInput, View, useWindowDimensions } from 'rea
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { Settings } from '@/api/settings';
+import { ClientPickerSlot, QuoteSaveProvider, SaveActionSlot } from '@/features/quotes';
 import { calcQuote } from '@/pricing';
 import { componentMetrics as cm, fontFace, Num, Text, useTheme } from '@/theme';
 import { Button, ErrorState, Field, Icon, IconButton, LoadingState, SegmentedControl, useToast, type Segment } from '@/ui';
@@ -285,36 +286,41 @@ export function CalculatorScreen() {
 
         <Summary breakdown={breakdown} settings={data} />
 
-        <Button label="העתקת הצעה" variant="secondary" block icon="copy" onPress={() => void onCopy()} />
+        <SaveActionSlot state={state} onCopy={() => void onCopy()} />
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: t.colors.bg, paddingTop: insets.top + t.spacing.xs }}>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ paddingBottom: insets.bottom + t.spacing.xxxl }}
-      >
-        <View
-          style={{
-            width: '100%',
-            maxWidth: width >= WIDE_MIN_WIDTH ? CALC_MAX_WIDTH : undefined,
-            alignSelf: 'center',
-            paddingHorizontal: t.spacing.screenPadding,
-          }}
+    <QuoteSaveProvider>
+      <View style={{ flex: 1, backgroundColor: t.colors.bg, paddingTop: insets.top + t.spacing.xs }}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: insets.bottom + t.spacing.xxxl }}
         >
-          <View style={{ paddingTop: t.spacing.sm, paddingBottom: t.spacing.md }}>
-            <Text variant="overline" color="textMuted">
-              הצעת מחיר לביקור
-            </Text>
-            <Text variant="title1" accessibilityRole="header">
-              מחשבון
-            </Text>
+          <View
+            style={{
+              width: '100%',
+              maxWidth: width >= WIDE_MIN_WIDTH ? CALC_MAX_WIDTH : undefined,
+              alignSelf: 'center',
+              paddingHorizontal: t.spacing.screenPadding,
+            }}
+          >
+            <View style={{ paddingTop: t.spacing.sm, paddingBottom: t.spacing.md }}>
+              <Text variant="overline" color="textMuted">
+                הצעת מחיר לביקור
+              </Text>
+              <Text variant="title1" accessibilityRole="header">
+                מחשבון
+              </Text>
+            </View>
+            <View style={{ paddingBottom: t.spacing.lg }}>
+              <ClientPickerSlot />
+            </View>
+            {body}
           </View>
-          {body}
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </QuoteSaveProvider>
   );
 }
