@@ -30,7 +30,8 @@ function SumRow({ label, children }: { label: string; children: ReactNode }) {
 function minimumHelper(settings: Settings): string {
   const minimum = ltrIsolate(`${Math.round(settings.minimumPriceAgorot / 100)} ₪`);
   const minutes = ltrIsolate(String(settings.minimumMinutes));
-  const perMinute = ltrIsolate(`${settings.hourlyRateAgorot / 100} ₪`);
+  // Per-minute rate: hourlyRateAgorot is per hour, so /60 → agorot/min, /100 → shekels (33,000 → 5.5).
+  const perMinute = ltrIsolate(`${settings.hourlyRateAgorot / 6000} ₪`);
   return `מינימום ${minimum} כולל ${minutes} דקות ראשונות, ואחר כך ${perMinute} לדקה. דמי פתיחת מחט פעם אחת לביקור.`;
 }
 
