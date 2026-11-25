@@ -1,3 +1,4 @@
+import * as Clipboard from 'expo-clipboard';
 import { useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, TextInput, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -5,10 +6,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Settings } from '@/api/settings';
 import { calcQuote } from '@/pricing';
 import { componentMetrics as cm, fontFace, Num, Text, useTheme } from '@/theme';
-import { Button, ErrorState, Field, Icon, IconButton, LoadingState, SegmentedControl, type Segment } from '@/ui';
+import { Button, ErrorState, Field, Icon, IconButton, LoadingState, SegmentedControl, useToast, type Segment } from '@/ui';
 
 import { ItemEditor } from './ItemEditor';
 import { Summary } from './Summary';
+import { copyQuoteText } from './copyQuoteText';
 import { toQuoteInput, useCalculatorState, type DiscountKind, type OptionsState } from './calculatorState';
 import { useSettings } from './useSettings';
 
@@ -233,6 +235,7 @@ export function CalculatorScreen() {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const settings = useSettings();
+  const toast = useToast();
   const [state, dispatch] = useCalculatorState();
 
   let body: ReactNode = null;
@@ -244,8 +247,14 @@ export function CalculatorScreen() {
     );
   } else {
     const data = settings.data;
-    const breakdown = calcQuote(toQuoteInput(state), data);
+    const quoteInput = toQuoteInput(state);
+    const breakdown = calcQuote(quoteInput, data);
     const multiple = state.items.length > 1;
+
+    const onCopy = async () => {
+      await Clipboard.setStringAsync(copyQuoteText(quoteInput.items, breakdown));
+      toast.show('ההצעה הועתקה');
+    };
     body = (
       <View style={{ gap: t.spacing.lg }}>
         <View style={{ gap: t.spacing.md }}>
@@ -275,6 +284,8 @@ export function CalculatorScreen() {
         />
 
         <Summary breakdown={breakdown} settings={data} />
+
+        <Button label="העתקת הצעה" variant="secondary" block icon="copy" onPress={() => void onCopy()} />
       </View>
     );
   }
