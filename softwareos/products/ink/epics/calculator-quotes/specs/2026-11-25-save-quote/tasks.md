@@ -18,7 +18,7 @@
 
 ## Save from calculator  (PR 3)
 
-- [ ] T7 `apps/mobile/src/api/quotes.ts` + types (`putQuote` / `getQuote` / `listQuotes(clientId)` / `deleteQuote`, `Quote` / `QuoteItem` / `QuoteInput`) mirroring `clients.ts`; surface `version_conflict` / `validation_failed` as `ApiError` (AC5)
+- [x] T7 `apps/mobile/src/api/quotes.ts` + types (`putQuote` / `getQuote` / `listQuotes(clientId)` / `deleteQuote`, `Quote` / `QuoteItem` / `QuoteInput`) mirroring `clients.ts`; surface `version_conflict` / `validation_failed` as `ApiError` (AC5)
 - [ ] T8 `apps/mobile/src/features/quotes/`: client picker (reuse `useClients` search) + "לקוח חדש" (reuse `ClientFormModal`) + picked-client pill + save sheet (title default from item descriptions, editable; optional notes) + "שמירת הצעה" (`useSaveQuote` → `putQuote`, device UUID, success toast); mount in `CalculatorScreen` via an additive slot; build `QuoteInput` from calculator state; save disabled with no client (AC6, AC7)
 - [ ] T9 Component tests `apps/mobile/__tests__/save-quote.test.tsx`: pick existing client, add new client, title defaults from items, `QuoteInput` built from calculator state, save disabled without a client, success toast (testing skill) (AC6)
 
