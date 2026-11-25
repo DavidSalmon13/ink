@@ -1,6 +1,6 @@
-import { PlaceholderScreen } from '@/ui';
+import { CalculatorScreen } from '@/features/calculator';
 
-/** Placeholder until its own epic builds the real screen (app-shell AC9). */
+/** The Calculator tab — the instant price preview (calculator-preview spec, replacing app-shell's placeholder). */
 export default function CalculatorTab() {
-  return <PlaceholderScreen title="מחשבון" />;
+  return <CalculatorScreen />;
 }

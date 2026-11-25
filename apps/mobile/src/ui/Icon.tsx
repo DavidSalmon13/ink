@@ -56,6 +56,7 @@ const glyphs = {
     path('M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5'),
   ],
   plus: [path('M12 5v14M5 12h14')],
+  minus: [path('M6 12h12')],
   close: [path('M6 6l12 12M18 6L6 18')],
   check: [path('M5 12.5l4.5 4.5L19 7.5')],
   warning: [path('M12 4l9 16H3z'), path('M12 10v4M12 17h.01')],
