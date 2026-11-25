@@ -1,7 +1,7 @@
 # Calculator Preview
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/calculator-quotes/calculator-preview
 > Covers: apps/mobile/src/pricing/**, apps/mobile/src/features/calculator/**, apps/mobile/app/(tabs)/calculator.tsx, fixtures/pricing-vectors.json
 

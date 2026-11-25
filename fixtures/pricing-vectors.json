@@ -1,0 +1,144 @@
+{
+  "_comment": "Shared pricing test vectors for the Calculator & Quotes epic (calculator-preview spec, AC2). The TypeScript src/pricing unit tests read this file; the save-quote Java pricing tests MUST reuse it so both copies agree (architecture.md Gotchas). All money is integer agorot; all minutes integer. Discount rounding is round-half-up (toward +infinity). `placement` on an item is the resolved tier (easy|medium|hard); `designHours` only adds a fee for designSource=custom_design; discountValue is a percent for discountType=percent and agorot for discountType=amount.",
+  "settings": {
+    "minimumPriceAgorot": 35000,
+    "minimumMinutes": 30,
+    "hourlyRateAgorot": 33000,
+    "designHourlyRateAgorot": 20000,
+    "needleOpeningCostAgorot": 7000,
+    "extraNeedleCostAgorot": 5000,
+    "estimateTables": {
+      "sizeBaseMinutes": { "XS": 20, "S": 40, "M": 75, "L": 120, "XL": 180 },
+      "detail": { "simple": 0.8, "medium": 1.0, "high": 1.35 },
+      "shading": { "none": 1.0, "light": 1.2, "full": 1.45 },
+      "placement": { "easy": 1.0, "medium": 1.1, "hard": 1.25 }
+    },
+    "calibrationPoints": [
+      { "label": "arm", "minutes": 180 },
+      { "label": "back", "minutes": 180 },
+      { "label": "cherry", "minutes": 80 },
+      { "label": "figure with book", "minutes": 120 },
+      { "label": "rose", "minutes": 60 },
+      { "label": "deer", "minutes": 120 }
+    ]
+  },
+
+  "roundUpTo5": [
+    { "note": "exact multiple stays", "input": 60, "expected": 60 },
+    { "note": "rounds up to the next 5", "input": 61, "expected": 65 },
+    { "note": "rounds up", "input": 44, "expected": 45 },
+    { "note": "rounds up from just above a multiple", "input": 72, "expected": 75 },
+    { "note": "float-error guard: 60.0000001 is a multiple of 5 with float noise -> 60, not 65", "input": 60.0000001, "expected": 60 },
+    { "note": "small positive rounds up to 5", "input": 1, "expected": 5 },
+    { "note": "zero stays zero", "input": 0, "expected": 0 }
+  ],
+
+  "estimateFromProduct": [
+    { "note": "15-minute floor: product below 15 is floored to 15", "product": 12, "expected": 15 },
+    { "note": "floor boundary", "product": 15, "expected": 15 },
+    { "note": "above the floor rounds up", "product": 16, "expected": 20 },
+    { "note": "rounds up", "product": 72, "expected": 75 },
+    { "note": "exact multiple", "product": 120, "expected": 120 }
+  ],
+
+  "calibration": [
+    { "note": "exact", "estimated": 60, "label": "rose", "minutes": 60 },
+    { "note": "cherry M ~ 75 -> nearest cherry (80)", "estimated": 75, "label": "cherry", "minutes": 80 },
+    { "note": "45 is closer to rose (60) than cherry (80)", "estimated": 45, "label": "rose", "minutes": 60 },
+    { "note": "tie between rose (60) and cherry (80) -> fewer minutes wins", "estimated": 70, "label": "rose", "minutes": 60 },
+    { "note": "equidistant arm/back (both 180) -> first in order (arm)", "estimated": 200, "label": "arm", "minutes": 180 }
+  ],
+
+  "hints": [
+    { "note": "Hebrew label map + nearest-point render", "estimated": 60, "text": "דומה: ורד ≈ 60 דק׳" },
+    { "estimated": 75, "text": "דומה: דובדבן ≈ 80 דק׳" },
+    { "estimated": 45, "text": "דומה: ורד ≈ 60 דק׳" },
+    { "estimated": 120, "text": "דומה: צבי ≈ 120 דק׳" },
+    { "estimated": 180, "text": "דומה: זרוע ≈ 180 דק׳" }
+  ],
+
+  "cases": [
+    {
+      "name": "rose-m-simple (calibration: rose M simple = 60)",
+      "items": [
+        { "description": "ורד", "size": "M", "detail": "simple", "shading": "none", "placement": "easy", "designSource": "artist_sketch" }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "none", "discountValue": 0, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [60], "visitMinutes": 60, "base": 51500, "design": 0, "extras": 0, "discount": 0, "subtotal": 51500, "computed": 51500, "final": 51500 }
+    },
+    {
+      "name": "arm-xl (calibration: arm XL = 180)",
+      "items": [
+        { "description": "זרוע", "size": "XL", "detail": "medium", "shading": "none", "placement": "easy", "designSource": "artist_sketch" }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "none", "discountValue": 0, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [180], "visitMinutes": 180, "base": 117500, "design": 0, "extras": 0, "discount": 0, "subtotal": 117500, "computed": 117500, "final": 117500 }
+    },
+    {
+      "name": "deer-l (calibration: deer L = 120)",
+      "items": [
+        { "description": "צבי", "size": "L", "detail": "medium", "shading": "none", "placement": "easy", "designSource": "artist_sketch" }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "none", "discountValue": 0, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [120], "visitMinutes": 120, "base": 84500, "design": 0, "extras": 0, "discount": 0, "subtotal": 84500, "computed": 84500, "final": 84500 }
+    },
+    {
+      "name": "cherry-m (calibration: cherry M ~ 75)",
+      "items": [
+        { "description": "דובדבן", "size": "M", "detail": "medium", "shading": "none", "placement": "easy", "designSource": "artist_sketch" }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "none", "discountValue": 0, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [75], "visitMinutes": 75, "base": 59750, "design": 0, "extras": 0, "discount": 0, "subtotal": 59750, "computed": 59750, "final": 59750 }
+    },
+    {
+      "name": "mockup-full (Calculator.html: two items, custom design, extra needle, 95 shekel amount discount -> 1,000 shekel)",
+      "items": [
+        { "description": "ורד עם גבעול", "size": "M", "detail": "simple", "shading": "light", "placement": "easy", "designSource": "artist_sketch" },
+        { "description": "דובדבנים", "size": "S", "detail": "medium", "shading": "none", "placement": "medium", "designSource": "custom_design", "designHours": 1 }
+      ],
+      "options": { "extraNeedles": 1, "discountType": "amount", "discountValue": 9500, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [75, 45], "visitMinutes": 120, "base": 84500, "design": 20000, "extras": 5000, "discount": 9500, "subtotal": 109500, "computed": 100000, "final": 100000 }
+    },
+    {
+      "name": "percent-discount-rounding (15% of 59,750 = 8,962.5 -> round half up 8,963)",
+      "items": [
+        { "description": "דובדבן", "size": "M", "detail": "medium", "shading": "none", "placement": "easy", "designSource": "artist_sketch" }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "percent", "discountValue": 15, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [75], "visitMinutes": 75, "base": 59750, "design": 0, "extras": 0, "discount": 8963, "subtotal": 59750, "computed": 50787, "final": 50787 }
+    },
+    {
+      "name": "price-override (manual final price wins over the computed subtotal)",
+      "items": [
+        { "description": "דובדבן", "size": "M", "detail": "medium", "shading": "none", "placement": "easy", "designSource": "artist_sketch" }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "none", "discountValue": 0, "priceOverrideAgorot": 50000 },
+      "expected": { "itemsEstimatedMinutes": [75], "visitMinutes": 75, "base": 59750, "design": 0, "extras": 0, "discount": 0, "subtotal": 59750, "computed": 59750, "final": 50000 }
+    },
+    {
+      "name": "minutes-override-and-amount-clamp (per-item override drives time; amount discount clamps to subtotal, never below 0)",
+      "items": [
+        { "description": "זעיר", "size": "XS", "detail": "simple", "shading": "none", "placement": "easy", "designSource": "artist_sketch", "estimatedMinutesOverride": 60 }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "amount", "discountValue": 999999, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [20], "visitMinutes": 60, "base": 51500, "design": 0, "extras": 0, "discount": 51500, "subtotal": 51500, "computed": 0, "final": 0 }
+    },
+    {
+      "name": "below-minimum-minutes (visit under 30 min charges the minimum only, max(0, ...) = 0)",
+      "items": [
+        { "description": "זעיר", "size": "XS", "detail": "simple", "shading": "none", "placement": "easy", "designSource": "artist_sketch" }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "none", "discountValue": 0, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [20], "visitMinutes": 20, "base": 35000, "design": 0, "extras": 0, "discount": 0, "subtotal": 35000, "computed": 35000, "final": 35000 }
+    },
+    {
+      "name": "two-custom-designs (design fee sums per custom item; sketch item in mockup already proves artist_sketch adds no fee)",
+      "items": [
+        { "description": "עיצוב א", "size": "M", "detail": "medium", "shading": "none", "placement": "easy", "designSource": "custom_design", "designHours": 1 },
+        { "description": "עיצוב ב", "size": "S", "detail": "simple", "shading": "none", "placement": "easy", "designSource": "custom_design", "designHours": 0.5 }
+      ],
+      "options": { "extraNeedles": 0, "discountType": "none", "discountValue": 0, "priceOverrideAgorot": null },
+      "expected": { "itemsEstimatedMinutes": [75, 35], "visitMinutes": 110, "base": 79000, "design": 30000, "extras": 0, "discount": 0, "subtotal": 109000, "computed": 109000, "final": 109000 }
+    }
+  ]
+}
