@@ -22,4 +22,4 @@
 
 - [ ] T9 Screenshots iPhone + iPad vs `Calculator.html`; fix or record deviations (no `.ipad.html`; illustrative hint text) in the Changelog (AC7)
 - [ ] T10 HUMAN: Aya approves the copy text and prices 3 real past visits with the calculator and accepts the results; confirm the "similar" hint behaviour (AC7)
-- [ ] T11 Run QA against acceptance criteria (qa skill)
+- [x] T11 Run QA against acceptance criteria (qa skill)
