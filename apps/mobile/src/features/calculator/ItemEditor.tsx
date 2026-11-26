@@ -146,7 +146,11 @@ export function ItemEditor({ item, settings, index, onChange, onRemove }: ItemEd
         <Field
           label="זמן משוער"
           value={minutesValue}
-          onChangeText={(text) => onChange({ minutesOverride: text === '' ? null : text })}
+          // Keep whatever is typed, including "" — don't coerce empty back to null, or the field would
+          // snap to the estimate the moment it's cleared and could never be emptied. An empty field reads
+          // as "use the estimate" (the placeholder shows it, and toQuoteItem falls back to it for pricing).
+          onChangeText={(text) => onChange({ minutesOverride: text })}
+          placeholder={String(estimate)}
           keyboardType="number-pad"
           ltr
           unit="דק׳"
