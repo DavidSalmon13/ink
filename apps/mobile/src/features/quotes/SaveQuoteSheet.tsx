@@ -6,7 +6,7 @@ import type { CalculatorState } from '@/features/calculator';
 import { Button, Field, Modal } from '@/ui';
 
 import type { QuoteEditContext } from './QuoteSave';
-import { buildQuoteInput, defaultQuoteTitle } from './quoteInput';
+import { buildQuoteInput, defaultQuoteTitle, resolveItemIds } from './quoteInput';
 import { useSaveQuote } from './useSaveQuote';
 
 export interface SaveQuoteSheetProps {
@@ -32,7 +32,7 @@ export interface SaveQuoteSheetProps {
 export function SaveQuoteSheet({ state, client, editContext, onClose }: SaveQuoteSheetProps) {
   const [quoteId] = useState(() => editContext?.id ?? Crypto.randomUUID());
   const [itemIds] = useState(() =>
-    editContext ? state.items.map((item) => item.id) : state.items.map(() => Crypto.randomUUID()),
+    resolveItemIds(state, editContext !== null, Crypto.randomUUID),
   );
   const [title, setTitle] = useState(() => editContext?.title ?? defaultQuoteTitle(state));
   const [notes, setNotes] = useState(() => editContext?.notes ?? '');

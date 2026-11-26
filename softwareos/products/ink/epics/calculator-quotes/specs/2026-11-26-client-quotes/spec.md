@@ -122,3 +122,4 @@ As Aya:
 | Date | Author | Type | Change | Ref |
 |---|---|---|---|---|
 | 2026-11-26 | David Schwartzman | created | Initial shaping (role: Both, mode: setup, test mode: TDD). Decisions: full reopen-to-edit (prefill Calculator + versioned-PUT update); Quotes tab list built from existing components (no mockup — recorded gap); kept a separate spec from the merged save-quote, sharing the src/features/quotes/ dir but owning distinct files; "קביעת תור" stays out until the Calendar epic. | — |
+| 2026-11-26 | David Schwartzman | fix | Pre-PR code review (AC4): adding a tattoo while editing a reopened quote sent the reducer's counter id (`"2"`) as the item id, which the API's `UUID` item id rejects → the whole edit-save 400'd. Extracted `resolveItemIds` (keep server UUIDs, mint a fresh one for items added during an edit); `SaveQuoteSheet` uses it. Regression test in `reopen-quote.test.ts`. | qa-report.md |

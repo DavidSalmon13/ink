@@ -9,8 +9,10 @@ import { describe, expect, it } from '@jest/globals';
 
 import type { Quote } from '@/api/quotes';
 
+import { newItem } from '@/features/calculator/item';
+
 import { fromQuote } from '@/features/quotes/fromQuote';
-import { type BuildQuoteArgs, buildQuoteInput } from '@/features/quotes/quoteInput';
+import { type BuildQuoteArgs, buildQuoteInput, resolveItemIds } from '@/features/quotes/quoteInput';
 
 const CLIENT_ID = '11111111-1111-4111-8111-111111111111';
 
@@ -171,5 +173,38 @@ describe('buildQuoteInput — edit mode reuses ids + sends version (client-quote
   it('omits version on the create path (no edit context)', () => {
     const input = buildQuoteInput(state, { ...base, itemIds: ['new-a', 'new-b'] });
     expect(input.version).toBeUndefined();
+  });
+});
+
+describe('resolveItemIds — a tattoo added while editing gets a fresh UUID (client-quotes AC4)', () => {
+  // The reducer gives a newly added item a plain counter id ("2"); the quotes API requires a UUID per item, so
+  // reusing that verbatim 400s the whole edit-save. Existing items keep their server UUID; the new one is minted.
+  const SERVER_UUID_A = '33333333-3333-4333-8333-333333333333';
+  const SERVER_UUID_B = '44444444-4444-4444-8444-444444444444';
+
+  /** A reopened quote whose two items carry server UUIDs, as the API actually returns them. */
+  const editState = () =>
+    fromQuote(
+      quote({
+        items: [
+          { ...quote().items[0], id: SERVER_UUID_A },
+          { ...quote().items[1], id: SERVER_UUID_B },
+        ],
+      }),
+    );
+
+  it('reuses server UUIDs but mints an id for a counter-id item added during an edit', () => {
+    const state = editState();
+    state.items.push(newItem('2')); // Aya taps "הוספת קעקוע": the reducer mints a counter id
+    let minted = 0;
+    const ids = resolveItemIds(state, true, () => `minted-${minted++}`);
+    expect(ids).toEqual([SERVER_UUID_A, SERVER_UUID_B, 'minted-0']);
+  });
+
+  it('mints a fresh id for every item on the create path', () => {
+    const state = editState();
+    let minted = 0;
+    const ids = resolveItemIds(state, false, () => `minted-${minted++}`);
+    expect(ids).toEqual(['minted-0', 'minted-1']);
   });
 });

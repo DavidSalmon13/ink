@@ -15,6 +15,23 @@ export function defaultQuoteTitle(state: CalculatorState): string {
     .join(', ');
 }
 
+/** A canonical UUID, in any version — what the server mints for a saved item (and the API requires back). */
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * The per-item ids to save, aligned to `state.items` by index (client-quotes AC4). Creating: a fresh UUID for
+ * every item. Editing a reopened quote: reuse each item's existing server UUID so the PUT updates it in place,
+ * but mint a fresh UUID for any item **added during the edit** — the reducer gives those a plain counter id
+ * (`"2"`), which the API's `UUID` item id rejects, so reusing it verbatim would 400 the whole save.
+ */
+export function resolveItemIds(
+  state: CalculatorState,
+  editing: boolean,
+  newId: () => string,
+): string[] {
+  return state.items.map((item) => (editing && UUID_RE.test(item.id) ? item.id : newId()));
+}
+
 export interface BuildQuoteArgs {
   clientId: string;
   title: string;
