@@ -7,7 +7,7 @@
 ## Quotes tab list  (PR 1)
 
 - [x] T1 Failing tests (testing skill, TDD): `useClientQuotes` lists newest-first + delete invalidates; `ClientQuotes` renders loading/error/empty/list; `QuoteRow` shows title + final ₪ (AC1, AC2)
-- [ ] T2 `apps/mobile/src/features/quotes/useClientQuotes.ts`: TanStack query over `listQuotes` keyed by `quoteListKey(clientId)` + `deleteQuote` mutation invalidating it — make the hook tests pass (AC1, AC2)
+- [x] T2 `apps/mobile/src/features/quotes/useClientQuotes.ts`: TanStack query over `listQuotes` keyed by `quoteListKey(clientId)` + `deleteQuote` mutation invalidating it — make the hook tests pass (AC1, AC2)
 - [ ] T3 `apps/mobile/src/features/quotes/ClientQuotes.tsx` + `QuoteRow.tsx`: list with loading/error(retry)/empty(reuse `EmptyState`), each row title + final ₪ (isolated LTR) + meta line; `src/ui` + tokens only (AC1, AC6)
 - [ ] T4 Wire `ClientQuotes` into `ClientCard.tsx` `הצעות מחיר` tab (replace the `EmptyState` branch; additive touch) (AC1)
 - [ ] T5 Delete-with-confirm from a `QuoteRow` → `deleteQuote`; row leaves the list on confirm (AC2)
