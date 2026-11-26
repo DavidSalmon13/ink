@@ -1,7 +1,7 @@
 # Client Quotes
 
 > Epic: ../../epic.md
-> Status: shaped
+> Status: in-progress
 > Branch: feat/calculator-quotes/client-quotes
 > Covers: apps/mobile/src/features/quotes/ClientQuotes.tsx, apps/mobile/src/features/quotes/QuoteRow.tsx, apps/mobile/src/features/quotes/useClientQuotes.ts, apps/mobile/src/features/quotes/fromQuote.ts
 
