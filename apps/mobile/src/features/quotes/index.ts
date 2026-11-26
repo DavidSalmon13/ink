@@ -7,6 +7,7 @@ export {
   SaveActionSlot,
   type SaveActionSlotProps,
 } from './QuoteSave';
+export { fromQuote } from './fromQuote';
 export { buildQuoteInput, defaultQuoteTitle, type BuildQuoteArgs } from './quoteInput';
 export {
   quoteListKey,
