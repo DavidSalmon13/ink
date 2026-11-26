@@ -11,3 +11,13 @@ specs:
       - apps/mobile/src/features/calculator/**
       - "apps/mobile/app/(tabs)/calculator.tsx"
       - fixtures/pricing-vectors.json
+  - folder: 2026-11-25-save-quote
+    slug: save-quote
+    status: shaped
+    branch: feat/calculator-quotes/save-quote
+    covers:
+      - apps/api/src/main/resources/db/migration/V7__quote.sql
+      - apps/api/src/main/java/app/ink/api/quote/**
+      - apps/api/src/main/java/app/ink/api/pricing/**
+      - apps/mobile/src/api/quotes.ts
+      - apps/mobile/src/features/quotes/**
