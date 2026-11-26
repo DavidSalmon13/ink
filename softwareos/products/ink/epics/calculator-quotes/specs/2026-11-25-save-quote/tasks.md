@@ -24,7 +24,7 @@
 
 ## Verification  (PR 4)
 
-- [ ] T10 Screenshots iPhone + iPad of the client/save block vs `Calculator.html`; fix or record deviations (no `.ipad.html`; hidden "קביעת תור") in the Changelog (AC7)
+- [~] T10 Screenshots iPhone + iPad of the client/save block vs `Calculator.html`; fix or record deviations (no `.ipad.html`; hidden "קביעת תור") in the Changelog (AC7)
 - [ ] T11 HUMAN: Aya saves 1–2 real quotes end-to-end; confirm the saved totals reproduce the preview numbers and the quote persists under the client (AC7)
 - [ ] T12 Run QA against acceptance criteria (qa skill)
 
