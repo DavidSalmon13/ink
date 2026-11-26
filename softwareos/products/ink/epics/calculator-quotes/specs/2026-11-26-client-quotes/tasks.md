@@ -14,7 +14,7 @@
 
 ## Reopen to edit  (PR 2)
 
-- [ ] T6 Failing tests (testing skill, TDD): `fromQuote` round-trips a saved quote back to calculator state (items + options + overrides); edit-mode `buildQuoteInput` reuses ids + sends `version` (AC3, AC4)
+- [x] T6 Failing tests (testing skill, TDD): `fromQuote` round-trips a saved quote back to calculator state (items + options + overrides); edit-mode `buildQuoteInput` reuses ids + sends `version` (AC3, AC4)
 - [ ] T7 `apps/mobile/src/features/quotes/fromQuote.ts`: `fromQuote(quote) → CalculatorState` reversing `toQuoteInput`/`toQuoteItem`/`toQuoteOptions` — make T6 hydrator tests pass (AC3)
 - [ ] T8 Calculator edit mode: `quoteId` param on `app/(tabs)/calculator.tsx`; `CalculatorScreen` fetches `getQuote`+client, seeds state via `fromQuote`, pre-picks the client, carries `{id, version}` edit context (additive touch) (AC3)
 - [ ] T9 Edit-mode save: `SaveQuoteSheet`/`buildQuoteInput`/`useSaveQuote` reuse quote id + item ids, send `version`, prefill title/notes when editing (create path unchanged) — make T6 edit tests pass (additive touch) (AC4)
