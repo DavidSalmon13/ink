@@ -58,6 +58,8 @@ const mockFetch = jest.fn<(input: string, init?: RequestInit) => Promise<Respons
 let serverQuotes: Quote[] = [];
 /** When true, the next GET /quotes fails once (for the error → retry path). */
 let failNextList = false;
+/** When set, GET /quotes waits on this before responding (so a test can assert the loading state). */
+let listGate: Promise<void> | null = null;
 /** Ids the mock received a DELETE for. */
 let deleted: string[] = [];
 
@@ -85,6 +87,7 @@ function Providers({ children }: { children: ReactNode }) {
 beforeEach(() => {
   serverQuotes = [NEWER, OLDER];
   failNextList = false;
+  listGate = null;
   deleted = [];
   mockFetch.mockReset();
   mockFetch.mockImplementation(async (input, init) => {
@@ -93,6 +96,7 @@ beforeEach(() => {
     const path = url.pathname;
 
     if (method === 'GET' && path === '/quotes') {
+      if (listGate) await listGate;
       if (failNextList) {
         failNextList = false;
         return response(500, { code: 'internal', message: 'boom' });
@@ -118,36 +122,44 @@ afterEach(() => {
   queryClient.clear();
 });
 
-/** Finds a text node whose content includes `needle` (prices are wrapped in LTR-isolate chars). */
-const textIncluding = (needle: string) => (content: string) => content.includes(needle);
+/** A RegExp matching a money amount as a substring (prices render wrapped in LTR-isolate chars). */
+const money = (agorot: number) =>
+  new RegExp(formatMoney(agorot).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 
 describe('client quotes list (client-quotes AC1)', () => {
-  it('shows the loading state while the list is fetching', () => {
-    render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
+  it('shows the loading state while the list is fetching', async () => {
+    let release!: () => void;
+    listGate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
     expect(screen.getByLabelText('טוען…')).toBeOnTheScreen();
+
+    release();
+    await screen.findByLabelText(`הצעה: ${NEWER.title}`);
   });
 
   it('shows the empty state when the client has no quotes', async () => {
     serverQuotes = [];
-    render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
+    await render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
     expect(await screen.findByText('עדיין אין הצעות מחיר')).toBeOnTheScreen();
   });
 
   it('lists the client quotes newest-first, each with its title and final ₪', async () => {
-    render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
+    await render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
 
     await screen.findByLabelText(`הצעה: ${NEWER.title}`);
     const rows = screen.getAllByLabelText(/^הצעה: /).map((n) => n.props.accessibilityLabel);
     expect(rows).toEqual([`הצעה: ${NEWER.title}`, `הצעה: ${OLDER.title}`]);
 
     // formatMoney(51500) === "515 ₪" / formatMoney(28000) === "280 ₪"
-    expect(screen.getByText(textIncluding(formatMoney(NEWER.finalPriceAgorot)))).toBeOnTheScreen();
-    expect(screen.getByText(textIncluding(formatMoney(OLDER.finalPriceAgorot)))).toBeOnTheScreen();
+    expect(screen.getByText(money(NEWER.finalPriceAgorot))).toBeOnTheScreen();
+    expect(screen.getByText(money(OLDER.finalPriceAgorot))).toBeOnTheScreen();
   });
 
   it('shows an error state with retry, and recovers on retry', async () => {
     failNextList = true;
-    render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
+    await render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
 
     await screen.findByText('לא הצלחנו לטעון את ההצעות');
     fireEvent.press(screen.getByRole('button', { name: 'נסו שוב' }));
@@ -158,7 +170,7 @@ describe('client quotes list (client-quotes AC1)', () => {
 
 describe('delete a quote (client-quotes AC2)', () => {
   it('deletes a quote after confirm and drops it from the list', async () => {
-    render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
+    await render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
     await screen.findByLabelText(`הצעה: ${OLDER.title}`);
 
     fireEvent.press(screen.getByLabelText(`מחיקת הצעה: ${OLDER.title}`));
