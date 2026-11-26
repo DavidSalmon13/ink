@@ -104,6 +104,8 @@ function serve({
     const method = init?.method ?? 'GET';
     const [, , id, sub] = url.pathname.split('/');
     if (method === 'GET' && url.pathname === '/clients') return response(200, live);
+    // The Quotes tab lists a client's quotes; default to none so the empty state shows (client-quotes).
+    if (method === 'GET' && url.pathname === '/quotes') return response(200, []);
     const found = live.find((c) => c.id === id);
     if (method === 'GET' && sub === 'summary') {
       return found ? response(200, EMPTY_SUMMARY) : response(404, { error: { code: 'not_found', message: 'Not found' } });
@@ -261,7 +263,7 @@ describe('tabs', () => {
     expect(screen.getByText('עדיין אין קעקועים')).toBeOnTheScreen();
 
     await fireEvent.press(screen.getByRole('tab', { name: 'הצעות מחיר' }));
-    expect(screen.getByText('עדיין אין הצעות מחיר')).toBeOnTheScreen();
+    expect(await screen.findByText('עדיין אין הצעות מחיר')).toBeOnTheScreen();
 
     await fireEvent.press(screen.getByRole('tab', { name: 'הערות' }));
     expect(screen.getByText('מעדיפה קו דק')).toBeOnTheScreen();

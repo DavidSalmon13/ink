@@ -19,6 +19,7 @@ import {
   Tabs,
   type IconName,
 } from '@/ui';
+import { ClientQuotes } from '@/features/quotes';
 
 import { ClientFormModal } from '../ClientFormModal';
 import { clientsKey } from '../useClients';
@@ -222,7 +223,7 @@ export function ClientCard({ id, onGone, pane = false, onBack }: ClientCardProps
       />
       <View style={{ paddingHorizontal: inset, marginTop: cardMetrics.bodyMarginTop }}>
         {tab === 'tattoos' ? <EmptyState title="עדיין אין קעקועים" /> : null}
-        {tab === 'quotes' ? <EmptyState title="עדיין אין הצעות מחיר" /> : null}
+        {tab === 'quotes' ? <ClientQuotes clientId={c.id} /> : null}
         {tab === 'notes' ? (
           c.notes ? (
             <Text style={{ writingDirection: 'rtl' }}>{c.notes}</Text>

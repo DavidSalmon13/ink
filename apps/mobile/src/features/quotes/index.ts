@@ -1,4 +1,5 @@
 export { ClientPicker, type ClientPickerProps } from './ClientPicker';
+export { ClientQuotes, type ClientQuotesProps } from './ClientQuotes';
 export { SaveQuoteSheet, type SaveQuoteSheetProps } from './SaveQuoteSheet';
 export {
   ClientPickerSlot,
