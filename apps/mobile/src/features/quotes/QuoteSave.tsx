@@ -9,27 +9,53 @@ import { Button } from '@/ui';
 import { ClientPicker } from './ClientPicker';
 import { SaveQuoteSheet } from './SaveQuoteSheet';
 
+/**
+ * Marks the Calculator as editing an existing quote (client-quotes AC4). Carried from the reopened quote by
+ * CalculatorScreen and read by the save sheet, which then reuses the quote's `id`, sends its `version` and
+ * prefills the saved `title`/`notes` instead of minting a fresh quote. `null` is the create path.
+ */
+export interface QuoteEditContext {
+  id: string;
+  version: number;
+  title: string;
+  notes: string;
+}
+
 interface QuoteSaveContextValue {
   client: Client | null;
   setClient: (client: Client | null) => void;
+  editContext: QuoteEditContext | null;
 }
 
 const QuoteSaveContext = createContext<QuoteSaveContextValue | null>(null);
 
-function useQuoteSave(): QuoteSaveContextValue {
+export function useQuoteSave(): QuoteSaveContextValue {
   const value = useContext(QuoteSaveContext);
   if (value === null) throw new Error('QuoteSave slots must be used inside <QuoteSaveProvider>');
   return value;
 }
 
+export interface QuoteSaveProviderProps {
+  children: ReactNode;
+  /** Pre-picked client when reopening a quote to edit (client-quotes AC3); null/omitted is the create path. */
+  initialClient?: Client | null;
+  /** Edit context when reopening a quote (client-quotes AC4); null/omitted is the create path. */
+  editContext?: QuoteEditContext | null;
+}
+
 /**
  * Shares the picked client between the two Calculator slots — the {@link ClientPickerSlot} at the top and the
  * {@link SaveActionSlot} beside "העתקת הצעה" — so the save button knows whether a client is chosen. Holds no
- * UI of its own; CalculatorScreen wraps its content in it (the spec's one additive touch).
+ * UI of its own; CalculatorScreen wraps its content in it. When reopening a quote (client-quotes AC3/AC4) it
+ * seeds the picked client and carries the edit context the save sheet reads.
  */
-export function QuoteSaveProvider({ children }: { children: ReactNode }) {
-  const [client, setClient] = useState<Client | null>(null);
-  const value = useMemo(() => ({ client, setClient }), [client]);
+export function QuoteSaveProvider({
+  children,
+  initialClient = null,
+  editContext = null,
+}: QuoteSaveProviderProps) {
+  const [client, setClient] = useState<Client | null>(initialClient);
+  const value = useMemo(() => ({ client, setClient, editContext }), [client, editContext]);
   return <QuoteSaveContext.Provider value={value}>{children}</QuoteSaveContext.Provider>;
 }
 

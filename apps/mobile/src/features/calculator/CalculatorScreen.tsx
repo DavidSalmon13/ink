@@ -1,10 +1,20 @@
 import * as Clipboard from 'expo-clipboard';
-import { useState, type ReactNode } from 'react';
+import { useMemo, useReducer, useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, TextInput, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import type { Client } from '@/api/clients';
+import type { Quote } from '@/api/quotes';
 import type { Settings } from '@/api/settings';
-import { ClientPickerSlot, QuoteSaveProvider, SaveActionSlot } from '@/features/quotes';
+import { useClient } from '@/features/clients';
+import {
+  ClientPickerSlot,
+  QuoteSaveProvider,
+  SaveActionSlot,
+  fromQuote,
+  useQuote,
+  type QuoteEditContext,
+} from '@/features/quotes';
 import { calcQuote } from '@/pricing';
 import { componentMetrics as cm, fontFace, Num, Text, useTheme } from '@/theme';
 import { Button, ErrorState, Field, Icon, IconButton, LoadingState, SegmentedControl, useToast, type Segment } from '@/ui';
@@ -12,7 +22,14 @@ import { Button, ErrorState, Field, Icon, IconButton, LoadingState, SegmentedCon
 import { ItemEditor } from './ItemEditor';
 import { Summary } from './Summary';
 import { copyQuoteText } from './copyQuoteText';
-import { toQuoteInput, useCalculatorState, type DiscountKind, type OptionsState } from './calculatorState';
+import {
+  calculatorReducer,
+  initCalculatorState,
+  toQuoteInput,
+  type CalculatorState,
+  type DiscountKind,
+  type OptionsState,
+} from './calculatorState';
 import { useSettings } from './useSettings';
 
 /**
@@ -225,19 +242,28 @@ function MoreOptions({
   );
 }
 
+interface CalculatorEditorProps {
+  /** The reducer's starting state — a fresh calculator, or one seeded from a reopened quote (AC3). */
+  initialState: CalculatorState;
+  /** The pre-picked client when reopening a quote (AC3); null on the create path. */
+  initialClient: Client | null;
+  /** The edit context when reopening a quote (AC4); null on the create path. */
+  editContext: QuoteEditContext | null;
+}
+
 /**
- * The Calculator tab (Calculator.html). Loads the seeded Settings and shows the shared loading and
+ * The Calculator tab body (Calculator.html). Loads the seeded Settings and shows the shared loading and
  * error states (an error offers retry); once loaded it prices the visit live from the item editors and
- * the "אפשרויות נוספות" options, and shows the summary breakdown. No client is chosen and nothing is
- * saved; the "העתקת הצעה" action is added in T7.
+ * the "אפשרויות נוספות" options, and shows the summary breakdown. The reducer seeds from `initialState`, so a
+ * reopened quote starts with its items and options (AC3); `initialClient`/`editContext` flow to the save slot.
  */
-export function CalculatorScreen() {
+function CalculatorEditor({ initialState, initialClient, editContext }: CalculatorEditorProps) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const settings = useSettings();
   const toast = useToast();
-  const [state, dispatch] = useCalculatorState();
+  const [state, dispatch] = useReducer(calculatorReducer, initialState);
 
   let body: ReactNode = null;
   if (settings.data === undefined) {
@@ -292,7 +318,7 @@ export function CalculatorScreen() {
   }
 
   return (
-    <QuoteSaveProvider>
+    <QuoteSaveProvider initialClient={initialClient} editContext={editContext}>
       <View style={{ flex: 1, backgroundColor: t.colors.bg, paddingTop: insets.top + t.spacing.xs }}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -323,4 +349,71 @@ export function CalculatorScreen() {
       </View>
     </QuoteSaveProvider>
   );
+}
+
+/** A full-screen frame for the edit-mode load states (the editor itself draws its own chrome once ready). */
+function EditLoadFrame({ children }: { children: ReactNode }) {
+  const t = useTheme();
+  const insets = useSafeAreaInsets();
+  return (
+    <View style={{ flex: 1, backgroundColor: t.colors.bg, paddingTop: insets.top + t.spacing.xs }}>
+      {children}
+    </View>
+  );
+}
+
+/** Loads the reopened quote's client, then mounts the editor seeded + pre-picked (client-quotes AC3). */
+function EditQuoteWithClient({ quote }: { quote: Quote }) {
+  const client = useClient(quote.clientId);
+  if (client.data === undefined) {
+    return (
+      <EditLoadFrame>
+        {client.isError ? (
+          <ErrorState title="לא הצלחנו לטעון את הלקוח" onRetry={() => void client.refetch()} />
+        ) : (
+          <LoadingState />
+        )}
+      </EditLoadFrame>
+    );
+  }
+  return (
+    <CalculatorEditor
+      initialState={fromQuote(quote)}
+      initialClient={client.data}
+      editContext={{
+        id: quote.id,
+        version: quote.version,
+        title: quote.title,
+        notes: quote.notes ?? '',
+      }}
+    />
+  );
+}
+
+/** Loads a reopened quote by id, showing the shared loading / error(retry) states until it arrives (AC3). */
+function EditQuoteGate({ quoteId }: { quoteId: string }) {
+  const quote = useQuote(quoteId);
+  if (quote.data === undefined) {
+    return (
+      <EditLoadFrame>
+        {quote.isError ? (
+          <ErrorState title="לא הצלחנו לטעון את ההצעה" onRetry={() => void quote.refetch()} />
+        ) : (
+          <LoadingState />
+        )}
+      </EditLoadFrame>
+    );
+  }
+  return <EditQuoteWithClient quote={quote.data} />;
+}
+
+/**
+ * The Calculator tab (Calculator.html). Without a `quoteId` it is a fresh calculator (the create path); with
+ * one it reopens that saved quote — fetching it and its client, then seeding the editor and pre-picking the
+ * client so the summary reproduces the saved totals and a save updates it in place (client-quotes AC3/AC4).
+ */
+export function CalculatorScreen({ quoteId }: { quoteId?: string }) {
+  const createState = useMemo(() => initCalculatorState(), []);
+  if (quoteId) return <EditQuoteGate quoteId={quoteId} />;
+  return <CalculatorEditor initialState={createState} initialClient={null} editContext={null} />;
 }

@@ -1,9 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { deleteQuote, listQuotes, type Quote } from '@/api/quotes';
+import { deleteQuote, getQuote, listQuotes, type Quote } from '@/api/quotes';
 import { useApiClient } from '@/auth/AuthProvider';
 
-import { quoteListKey } from './useSaveQuote';
+import { quoteListKey, quotesKey } from './useSaveQuote';
+
+/** A single quote's cache key, under the shared `quotesKey` so the list and the record stay siblings. */
+export const quoteDetailKey = (id: string) => [...quotesKey, 'detail', id] as const;
 
 /**
  * A client's saved quotes for the card's Quotes tab (client-quotes AC1), newest-first as the API returns
@@ -15,6 +18,19 @@ export function useClientQuotes(clientId: string) {
   return useQuery<Quote[]>({
     queryKey: quoteListKey(clientId),
     queryFn: () => listQuotes(api, clientId),
+  });
+}
+
+/**
+ * One saved quote by id, for reopening it in the Calculator (client-quotes AC3). The screen seeds its state
+ * from this once it loads; `getQuote` throws `not_found` for an unknown/deleted quote, surfaced as the query's
+ * error so the screen can offer a retry.
+ */
+export function useQuote(id: string) {
+  const api = useApiClient();
+  return useQuery<Quote>({
+    queryKey: quoteDetailKey(id),
+    queryFn: () => getQuote(api, id),
   });
 }
 
