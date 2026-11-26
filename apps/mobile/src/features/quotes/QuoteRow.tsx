@@ -2,20 +2,22 @@ import { Pressable, View } from 'react-native';
 
 import type { Quote } from '@/api/quotes';
 import { Num, Text, useTheme } from '@/theme';
-import { Card, formatDayDate } from '@/ui';
+import { Card, formatDayDate, IconButton } from '@/ui';
 
 export interface QuoteRowProps {
   quote: Quote;
   /** Reopen the quote in the Calculator (wired to navigation in T10). */
   onReopen?: (quote: Quote) => void;
+  /** Request deletion of this quote (the list owns the confirm + mutation). */
+  onDelete?: (quote: Quote) => void;
 }
 
 /**
  * One saved quote on the client card's Quotes tab (client-quotes AC1): the title and its final price in ₪
  * (an isolated LTR run), with a muted meta line (saved date · estimated minutes). The whole row reopens the
- * quote; the delete affordance is added in T5. No mockup — built from `Card` + theme tokens.
+ * quote; the trailing trash button asks the list to delete it (AC2). No mockup — built from `Card` + tokens.
  */
-export function QuoteRow({ quote, onReopen }: QuoteRowProps) {
+export function QuoteRow({ quote, onReopen, onDelete }: QuoteRowProps) {
   const t = useTheme();
   return (
     <Pressable
@@ -37,6 +39,11 @@ export function QuoteRow({ quote, onReopen }: QuoteRowProps) {
           </Text>
         </View>
         <Num variant="price" color="text" agorot={quote.finalPriceAgorot} />
+        <IconButton
+          icon="trash"
+          accessibilityLabel={`מחיקת הצעה: ${quote.title}`}
+          onPress={() => onDelete?.(quote)}
+        />
       </Card>
     </Pressable>
   );
