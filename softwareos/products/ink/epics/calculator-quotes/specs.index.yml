@@ -21,3 +21,12 @@ specs:
       - apps/api/src/main/java/app/ink/api/pricing/**
       - apps/mobile/src/api/quotes.ts
       - apps/mobile/src/features/quotes/**
+  - folder: 2026-11-26-client-quotes
+    slug: client-quotes
+    status: shaped
+    branch: feat/calculator-quotes/client-quotes
+    covers:
+      - apps/mobile/src/features/quotes/ClientQuotes.tsx
+      - apps/mobile/src/features/quotes/QuoteRow.tsx
+      - apps/mobile/src/features/quotes/useClientQuotes.ts
+      - apps/mobile/src/features/quotes/fromQuote.ts
