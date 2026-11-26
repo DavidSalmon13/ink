@@ -3,6 +3,7 @@
 > Epic: calculator-quotes
 > Spec: 2026-11-26-client-quotes
 > Branch: feat/calculator-quotes/client-quotes
+> PR: https://github.com/DavidSalmon13/ink/pull/86
 
 ## Quotes tab list  (PR 1)
 
