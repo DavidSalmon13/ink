@@ -8,6 +8,8 @@ import { useToast } from '@/ui';
 /** Every quote query (lists and single records) lives under this key; the list is keyed by client. */
 export const quotesKey = ['quotes'] as const;
 export const quoteListKey = (clientId: string) => [...quotesKey, 'list', clientId] as const;
+/** A single quote's cache key, under the shared `quotesKey` so the list and the record stay siblings. */
+export const quoteDetailKey = (id: string) => [...quotesKey, 'detail', id] as const;
 
 export const SAVED_MESSAGE = 'ההצעה נשמרה';
 export const CONFLICT_MESSAGE = 'ההצעה עודכנה במכשיר אחר. נסו שוב.';
@@ -35,6 +37,8 @@ export function useSaveQuote() {
     mutationFn: ({ id, input }: SaveQuoteVars) => putQuote(api, id, input),
     onSuccess: async (saved: Quote) => {
       toast.show(SAVED_MESSAGE);
+      // Seed the record with the saved version so a reopened quote's next save sends it (not the stale one).
+      queryClient.setQueryData(quoteDetailKey(saved.id), saved);
       await queryClient.invalidateQueries({ queryKey: quoteListKey(saved.clientId) });
     },
     onError: (error) => {

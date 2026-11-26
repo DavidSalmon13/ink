@@ -12,6 +12,13 @@ import type { Settings } from '@/api/settings';
 import { formatMoney, ltrIsolate } from '@/theme';
 import { ToastProvider } from '@/ui';
 
+// The tab subscribes to its own tab press (to drop a reopened quote's param); outside a router, stub it.
+jest.mock('expo-router', () => ({
+  ...jest.requireActual<object>('expo-router'),
+  useLocalSearchParams: () => ({}),
+  useNavigation: () => ({ addListener: () => () => {} }),
+  useRouter: () => ({ setParams: () => {}, push: () => {}, back: () => {} }),
+}));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(() => Promise.resolve(true)) }));
 
 jest.mock('@/auth/AuthProvider', () => {

@@ -376,8 +376,11 @@ function EditQuoteWithClient({ quote }: { quote: Quote }) {
       </EditLoadFrame>
     );
   }
+  // Keyed by quote so switching to another (cached) reopened quote remounts the editor with that quote's
+  // state and client; reducer and picker state only read their initial values on mount.
   return (
     <CalculatorEditor
+      key={quote.id}
       initialState={fromQuote(quote)}
       initialClient={client.data}
       editContext={{
