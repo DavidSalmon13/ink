@@ -78,7 +78,7 @@ class QuoteService {
 	/** The single seeded Settings row (V3). */
 	private Settings settings() {
 		return em.createQuery("select s from Settings s where s.deletedAt is null", Settings.class)
-				.getResultStream().findFirst().orElseThrow(ApiException.NotFound::new);
+				.setMaxResults(1).getResultList().stream().findFirst().orElseThrow(ApiException.NotFound::new);
 	}
 
 	/** Maps the request to a pricing input: each item's raw body placement becomes its time tier. */
