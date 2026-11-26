@@ -79,7 +79,7 @@ export interface SaveActionSlotProps {
  */
 export function SaveActionSlot({ state, onCopy }: SaveActionSlotProps) {
   const t = useTheme();
-  const { client } = useQuoteSave();
+  const { client, editContext } = useQuoteSave();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
@@ -103,7 +103,12 @@ export function SaveActionSlot({ state, onCopy }: SaveActionSlotProps) {
         שמירת הצעה אינה יוצרת תור.
       </Text>
       {sheetOpen && client ? (
-        <SaveQuoteSheet state={state} client={client} onClose={() => setSheetOpen(false)} />
+        <SaveQuoteSheet
+          state={state}
+          client={client}
+          editContext={editContext}
+          onClose={() => setSheetOpen(false)}
+        />
       ) : null}
     </View>
   );

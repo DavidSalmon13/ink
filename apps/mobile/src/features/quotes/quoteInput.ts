@@ -21,6 +21,12 @@ export interface BuildQuoteArgs {
   notes: string;
   /** One device UUID per item, aligned to `state.items` by index, so a retry reuses the same ids (AC3). */
   itemIds: string[];
+  /**
+   * The quote's last-seen version when editing a reopened quote (client-quotes AC4): sent so the server can
+   * reject a stale update with `version_conflict`. Absent on the create path — the server then mints a new
+   * quote.
+   */
+  version?: number;
 }
 
 /**
@@ -32,7 +38,7 @@ export interface BuildQuoteArgs {
  */
 export function buildQuoteInput(
   state: CalculatorState,
-  { clientId, title, notes, itemIds }: BuildQuoteArgs,
+  { clientId, title, notes, itemIds, version }: BuildQuoteArgs,
 ): QuoteInput {
   const options = toQuoteOptions(state.options);
 
@@ -55,6 +61,7 @@ export function buildQuoteInput(
 
   const trimmedNotes = notes.trim();
   return {
+    version,
     clientId,
     title: title.trim(),
     notes: trimmedNotes.length > 0 ? trimmedNotes : null,
