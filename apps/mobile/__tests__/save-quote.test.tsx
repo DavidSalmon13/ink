@@ -18,7 +18,7 @@ jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(() => Promise.resol
 jest.mock('expo-router', () => ({
   ...jest.requireActual<object>('expo-router'),
   useLocalSearchParams: () => ({}),
-  useNavigation: () => ({ addListener: () => () => {} }),
+  useNavigation: () => ({ addListener: () => () => {}, isFocused: () => true, setParams: () => {} }),
   useRouter: () => ({ setParams: () => {}, push: () => {}, back: () => {} }),
 }));
 jest.mock('expo-crypto', () => ({ randomUUID: () => '6f1c2c1e-0000-4000-8000-0000000000aa' }));

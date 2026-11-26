@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import type { Client } from '@/api/clients';
 import type { Quote } from '@/api/quotes';
 import type { Settings } from '@/api/settings';
+import { quoteDetailKey } from '@/features/quotes';
 import { ToastProvider } from '@/ui';
 
 import CalculatorTab from '../app/(tabs)/calculator';
@@ -28,12 +29,15 @@ jest.mock('@/auth/AuthProvider', () => {
 });
 
 const mockSetParams = jest.fn();
+let mockFocused = false;
 let mockParams: { quoteId?: string } = {};
 let mockTabPress: (() => void) | null = null;
 jest.mock('expo-router', () => ({
   useLocalSearchParams: () => mockParams,
-  useRouter: () => ({ setParams: mockSetParams, push: jest.fn(), back: jest.fn() }),
+  useRouter: () => ({ setParams: jest.fn(), push: jest.fn(), back: jest.fn() }),
   useNavigation: () => ({
+    setParams: mockSetParams,
+    isFocused: () => mockFocused,
     addListener: (event: string, cb: () => void) => {
       if (event === 'tabPress') mockTabPress = cb;
       return () => {
@@ -153,6 +157,7 @@ function Providers({ children }: { children: ReactNode }) {
 beforeEach(() => {
   mockParams = {};
   mockTabPress = null;
+  mockFocused = false;
   mockSetParams.mockReset();
   stored = { [QUOTE_A]: quote(QUOTE_A, 'ורד'), [QUOTE_B]: quote(QUOTE_B, 'דרקון') };
   puts = [];
@@ -186,7 +191,7 @@ beforeEach(() => {
     throw new Error(`unexpected request ${method} ${input}`);
   });
   globalThis.fetch = mockFetch as unknown as typeof fetch;
-  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: Infinity, staleTime: Infinity } } });
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: Infinity, staleTime: 30_000 } } });
 });
 
 afterEach(() => {
@@ -237,14 +242,25 @@ describe('reopen to edit (client-quotes AC3/AC4, review regressions)', () => {
     expect(items.map((it) => it.id)).toEqual([itemIdOf(QUOTE_A)]);
   });
 
-  it('pressing the Calculator tab while editing a quote clears it back to a fresh calculator', async () => {
+  it('coming back to the Calculator tab from another tab clears a reopened quote via the screen’s own navigation', async () => {
     mockParams = { quoteId: QUOTE_A };
     await render(<CalculatorTab />, { wrapper: Providers });
     await screen.findByLabelText('תיאור קעקוע 1');
 
+    mockFocused = false; // the press fires while another tab is still focused
     expect(mockTabPress).not.toBeNull();
     mockTabPress?.();
     expect(mockSetParams).toHaveBeenCalledWith({ quoteId: undefined });
+  });
+
+  it('tapping the Calculator tab while already editing on it keeps the reopened quote (no lost edits)', async () => {
+    mockParams = { quoteId: QUOTE_A };
+    await render(<CalculatorTab />, { wrapper: Providers });
+    await screen.findByLabelText('תיאור קעקוע 1');
+
+    mockFocused = true;
+    mockTabPress?.();
+    expect(mockSetParams).not.toHaveBeenCalled();
   });
 
   it('pressing the Calculator tab on a fresh calculator leaves the params alone', async () => {
@@ -253,5 +269,22 @@ describe('reopen to edit (client-quotes AC3/AC4, review regressions)', () => {
 
     mockTabPress?.();
     expect(mockSetParams).not.toHaveBeenCalled();
+  });
+
+  it('reopening a stale cached quote reseeds from the fresh version instead of pairing old content with it', async () => {
+    // This device cached A at v0; another device has since saved A as v1 with different content.
+    const cachedV0 = quote(QUOTE_A, 'ורד');
+    stored[QUOTE_A] = { ...quote(QUOTE_A, 'ורד מהאייפד'), version: 1 };
+    queryClient.setQueryData(quoteDetailKey(QUOTE_A), cachedV0, { updatedAt: 0 }); // long stale
+
+    mockParams = { quoteId: QUOTE_A };
+    await render(<CalculatorTab />, { wrapper: Providers });
+    // The background refetch brings v1; the editor must show v1's content, not keep v0's.
+    await waitFor(() => expect(screen.getByLabelText('תיאור קעקוע 1')).toHaveDisplayValue('ורד מהאייפד'));
+
+    await saveViaSheet();
+    await waitFor(() => expect(puts).toHaveLength(1));
+    expect(puts[0].version).toBe(1);
+    expect((puts[0].items as { description: string }[])[0].description).toBe('ורד מהאייפד');
   });
 });

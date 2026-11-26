@@ -376,11 +376,13 @@ function EditQuoteWithClient({ quote }: { quote: Quote }) {
       </EditLoadFrame>
     );
   }
-  // Keyed by quote so switching to another (cached) reopened quote remounts the editor with that quote's
-  // state and client; reducer and picker state only read their initial values on mount.
+  // Keyed by quote and version: switching to another (cached) reopened quote remounts with that quote's state
+  // and client, and a newer version arriving (a background refetch of a stale cached quote, or this device's
+  // own save) reseeds the editor so its content always matches the version it sends — otherwise a save could
+  // pair stale content with the fresh version and silently overwrite an edit from another device (AC4).
   return (
     <CalculatorEditor
-      key={quote.id}
+      key={`${quote.id}:${quote.version}`}
       initialState={fromQuote(quote)}
       initialClient={client.data}
       editContext={{

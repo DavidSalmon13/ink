@@ -16,7 +16,7 @@ import { ToastProvider } from '@/ui';
 jest.mock('expo-router', () => ({
   ...jest.requireActual<object>('expo-router'),
   useLocalSearchParams: () => ({}),
-  useNavigation: () => ({ addListener: () => () => {} }),
+  useNavigation: () => ({ addListener: () => () => {}, isFocused: () => true, setParams: () => {} }),
   useRouter: () => ({ setParams: () => {}, push: () => {}, back: () => {} }),
 }));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(() => Promise.resolve(true)) }));
