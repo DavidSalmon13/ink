@@ -189,7 +189,9 @@ describe('delete a quote (client-quotes AC2)', () => {
 });
 
 describe('reopen a quote (client-quotes AC3)', () => {
-  beforeEach(() => mockRouter.push.mockClear());
+  beforeEach(() => {
+    mockRouter.push.mockClear();
+  });
 
   it('navigates to the Calculator with the quote id when a row is tapped', async () => {
     await render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
