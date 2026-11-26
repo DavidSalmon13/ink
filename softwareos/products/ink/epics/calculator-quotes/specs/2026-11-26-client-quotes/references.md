@@ -18,6 +18,12 @@
 - **[Related]** `../../../clients/epic.md` — the `clients` epic owns the client card. `ClientCard.tsx`'s
   `הצעות מחיר` tab (which currently renders an `EmptyState`) is **additively wired** to render `ClientQuotes`.
 
+- **Out-of-scope fixes landed in this PR** (recorded in the spec Changelog): the quotes API owned by
+  `save-quote` was touched for two bugs blocking quote saves — `apps/api/src/main/resources/db/migration/V8__quote_item_hours_double.sql`
+  (new) and `apps/api/src/main/java/app/ink/api/quote/QuoteService.java` (`settings()` read). `calculator-preview`'s
+  `ItemEditor.tsx` was touched for the clearable minutes field, and `app/(tabs)/calculator.tsx` now clears
+  `quoteId` on its own tab press.
+
 ## Design
 
 - **No mockup** exists for the client-card Quotes tab list or its loading/empty/error states. Per
