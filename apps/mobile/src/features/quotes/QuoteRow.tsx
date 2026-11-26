@@ -6,7 +6,7 @@ import { Card, formatDayDate, IconButton } from '@/ui';
 
 export interface QuoteRowProps {
   quote: Quote;
-  /** Reopen the quote in the Calculator (wired to navigation in T10). */
+  /** Reopen the quote in the Calculator to edit it (the list navigates on row press). */
   onReopen?: (quote: Quote) => void;
   /** Request deletion of this quote (the list owns the confirm + mutation). */
   onDelete?: (quote: Quote) => void;

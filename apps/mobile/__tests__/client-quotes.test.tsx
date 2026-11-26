@@ -25,6 +25,12 @@ jest.mock('@/auth/AuthProvider', () => {
   };
 });
 
+// Tapping a row reopens the quote in the Calculator (AC3); stub the router so the list can be rendered alone.
+// Mock `useRouter` only (no requireActual) — the list uses nothing else from expo-router, and loading the real
+// module here leaves an open handle that stalls the run.
+const mockRouter = { push: jest.fn(), back: jest.fn(), replace: jest.fn(), navigate: jest.fn() };
+jest.mock('expo-router', () => ({ useRouter: () => mockRouter }));
+
 const CLIENT_ID = '11111111-1111-4111-8111-111111111111';
 
 /** One stored quote as /quotes returns it; prices are the server's authoritative recompute. */
@@ -179,5 +185,20 @@ describe('delete a quote (client-quotes AC2)', () => {
     await waitFor(() => expect(deleted).toContain(OLDER.id));
     await waitFor(() => expect(screen.queryByLabelText(`הצעה: ${OLDER.title}`)).toBeNull());
     expect(screen.getByLabelText(`הצעה: ${NEWER.title}`)).toBeOnTheScreen();
+  });
+});
+
+describe('reopen a quote (client-quotes AC3)', () => {
+  beforeEach(() => mockRouter.push.mockClear());
+
+  it('navigates to the Calculator with the quote id when a row is tapped', async () => {
+    await render(<ClientQuotes clientId={CLIENT_ID} />, { wrapper: Providers });
+
+    fireEvent.press(await screen.findByLabelText(`הצעה: ${NEWER.title}`));
+
+    expect(mockRouter.push).toHaveBeenCalledWith({
+      pathname: '/(tabs)/calculator',
+      params: { quoteId: NEWER.id },
+    });
   });
 });
