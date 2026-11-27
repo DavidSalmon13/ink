@@ -23,8 +23,8 @@
 
 ## Verification  (PR 3)
 
-- [~] T11 Screenshots iPhone + iPad of the Quotes tab list + a reopened quote; record the no-mockup deviation in the Changelog (AC6)
-- [ ] T12 HUMAN: Aya reopens a saved quote, edits it and saves (confirms it updates in place, totals reproduce), and deletes one from the list (AC3, AC4)
+- [x] T11 Screenshots iPhone + iPad of the Quotes tab list + a reopened quote; record the no-mockup deviation in the Changelog (AC6) — deviation recorded; screenshot pass **waived** 2026-11-27 (setup mode, no iOS simulator on this machine)
+- [x] T12 HUMAN: Aya reopens a saved quote, edits it and saves (confirms it updates in place, totals reproduce), and deletes one from the list (AC3, AC4) — **waived** 2026-11-27 (setup mode, accepted by David without an on-device pass recorded)
 - [x] T13 Run QA against acceptance criteria (qa skill) — qa-report.md: PASS WITH NOTES (2026-11-26)
 
 > `CalculatorScreen.tsx` + `app/(tabs)/calculator.tsx` (calculator-preview) and `SaveQuoteSheet.tsx` /
