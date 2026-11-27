@@ -23,7 +23,7 @@
 
 ## Verification  (PR 3)
 
-- [ ] T11 Screenshots iPhone + iPad of the Quotes tab list + a reopened quote; record the no-mockup deviation in the Changelog (AC6)
+- [~] T11 Screenshots iPhone + iPad of the Quotes tab list + a reopened quote; record the no-mockup deviation in the Changelog (AC6)
 - [ ] T12 HUMAN: Aya reopens a saved quote, edits it and saves (confirms it updates in place, totals reproduce), and deletes one from the list (AC3, AC4)
 - [x] T13 Run QA against acceptance criteria (qa skill) — qa-report.md: PASS WITH NOTES (2026-11-26)
 
