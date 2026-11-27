@@ -3,10 +3,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteQuote, getQuote, listQuotes, type Quote } from '@/api/quotes';
 import { useApiClient } from '@/auth/AuthProvider';
 
-import { quoteListKey, quotesKey } from './useSaveQuote';
+import { quoteDetailKey, quoteListKey } from './useSaveQuote';
 
-/** A single quote's cache key, under the shared `quotesKey` so the list and the record stay siblings. */
-export const quoteDetailKey = (id: string) => [...quotesKey, 'detail', id] as const;
+// `quoteDetailKey` is defined alongside the other quote keys in useSaveQuote (so the save flow can refresh it);
+// re-export it here where the detail query that owns it lives.
+export { quoteDetailKey };
 
 /**
  * A client's saved quotes for the card's Quotes tab (client-quotes AC1), newest-first as the API returns

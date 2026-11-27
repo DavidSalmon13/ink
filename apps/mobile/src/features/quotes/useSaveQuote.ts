@@ -8,6 +8,8 @@ import { useToast } from '@/ui';
 /** Every quote query (lists and single records) lives under this key; the list is keyed by client. */
 export const quotesKey = ['quotes'] as const;
 export const quoteListKey = (clientId: string) => [...quotesKey, 'list', clientId] as const;
+/** A single quote's cache key (reopen reads it); defined here with the other keys so the save can refresh it. */
+export const quoteDetailKey = (id: string) => [...quotesKey, 'detail', id] as const;
 
 export const SAVED_MESSAGE = 'ההצעה נשמרה';
 export const CONFLICT_MESSAGE = 'ההצעה עודכנה במכשיר אחר. נסו שוב.';
@@ -35,6 +37,10 @@ export function useSaveQuote() {
     mutationFn: ({ id, input }: SaveQuoteVars) => putQuote(api, id, input),
     onSuccess: async (saved: Quote) => {
       toast.show(SAVED_MESSAGE);
+      // Keep the per-quote detail cache in step with the server: an edit bumps `version`, and within the
+      // query staleTime a re-reopen would otherwise seed the editor from the superseded quote and 409 the
+      // next save as a false `version_conflict` (client-quotes AC4). The list refetches separately.
+      queryClient.setQueryData(quoteDetailKey(saved.id), saved);
       await queryClient.invalidateQueries({ queryKey: quoteListKey(saved.clientId) });
     },
     onError: (error) => {
