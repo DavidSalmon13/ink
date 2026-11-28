@@ -61,6 +61,10 @@ export function Field({ label, error, invalid = false, helper, unit, ltr = false
           {...input}
           style={{
             flex: 1,
+            // Without this the web <input>'s default intrinsic width (~174px) wins over flex shrink
+            // (min-width defaults to `auto`, not 0, on the input element) and overflows a narrow field
+            // like "זמן משוער" (width 132) leftward over its neighbour. See design `.num` width.
+            minWidth: 0,
             minHeight: t.touch.inputHeight,
             fontFamily: fontFace('400'),
             fontSize: m.field.inputFontSize,
